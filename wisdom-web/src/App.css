@@ -1,27 +1,10 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
 
 .container {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
+  position: absolute; /* Cambia a absolute para llenar toda la ventana */
+  top: 0;            /* Asegúrate de que empiece en la parte superior */
+  left: 0;           /* Asegúrate de que empiece en la izquierda */
+  width: 100%;       /* Ocupa el 100% del ancho del viewport */
+  height: 100%;      /* Ocupa el 100% de la altura del viewport */
   overflow: hidden;
   background-color: black;
 }
@@ -34,26 +17,37 @@
   transform: translateY(-50%);
 }
 
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.centered-container {
+  position: absolute; /* Permite que se superponga sobre otros elementos */
+  top: 50%; /* 50% desde la parte superior */
+  left: 50%; /* 50% desde la izquierda */
+  transform: translate(-50%, -50%); /* Centra el contenedor */
+  text-align: center; /* Centra el texto */
+  z-index: 10; /* Asegúrate de que esté por encima de otros elementos */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.logo {
+  width: 150px; /* Ajusta según el tamaño de tu logo */
+  height: auto; /* Mantiene la proporción del logo */
 }
 
-.card {
-  padding: 2em;
+.qr-container {
+  padding: 23px; 
+  background-color: #181818;
+  border-width: 2px;
+  border-color: #323635;
+  border-style: solid;
+  border-radius: 10px;
 }
 
-.read-the-docs {
-  color: #888;
+.qr-code {
+  width: 230px; /* Ajusta según el tamaño de tu QR */
+  height: auto; /* Mantiene la proporción del QR */
 }
+
+.store-logo {
+  width: 25px; /* Ajusta según el tamaño de tu QR */
+  height: auto; /* Mantiene la proporción del QR */
+}
+
+
