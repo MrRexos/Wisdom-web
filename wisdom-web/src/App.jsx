@@ -54,54 +54,118 @@ const categoriesArray = [
 
 function App() {
   const [activeImages, setActiveImages] = useState([]);
-
+  const [currentBackgroundImages, setCurrentBackgroundImages] = useState([]);
+  
   useEffect(() => {
     // Función para añadir una imagen aleatoria
     const addRandomImage = () => {
       const randomImage = categoriesArray[Math.floor(Math.random() * categoriesArray.length)];
       if (activeImages.length >= 10) return;
-
+  
       const newImage = {
         ...randomImage,
         id: Math.random(), // Asignar un ID único para cada aparición
         left: window.innerWidth, // Empieza fuera de la pantalla a la derecha
         top: Math.random() * (window.innerHeight - 100), // Altura aleatoria
       };
-
+  
       setActiveImages((prev) => [...prev, newImage]);
-
+  
       // Elimina la imagen después de un tiempo si ha salido completamente de la pantalla
       setTimeout(() => {
-        setActiveImages((prev) => prev.filter((img) => img.left > -200)); // Ajusta según el tamaño de las imágenes
+        setActiveImages((prev) => prev.filter((img) => img.left > -300)); // Ajusta según el tamaño de las imágenes
       }, Math.random() * 8000 + 5000); // Entre 5 y 13 segundos de duración en pantalla
     };
-
+  
     // Intervalo aleatorio para añadir nuevas imágenes
     const addImageInterval = setInterval(() => {
       addRandomImage();
-    }, Math.random() * 6000 + 6000); //  segundos entre cada nueva imagen
-
+    }, Math.random() * 8000 + 8000); //  segundos entre cada nueva imagen
+  
     return () => clearInterval(addImageInterval); // Limpiar intervalo al desmontar el componente
   }, []);
+  
+  useEffect(() => {
+    // Función para añadir una imagen de fondo aleatoria
+    const addRandomBackgroundImage = () => {
+      const randomImage = categoriesArray[Math.floor(Math.random() * categoriesArray.length)];
+      if (currentBackgroundImages.length >= 5) return;
+  
+      const newImage = {
+        ...randomImage,
+        id: Math.random(), // Asignar un ID único para cada aparición
+        left: window.innerWidth, // Empieza fuera de la pantalla a la derecha
+        top: Math.random() * (window.innerHeight - 100), // Altura aleatoria
+      };
+  
+      setCurrentBackgroundImages((prev) => [...prev, newImage]);
+  
+      // Elimina la imagen después de un tiempo si ha salido completamente de la pantalla
+      setTimeout(() => {
+        setCurrentBackgroundImages((prev) => prev.filter((img) => img.left > -300)); // Ajusta según el tamaño de las imágenes
+      }, Math.random() * 10000 + 5000); // Entre 5 y 15 segundos de duración en pantalla
+    };
 
+    // Intervalo aleatorio para añadir nuevas imágenes de fondo
+    const addBackgroundImageInterval = setInterval(() => {
+      addRandomBackgroundImage();
+    }, Math.random() * 13000 + 10000); // segundos entre cada nueva imagen de fondo
+  
+    return () => clearInterval(addBackgroundImageInterval); // Limpiar intervalo al desmontar el componente
+  }, []);
+  
   useEffect(() => {
     // Mover las imágenes activas
     const moveImages = () => {
       setActiveImages((prev) =>
         prev.map((img) => ({
           ...img,
-          left: img.left - 1, // Mover hacia la izquierda
+          left: img.left - 0.6, // Mover hacia la izquierda
         }))
       );
     };
-
-    const moveInterval = setInterval(moveImages, 20); // Actualizar cada 50 ms para un movimiento fluido
-
+  
+    // Mover las imágenes de fondo
+    const moveBackgroundImages = () => {
+      setCurrentBackgroundImages((prev) =>
+        prev.map((img) => ({
+          ...img,
+          left: img.left - 0.3, // Mover más lentamente hacia la izquierda
+        }))
+      );
+    };
+  
+    const moveInterval = setInterval(() => {
+      moveImages();
+      moveBackgroundImages();
+    }, 10); // Actualizar cada 50 ms para un movimiento fluido
+  
     return () => clearInterval(moveInterval); // Limpiar intervalo al desmontar el componente
-  }, [activeImages]);
-
+  }, [activeImages, currentBackgroundImages]);
+  
   return (
     <div className="container flex-1">
+      
+      {currentBackgroundImages.map((image) => (
+        <img
+          key={image.id}
+          src={image.url}
+          alt={image.category}
+          className="background-image"
+          style={{
+            left: `${image.left}px`,
+            top: `${image.top}px`,
+            position: 'absolute',
+            transition: 'none',
+            width: '200px',
+            height: '100px',
+            objectFit: 'cover',
+            opacity: 0.7, // Fondo más tenue
+            filter: 'blur(2px)',
+          }}
+        />
+      ))}
+
       {activeImages.map((image) => (
         <img
           key={image.id}
@@ -127,7 +191,7 @@ function App() {
           className="logo"
           color="#ffffff"
         />
-        <h1 style={{ fontSize: '35px', marginBottom: 40, marginTop: 10 }}>Wisdom</h1>
+        <h1 style={{ fontSize: '35px', marginBottom: 40, marginTop: 10, color:'#bdbdbd'}}>Wisdom</h1>
         <div className="qr-container">
           <img
             src={qrRandom} // Cambia esto por la URL de tu QR

@@ -18,21 +18,23 @@
 }
 
 .centered-container {
-  position: absolute; /* Permite que se superponga sobre otros elementos */
-  top: 50%; /* 50% desde la parte superior */
-  left: 50%; /* 50% desde la izquierda */
-  transform: translate(-50%, -50%); /* Centra el contenedor */
-  text-align: center; /* Centra el texto */
-  z-index: 10; /* Asegúrate de que esté por encima de otros elementos */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  padding: 2vw; /* Ajuste dinámico del padding según el tamaño de la pantalla */
 }
 
 .logo {
-  width: 150px; /* Ajusta según el tamaño de tu logo */
-  height: auto; /* Mantiene la proporción del logo */
+  width: 20vw; /* Ajusta el tamaño del logo proporcionalmente al ancho de la pantalla */
+  max-width: 150px; /* Limita el tamaño máximo del logo */
+  height: auto;
 }
 
 .qr-container {
-  padding: 23px; 
+  padding: 3vw; 
   background-color: #181818;
   border-width: 2px;
   border-color: #323635;
@@ -41,13 +43,45 @@
 }
 
 .qr-code {
-  width: 230px; /* Ajusta según el tamaño de tu QR */
-  height: auto; /* Mantiene la proporción del QR */
+  width: 30vw; /* El tamaño del QR se ajusta según el ancho de la pantalla */
+  max-width: 230px; /* Limita el tamaño máximo del QR */
+  height: auto;
 }
 
 .store-logo {
-  width: 25px; /* Ajusta según el tamaño de tu QR */
-  height: auto; /* Mantiene la proporción del QR */
+  width: 5vw; /* Ajusta el tamaño de los logos de las tiendas según el ancho de la pantalla */
+  max-width: 25px; /* Limita el tamaño máximo */
+  height: auto;
 }
 
+@media screen and (max-width: 768px) {
+  /* Ajustes para pantallas más pequeñas */
+  .centered-container {
+    max-width: 95vw;
+  }
+
+  .logo {
+    width: 30vw;
+  }
+
+  .qr-code {
+    width: 40vw;
+  }
+
+  .store-logo {
+    width: 8vw;
+  }
+
+  /* Reduce el gap entre los logos de las tiendas en pantallas más pequeñas */
+  .qr-container div {
+    gap: 50px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  /* Ajustes adicionales para pantallas muy pequeñas */
+  .qr-container div {
+    gap: 20px;
+  }
+}
 
