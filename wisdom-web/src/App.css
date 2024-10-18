@@ -34,8 +34,7 @@
 }
 
 .qr-container {
-  padding: min(1.5vw, 20px);
-  padding-bottom: min(1.5vw, 20px);
+  padding: min(5vw, 15px);
   background-color: #181818;
   border-width: 2px;
   border-color: #323635;

@@ -191,7 +191,7 @@ function App() {
           className="logo"
           color="#ffffff"
         />
-        <h1 style={{ fontSize: 'min(4.5vw, 25px)', marginBottom: 40, marginTop: 10, color:'#bdbdbd'}}>Wisdom</h1>
+        <h1 style={{ fontSize: 'min(5vw, 25px)', marginBottom: 40, marginTop: 10, color:'#bdbdbd'}}>Wisdom</h1>
         <div className="qr-container">
           <img
             src={qrRandom} // Cambia esto por la URL de tu QR
