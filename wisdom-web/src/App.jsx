@@ -213,7 +213,7 @@ function App() {
                 display: 'flex',
                 justifyContent: 'center', // Centrar horizontalmente
                 alignItems: 'center',    // Centrar verticalmente
-                gap: '100px',             // Espacio entre los elementos
+                gap: 'min(20vw, 100px)',             // Espacio entre los elementos
             }}
           >
             <img
