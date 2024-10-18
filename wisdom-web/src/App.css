@@ -34,7 +34,8 @@
 }
 
 .qr-container {
-  padding: 3vw; 
+  padding: min(1.5vw, 20px);
+  padding-bottom: min(1.5vw, 20px);
   background-color: #181818;
   border-width: 2px;
   border-color: #323635;
@@ -74,7 +75,7 @@
 
   /* Reduce el gap entre los logos de las tiendas en pantallas más pequeñas */
   .qr-container div {
-    gap: 50px;
+    gap: 30px;
   }
 }
 
