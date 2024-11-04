@@ -5,8 +5,10 @@ import './App.css';
 import WisdomLogo from './assets/wisdomLogo.tsx';
 import appleLogo from './assets/appleLogo.png';
 import androidLogo from './assets/androidLogo.png';
-import qrRandom from './assets/qrRandom.png';
+import qrRandom from './assets/qrTR.png';
 
+//https://testflight.apple.com/join/cyXuf7w4
+//https://play.google.com/store/apps/details?id=com.anonymous.Wisdom_expo
 
 const categoriesArray = [
   { id: 2, category: "Plumbing", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174847.png" },
@@ -141,6 +143,14 @@ function App() {
   
     return () => clearInterval(moveInterval); // Limpiar intervalo al desmontar el componente
   }, [activeImages, currentBackgroundImages]);
+
+  const handleAppleClick = () => {
+    window.location.href = "https://testflight.apple.com/join/cyXuf7w4";
+  };
+
+  const handleAndroidClick = () => {
+    window.location.href = "https://play.google.com/store/apps/details?id=com.anonymous.Wisdom_expo";
+  };
   
   return (
     <div className="container flex-1">
@@ -219,11 +229,13 @@ function App() {
             <img
                 src={appleLogo}
                 alt="Apple Store"
+                onClick={handleAppleClick}
                 className="store-logo"
             />
             <img
                 src={androidLogo}
                 alt="Android Store"
+                onClick={handleAndroidClick}
                 className="store-logo"
                 />
             </div>
