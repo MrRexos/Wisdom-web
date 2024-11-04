@@ -9,6 +9,7 @@ import qrRandom from './assets/qrTR.png';
 
 //https://testflight.apple.com/join/cyXuf7w4
 //https://play.google.com/store/apps/details?id=com.anonymous.Wisdom_expo
+//https://drive.google.com/file/d/1vztIvrMEzE1c3RMZrOoBs9dbK12K-1JT/view?usp=drive_link
 
 const categoriesArray = [
   { id: 2, category: "Plumbing", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174847.png" },
@@ -151,6 +152,10 @@ function App() {
   const handleAndroidClick = () => {
     window.location.href = "https://play.google.com/store/apps/details?id=com.anonymous.Wisdom_expo";
   };
+
+  const handleQrClick = () => {
+    window.location.href = "https://drive.google.com/file/d/1vztIvrMEzE1c3RMZrOoBs9dbK12K-1JT/view?usp=drive_link";
+  };
   
   return (
     <div className="container flex-1">
@@ -206,6 +211,7 @@ function App() {
           <img
             src={qrRandom} // Cambia esto por la URL de tu QR
             alt="QR Code"
+            onClick={handleQrClick}
             className="qr-code"
           />
           <div
