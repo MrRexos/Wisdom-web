@@ -1,6 +1,6 @@
 
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 
 import WisdomLogo from './assets/wisdomLogo.tsx';
@@ -89,6 +89,8 @@ function App() {
       }, Math.random() * 8000 + 5000);
     };
 
+    addRandomImage();
+
     const addImageInterval = setInterval(() => {
       addRandomImage();
     }, Math.random() * 8000 + 8000);
@@ -116,6 +118,8 @@ function App() {
         setCurrentBackgroundImages((prev) => prev.filter((img) => img.left > -300));
       }, Math.random() * 10000 + 5000);
     };
+
+    addRandomBackgroundImage();
 
     const addBackgroundImageInterval = setInterval(() => {
       addRandomBackgroundImage();
