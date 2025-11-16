@@ -135,18 +135,17 @@ const SectionHeading = ({ eyebrow, title, highlight }) => (
 );
 
 const Card = ({ children, className = '' }) => (
-  <div className={`rounded-[32px] bg-white p-8 shadow-[0_20px_60px_rgba(15,23,42,0.08)] ${className}`}>
+  <div className={`rounded-[50px] bg-[#f5f5f5] p-8  ${className}`}>
     {children}
   </div>
 );
 
 function App() {
   return (
-    <div className="min-h-screen bg-[#f6f7fb] text-[#050505]">
+    <div className="min-h-screen bg-[#ffffff] text-[#050505]">
       <div className="mx-auto max-w-6xl px-4 pb-24">
         <header className="flex flex-wrap items-center justify-between gap-4 py-8">
           <div className="flex items-center gap-2 text-lg font-semibold">
-            <span role="img" aria-label="letters" className="text-2xl">✉️</span>
             Letters
           </div>
           <nav className="flex flex-wrap items-center gap-6 text-sm font-medium text-[#4c5563]">
@@ -162,15 +161,13 @@ function App() {
           </div>
         </header>
 
-        <section className="relative overflow-hidden rounded-[48px] bg-[#bcdff7] px-6 py-20 text-white">
-          <StaticSky className="absolute inset-0 h-full w-full" />
+        <section className="relative overflow-hidden rounded-[48px] bg-[#9ec2dc] px-6 py-20 text-white">
           <div className="relative z-10 flex flex-col items-center text-center">
-            <p className="text-sm uppercase tracking-[0.35em] text-white/70">Use cases — Features — Pricing — Our doctors</p>
             <h1 className="mt-6 max-w-3xl text-5xl font-semibold leading-tight sm:text-6xl">Patients, not paperwork</h1>
-            <p className="mt-6 max-w-2xl text-lg text-white/80">
+            <p className="mt-6 max-w-2xl text-lg text-white">
               Write letters instantly that sound like you. Enjoy unlimited, gold-standard transcriptions. Save 5+ hours weekly on paperwork.
             </p>
-            <button className="mt-8 rounded-full bg-white px-8 py-3 text-base font-semibold text-[#050505] shadow-lg">
+            <button className="mt-8 rounded-full bg-[#050505] px-8 py-3 text-base font-semibold text-white shadow-lg">
               Sign up for free
             </button>
 
@@ -193,32 +190,33 @@ function App() {
           </div>
         </section>
 
+        
         <section className="mt-24 space-y-10">
-          <SectionHeading eyebrow="Save hours a week" title="Save hours a week with Letters" />
+          <SectionHeading title="Save hours a week with Letters" />
           <div className="grid gap-6 md:grid-cols-2">
             {saveTimeCards.map((card) => (
               <Card key={card.title} className="flex flex-col gap-4">
                 <div className="flex items-center gap-3 text-sm font-semibold text-[#7f8794]">
-                  <span className="rounded-full bg-[#f4f5f7] px-3 py-1 text-[#050505]">{card.title}</span>
-                  {card.pill}
+                  <span className="rounded-full bg-[#ffffff] px-3 py-1 text-[#050505]">{card.title}</span>
                 </div>
                 <h3 className="text-2xl font-semibold">{card.subtitle}</h3>
                 <p className="text-[#4c5563]">{card.description}</p>
-                <div className="mt-8 h-48 rounded-3xl bg-[#dfeefd]"></div>
+                <div className="mt-8 h-48 rounded-3xl bg-[#d4d4d3]"></div>
               </Card>
             ))}
           </div>
         </section>
 
         <section className="mt-28">
-          <SectionHeading title="How Letters works" highlight="Letters" />
-          <div className="flex flex-wrap justify-center gap-4">
-            <button className="rounded-full bg-[#050505] px-6 py-2 text-sm font-semibold text-white">Letters</button>
-            <button className="rounded-full bg-white px-6 py-2 text-sm font-semibold text-[#4c5563] shadow">Transcribe</button>
+          <SectionHeading title="How Letters works" />
+          <div className="flex justify-center ">
+            <div className="p-1 flex justify-center bg-[#f5f5f5] rounded-[25px]">
+              <button className="rounded-full bg-white px-6 py-2 text-sm font-semibold ">Letters</button>
+              <button className="rounded-full px-6 py-2 text-sm font-semibold text-[#4c5563] ">Transcribe</button>
+            </div>
           </div>
           <div className="mt-10 overflow-hidden rounded-[40px] bg-[#bcdff7] p-1">
             <div className="relative rounded-[38px] bg-[#bcdff7] px-8 py-12 text-white">
-              <StaticSky className="absolute inset-0 h-full w-full" />
               <div className="relative z-10">
                 <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1 text-sm font-semibold uppercase tracking-[0.3em]">
                   Letters
@@ -241,11 +239,13 @@ function App() {
         </section>
 
         <section className="mt-24 space-y-8">
-          <SectionHeading title="Writing letters has never been easier" highlight="Letters" />
+          <SectionHeading title="Writing letters has never been easier"/>
           <div className="grid gap-6 md:grid-cols-2">
             {writingCards.map((card) => (
               <Card key={card.title}>
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#7f8794]">{card.accent}</p>
+                <div className="flex items-center gap-3 text-sm font-semibold text-[#7f8794]">
+                  <span className="rounded-full bg-[#ffffff] px-3 py-1 text-[#050505]">{card.accent}</span>
+                </div>
                 <h3 className="mt-3 text-2xl font-semibold">{card.title}</h3>
                 <p className="mt-4 text-[#4c5563]">{card.description}</p>
                 <div className="mt-8 h-48 rounded-3xl bg-[#f2f5fb]"></div>
@@ -254,16 +254,16 @@ function App() {
           </div>
         </section>
 
-        <section className="mt-28 rounded-[48px] bg-gradient-to-b from-white to-[#f0f4fb] p-10 text-center">
+        <section className="mt-28  p-10 text-center">
           <h3 className="text-3xl font-semibold">Gold-Standard Transcriptions</h3>
           <p className="mt-4 text-lg text-[#4c5563]">
             Extensive medical vocabulary & custom dictionary to supercharge transcription accuracy.
           </p>
-          <div className="mt-10 h-64 rounded-[36px] bg-[#e3ecfa]"></div>
+          <div className="mt-10 h-64 rounded-[36px] bg-[#d4d4d3]"></div>
         </section>
 
         <section className="mt-28">
-          <SectionHeading title="Supercharge your practice with Letters" highlight="Letters" />
+          <SectionHeading title="Supercharge your practice with Letters" />
           <div className="grid gap-6 md:grid-cols-3">
             {practiceSteps.map((step) => (
               <Card key={step.number} className="flex flex-col gap-4">
@@ -278,24 +278,24 @@ function App() {
           </div>
         </section>
 
-        <section className="mt-28">
-          <SectionHeading title="What our doctors say" highlight="Letters" />
-          <div className="grid gap-6 md:grid-cols-3">
+        <section className="mt-28 bg-[#f5f5f5] rounded-[48px]  px-8 py-16">
+          <SectionHeading title="What our doctors say" />
+          <div className="grid gap-6 md:grid-cols-3 ">
             {testimonials.map((testimonial) => (
-              <Card key={testimonial.name}>
+              <div className='bg-[#ffffff] p-8 rounded-[3 0px]' key={testimonial.name}>
                 <p className="text-lg font-medium text-[#050505]">“{testimonial.quote}”</p>
                 <div className="mt-6 text-sm font-semibold text-[#7f8794]">
                   {testimonial.name}
                   <br />
                   <span className="text-[#4c5563]">{testimonial.role}</span>
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
         </section>
 
         <section className="mt-28">
-          <SectionHeading title="Your data is safe" highlight="Letters" />
+          <SectionHeading title="Your data is safe" />
           <div className="grid gap-6 md:grid-cols-3">
             {securityHighlights.map((item) => (
               <Card key={item.title}>
@@ -312,9 +312,7 @@ function App() {
         <section className="mt-28 overflow-hidden rounded-[48px] bg-[#bcdff7] px-8 py-16 text-white">
           <StaticSky className="absolute inset-0 hidden md:block" />
           <div className="relative z-10 text-center">
-            <p className="text-sm uppercase tracking-[0.35em] text-white/70">Annual — 16.7% • Monthly</p>
             <h3 className="mt-4 text-4xl font-semibold">Flexible pricing</h3>
-            <p className="mt-3 text-lg text-white/80">Pick the plan that fits your workflow.</p>
           </div>
           <div className="relative z-10 mt-10 grid gap-6 md:grid-cols-3">
             {pricingPlans.map((plan) => (
@@ -324,6 +322,7 @@ function App() {
                   plan.highlighted ? 'shadow-[0_30px_80px_rgba(15,23,42,0.2)]' : 'shadow-[0_20px_50px_rgba(15,23,42,0.1)]'
                 }`}
               >
+                
                 <div className="flex items-center justify-between text-sm font-semibold text-[#7f8794]">
                   {plan.name}
                   {plan.badge && <span className="rounded-full bg-[#e8f1ff] px-3 py-1 text-[#050505]">{plan.badge}</span>}
@@ -354,15 +353,7 @@ function App() {
           <button className="mt-8 rounded-full bg-[#050505] px-8 py-3 text-base font-semibold text-white shadow-lg">
             Sign up for free
           </button>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {devices.map((device) => (
-              <Card key={device.title}>
-                <div className="h-52 rounded-[32px] bg-[#f0f4fb]"></div>
-                <h3 className="mt-6 text-xl font-semibold">{device.title}</h3>
-                <p className="mt-2 text-[#4c5563]">{device.description}</p>
-              </Card>
-            ))}
-          </div>
+          <div className="mt-10 h-64 rounded-[36px] bg-[#d4d4d3]"></div>
         </section>
       </div>
     </div>
