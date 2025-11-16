@@ -1,87 +1,23 @@
-
-.container {
-  position: fixed; /* Cambia a absolute para llenar toda la ventana */
-  top: 0;            /* Asegúrate de que empiece en la parte superior */
-  left: 0;           /* Asegúrate de que empiece en la izquierda */
-  width: 100%;       /* Ocupa el 100% del ancho del viewport */
-  height: 100%;      /* Ocupa el 100% de la altura del viewport */
-  overflow: hidden;
-  background-color: black;
+.section-heading {
+  color: var(--ink);
 }
 
-.moving-image {
-  position: absolute;
-  width: 200px;
-  height: auto;
-  top: 50%;
-  transform: translateY(-50%);
+.section-subtitle {
+  color: var(--slate);
 }
 
-.centered-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  z-index: 10;
-  padding: 2vw; /* Ajuste dinámico del padding según el tamaño de la pantalla */
+.pill-toggle button {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.logo {
-  width: 20vw; /* Ajusta el tamaño del logo proporcionalmente al ancho de la pantalla */
-  max-width: 150px; /* Limita el tamaño máximo del logo */
-  height: auto;
+.mockup-panel {
+  background: linear-gradient(180deg, var(--white) 0%, var(--soft-gray) 100%);
 }
 
-.qr-container {
-  padding: min(7vw, 25px);
-  background-color: #181818;
-  border-width: 2px;
-  border-color: #323635;
-  border-style: solid;
-  border-radius: 10px;
+.testimonial-card {
+  background: var(--white);
 }
 
-.qr-code {
-  width: 30vw; /* El tamaño del QR se ajusta según el ancho de la pantalla */
-  max-width: 230px; /* Limita el tamaño máximo del QR */
-  height: auto;
+.padlock-circle {
+  background: radial-gradient(circle at 50% 35%, var(--white) 0%, var(--pale-blue) 65%);
 }
-
-.store-logo {
-  width: 5vw; /* Ajusta el tamaño de los logos de las tiendas según el ancho de la pantalla */
-  max-width: 25px; /* Limita el tamaño máximo */
-  height: auto;
-}
-
-@media screen and (max-width: 768px) {
-  /* Ajustes para pantallas más pequeñas */
-  .centered-container {
-    max-width: 95vw;
-  }
-
-  .logo {
-    width: 30vw;
-  }
-
-  .qr-code {
-    width: 40vw;
-  }
-
-  .store-logo {
-    width: 8vw;
-  }
-
-  /* Reduce el gap entre los logos de las tiendas en pantallas más pequeñas */
-  .qr-container div {
-    gap: 30px;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  /* Ajustes adicionales para pantallas muy pequeñas */
-  .qr-container div {
-    gap: 20px;
-  }
-}
-

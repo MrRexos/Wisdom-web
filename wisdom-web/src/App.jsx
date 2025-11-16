@@ -1,274 +1,461 @@
-
-
-import { useState, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import * as THREE from 'three';
 import './App.css';
 
-import WisdomLogo from './assets/wisdomLogo.tsx';
-import appleLogo from './assets/appleLogo.png';
-import androidLogo from './assets/androidLogo.png';
-import qrRandom from './assets/qrTR.png';
+const navLinks = ['Use cases', 'Features', 'Pricing', 'Our doctors'];
 
-const categoriesArray = [
-  { id: 2, category: "Plumbing", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174847.png" },
-  { id: 89, category: "AI development", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20201215.png" },
-  { id: 1, category: "Home cleaning", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174733.png" },
-  { id: 31, category: "Personal trainers", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175621.png" },
-  { id: 317, category: "Dog walkers", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20190223.png" },
-  { id: 318, category: "Pet care at home", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20190446.png" },
-  { id: 5, category: "Masonry", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175117.png" },
-  { id: 83, category: "Mobile app development", url: "https://storage.googleapis.com/wisdom-images/451067aa-4bd3-43d8-874d-ff8b5e50ce7e.jpeg" },
-  { id: 151, category: "Architects", url: "https://storage.googleapis.com/wisdom-images/526bda5b-c0c2-4170-b552-12a17db69fa9.jpeg" },
-  { id: 8, category: "Painting and decoration", url: "https://storage.googleapis.com/wisdom-images/237ee01c-4454-4d81-8f27-f502f74ac9d3.jpeg" },
-  { id: 3, category: "Electrical work", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175034.png" },
-  { id: 6, category: "Gardening", url: "https://storage.googleapis.com/wisdom-images/4a4881ba-a06f-4bb1-be9d-016d2b49eae4.jpeg" },
-  { id: 32, category: "Nutritionists", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175812.png" },
-  { id: 34, category: "Psychology", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180032.png" },
-  { id: 35, category: "Yoga", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180113.png" },
-  { id: 36, category: "Guided meditation", url: "https://storage.googleapis.com/wisdom-images/53a50b05-32d7-4e90-86ce-62702bc97d65.jpeg" },
-  { id: 37, category: "Therapeutic massages", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180612.png" },
-  { id: 54, category: "Couples therapy", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180656.png" },
-  { id: 56, category: "Private tutors", url: "https://storage.googleapis.com/wisdom-images/77502ab75202d6b38aa0df57113b6746.jpg" },
-  { id: 57, category: "Math classes", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180933.png" },
-  { id: 58, category: "Language classes", url: "https://storage.googleapis.com/wisdom-images/6f1a64adbbe28f7d572a9fef189ea542.jpg" },
-  { id: 59, category: "Science classes", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181138.png" },
-  { id: 68, category: "Job interview preparation", url: "https://storage.googleapis.com/wisdom-images/36548671ef1476a260d9e3dbb8fe4706.jpg" },
-  { id: 65, category: "Music classes", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181310.png" },
-  { id: 61, category: "Programming classes", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181628.png" },
-  { id: 85, category: "Frontend development", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20182501.png" },
-  { id: 86, category: "Backend development", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20182034.png" },
-  { id: 90, category: "Graphic design", url: "https://storage.googleapis.com/wisdom-images/a2b2c958-2d21-4308-8b07-51a1820f6faa.jpeg" },
-  { id: 94, category: "Video editing", url: "https://storage.googleapis.com/wisdom-images/ad3a9403cb4273ff3bfb2ab24429bb62.jpg" },
-  { id: 100, category: "3D design", url: "https://storage.googleapis.com/wisdom-images/4475f6e7e9766c27834ae79e308907db2d4fe361f741e26a2e9357b0a6c63082_1920x1080.webp" },
-  { id: 101, category: "Social media content creation", url: "https://storage.googleapis.com/wisdom-images/contentcretor.png" },
-  { id: 152, category: "Masons", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175117.png" },
-  { id: 170, category: "Building rehabilitation", url: "https://storage.googleapis.com/wisdom-images/5964b65c-a2f6-4638-9024-6b38b2e0f42a.jpeg" },
-  { id: 172, category: "Wedding planners", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184608.png" },
-  { id: 173, category: "Event Catering", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184635.png" },
-  { id: 174, category: "Event photography", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184808.png" },
-  { id: 175, category: "Party DJs", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184853.png" },
-  { id: 178, category: "Children's entertainers", url: "https://storage.googleapis.com/wisdom-images/1.webp" },
-  { id: 181, category: "Event security", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20185110.png" },
-  { id: 228, category: "Business analysis", url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20190143.png" },
+const highlightCards = [
+  {
+    id: 'letters',
+    badge: 'Letters',
+    title: 'Instantly generate personalised medical letters',
+    description: 'Upload past letters, consultations or just start typing — Letters adapts to your style in seconds.',
+    actions: ['Upload past letters', 'Upload consultations recordings', 'Type it'],
+    accent: '📄',
+  },
+  {
+    id: 'transcribe',
+    badge: 'Transcribe',
+    title: 'Transcribe dictations, consultations & telehealth',
+    description: 'Save every detail with gold-standard, AI-assisted transcripts built for clinicians.',
+    actions: ['Upload patient letters', 'Choose documents', 'Assistant'],
+    accent: '🩺',
+  },
 ];
 
-function App() {
-  const [activeImages, setActiveImages] = useState([]);
-  const [currentBackgroundImages, setCurrentBackgroundImages] = useState([]);
-  const [isWindowActive, setIsWindowActive] = useState(true);
+const writingCards = [
+  {
+    title: 'Generate personalised letters that sound like you',
+    description: 'We learn your style based on your past letters, and create a template that sounds exactly like you.',
+    badge: 'Upload to train Letters',
+    placeholder: 'Signature template',
+  },
+  {
+    title: 'Upload any source to create your letter',
+    description: 'Add text, upload files or scans, consultations, telehealth visits — we will turn information into a draft.',
+    badge: 'Add multiple sources',
+    placeholder: 'Add Sources',
+  },
+];
+
+const practiceSteps = [
+  {
+    step: '1',
+    title: 'Invite your practice to Letters',
+    description: 'Easily get started by inviting your team — including doctors, allied health professionals, and administrative staff.',
+  },
+  {
+    step: '2',
+    title: 'Seamlessly onboard your practice',
+    description: 'Our intuitive platform means your practice is up and running fast, supported by helpful tooltips and clear states.',
+  },
+  {
+    step: '3',
+    title: "See your team’s impact",
+    description: 'Letters keeps your clinicians focused on patients. Track results with simple metrics and admin savings.',
+  },
+];
+
+const testimonials = [
+  {
+    name: 'Dr. Ram Kishanani',
+    role: 'The Carlyle Dentists',
+    quote: 'The ease of use, the instant draft and the outstanding support make Letters indispensable.',
+  },
+  {
+    name: 'Grace MacPherson',
+    role: 'Operations Lead',
+    quote: 'We have seen a significant reduction in report turnaround times and admin costs.',
+  },
+  {
+    name: 'Dr. David Lanz',
+    role: 'Clinical Director',
+    quote: 'It picks up every detail. If the dictation is messy, it still helps me to finalise things on time.',
+  },
+];
+
+const securityHighlights = [
+  {
+    title: 'Secure with bank-grade protection',
+    description: 'Letters complies with Australian privacy regulations, including the Australian Privacy Act 1988.',
+  },
+  {
+    title: 'Your data never leaves Australia',
+    description: 'Your data is processed and stored exclusively on secure servers located in Sydney.',
+  },
+  {
+    title: 'Recordings & files are never stored',
+    description: 'We delete audio & files instantly once processed, so your information stays in your control.',
+  },
+];
+
+const pricingPlans = [
+  {
+    name: 'Letters Basic',
+    price: 'Free',
+    description: 'For sole use with light needs.',
+    items: ['4 letters / day', '3 transcriptions / day', '1 personalised template'],
+    cta: 'Start for Free',
+    featured: false,
+  },
+  {
+    name: 'Letters Pro',
+    price: '$66/mo',
+    description: 'For busy doctors & growing practices.',
+    items: ['Unlimited letters', 'Unlimited transcriptions', 'Consultations Assistant', 'Practices: $660/mo up to 10'],
+    cta: 'Start a 2-Week Trial',
+    featured: true,
+  },
+  {
+    name: 'Letters Enterprise',
+    price: 'Flexible',
+    description: 'For practices, clinics and beyond.',
+    items: ['Dedicated support', 'Discounted pricing', 'Practice enablement', 'Custom deployment options'],
+    cta: 'Talk to Sales',
+    featured: false,
+  },
+];
+
+const devicePreviews = [
+  {
+    title: 'Dictate',
+    description: 'Capture audio notes anywhere.',
+  },
+  {
+    title: 'Transcribe',
+    description: 'Turn speech into structured notes.',
+  },
+  {
+    title: 'Letters',
+    description: 'Review, edit and send instantly.',
+  },
+];
+
+const HeroBadge = ({ label, value }) => (
+  <div className="rounded-full bg-[var(--white)]/70 px-4 py-2 text-sm font-medium text-[var(--slate)]">
+    <span className="mr-2 text-base">{label}</span>
+    <span className="font-semibold text-[var(--rich-ink)]">{value}</span>
+  </div>
+);
+
+const SkyScene = () => {
+  const mountRef = useRef(null);
 
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      setIsWindowActive(!document.hidden);
+    const mount = mountRef.current;
+    if (!mount) return;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, mount.clientWidth / mount.clientHeight, 0.1, 1000);
+    camera.position.z = 6;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(mount.clientWidth, mount.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setClearColor(0x000000, 0);
+    mount.appendChild(renderer.domElement);
+
+    const geometry = new THREE.SphereGeometry(10, 32, 32);
+    const material = new THREE.MeshBasicMaterial({ color: '#CDE8FF', side: THREE.BackSide });
+    const skyDome = new THREE.Mesh(geometry, material);
+    scene.add(skyDome);
+
+    const ambient = new THREE.AmbientLight('#FFFFFF', 0.6);
+    scene.add(ambient);
+
+    renderer.render(scene, camera);
+
+    const handleResize = () => {
+      if (!mount) return;
+      camera.aspect = mount.clientWidth / mount.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(mount.clientWidth, mount.clientHeight);
+      renderer.render(scene, camera);
     };
 
-    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener('resize', handleResize);
+      mount.removeChild(renderer.domElement);
+      geometry.dispose();
+      material.dispose();
+      renderer.dispose();
     };
   }, []);
 
-  useEffect(() => {
-    const addRandomImage = () => {
-      if (!isWindowActive) return; // Stop adding images when the window is inactive
+  return <div ref={mountRef} className="absolute inset-0" aria-hidden="true" />;
+};
 
-      const randomImage = categoriesArray[Math.floor(Math.random() * categoriesArray.length)];
-      if (activeImages.length >= 10) return;
-
-      const newImage = {
-        ...randomImage,
-        id: Math.random(),
-        left: window.innerWidth,
-        top: Math.random() * (window.innerHeight - 100),
-      };
-
-      setActiveImages((prev) => [...prev, newImage]);
-
-      setTimeout(() => {
-        setActiveImages((prev) => prev.filter((img) => img.left > -300));
-      }, Math.random() * 8000 + 5000);
-    };
-
-    addRandomImage();
-
-    const addImageInterval = setInterval(() => {
-      addRandomImage();
-    }, Math.random() * 8000 + 8000);
-
-    return () => clearInterval(addImageInterval);
-  }, [isWindowActive]);
-
-  useEffect(() => {
-    const addRandomBackgroundImage = () => {
-      if (!isWindowActive) return; // Stop adding background images when the window is inactive
-
-      const randomImage = categoriesArray[Math.floor(Math.random() * categoriesArray.length)];
-      if (currentBackgroundImages.length >= 5) return;
-
-      const newImage = {
-        ...randomImage,
-        id: Math.random(),
-        left: window.innerWidth,
-        top: Math.random() * (window.innerHeight - 100),
-      };
-
-      setCurrentBackgroundImages((prev) => [...prev, newImage]);
-
-      setTimeout(() => {
-        setCurrentBackgroundImages((prev) => prev.filter((img) => img.left > -300));
-      }, Math.random() * 10000 + 5000);
-    };
-
-    addRandomBackgroundImage();
-
-    const addBackgroundImageInterval = setInterval(() => {
-      addRandomBackgroundImage();
-    }, Math.random() * 13000 + 10000);
-
-    return () => clearInterval(addBackgroundImageInterval);
-  }, [isWindowActive]);
-
-  useEffect(() => {
-    const moveImages = () => {
-      if (!isWindowActive) return; // Stop moving images when the window is inactive
-
-      setActiveImages((prev) =>
-        prev.map((img) => ({
-          ...img,
-          left: img.left - 0.6,
-        }))
-      );
-    };
-
-    const moveBackgroundImages = () => {
-      if (!isWindowActive) return; // Stop moving background images when the window is inactive
-
-      setCurrentBackgroundImages((prev) =>
-        prev.map((img) => ({
-          ...img,
-          left: img.left - 0.3,
-        }))
-      );
-    };
-
-    const moveInterval = setInterval(() => {
-      moveImages();
-      moveBackgroundImages();
-    }, 10);
-
-    return () => clearInterval(moveInterval);
-  }, [isWindowActive, activeImages, currentBackgroundImages]);
-
-  const handleAppleClick = () => {
-    window.location.href = "https://testflight.apple.com/join/cyXuf7w4";
-  };
-
-  const handleAndroidClick = () => {
-    window.location.href = "https://play.google.com/store/apps/details?id=com.anonymous.Wisdom_expo";
-  };
-
-  const handleQrClick = () => {
-    window.location.href = "https://drive.google.com/file/d/1vztIvrMEzE1c3RMZrOoBs9dbK12K-1JT/view?usp=drive_link";
-  };
-
+function App() {
   return (
-    <div className="container flex-1">
-      {currentBackgroundImages.map((image) => (
-        <img
-          key={image.id}
-          src={image.url}
-          alt={image.category}
-          className="background-image"
-          style={{
-            left: `${image.left}px`,
-            top: `${image.top}px`,
-            position: 'absolute',
-            transition: 'none',
-            width: '200px',
-            height: '100px',
-            objectFit: 'cover',
-            opacity: 0.7,
-            filter: 'blur(2px)',
-            borderRadius: '8px',
-          }}
-        />
-      ))}
+    <div className="bg-[var(--cloud)] text-[var(--ink)] font-inter">
+      <section className="relative overflow-hidden hero-gradient">
+        <div className="absolute inset-0 hero-overlay" aria-hidden="true" />
+        <SkyScene />
+        <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col px-6 pb-16 pt-8">
+          <header className="flex flex-wrap items-center justify-between gap-4 py-4 text-sm font-medium text-[var(--slate)]">
+            <div className="flex items-center gap-2 text-[var(--ink)]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--white)] text-lg font-semibold text-[var(--accent)] shadow-lg">
+                L
+              </div>
+              <span className="text-base font-semibold text-[var(--ink)]">Letters</span>
+            </div>
+            <nav className="hidden flex-1 items-center justify-center gap-6 md:flex">
+              {navLinks.map((item) => (
+                <button key={item} className="text-sm text-[var(--slate)] transition hover:text-[var(--ink)]">
+                  {item}
+                </button>
+              ))}
+            </nav>
+            <div className="flex items-center gap-3 text-[var(--ink)]">
+              <button className="font-semibold">Login</button>
+              <button className="rounded-full bg-[var(--ink)] px-5 py-2 text-[var(--white)] font-semibold">
+                Sign up
+              </button>
+            </div>
+          </header>
 
-      {activeImages.map((image) => (
-        <img
-          key={image.id}
-          src={image.url}
-          alt={image.category}
-          className="moving-image"
-          style={{
-            left: `${image.left}px`,
-            top: `${image.top}px`,
-            position: 'absolute',
-            transition: 'none',
-            width: '330px',
-            height: '150px',
-            objectFit: 'cover',
-            borderRadius: '15px',
-          }}
-        />
-      ))}
+          <div className="flex flex-1 flex-col items-center justify-center gap-6 text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--slate)]">Use cases</p>
+            <h1 className="text-4xl font-semibold text-[var(--rich-ink)] md:text-6xl">Patients, not paperwork</h1>
+            <p className="max-w-3xl text-lg text-[var(--slate)]">
+              Write letters instantly that sound like you. Enjoy unlimited, gold-standard transcriptions and save 5+ hours weekly on paperwork.
+            </p>
+            <button className="rounded-full bg-[var(--rich-ink)] px-8 py-3 text-lg font-semibold text-[var(--white)]">
+              Sign up for free
+            </button>
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+              <HeroBadge label="Before" value="Dictate for 20 mins" />
+              <HeroBadge label="After" value="2 mins to finalise" />
+            </div>
+          </div>
 
-      <div className="centered-container">
-        <WisdomLogo className="logo" color="#ffffff" />
-         <h1 style={{ fontSize: 'min(5vw, 25px)', marginBottom: 40, marginTop: 10, color: '#bdbdbd' }}>Wisdom</h1>
-        <div className="qr-container">
-          <img
-            src={qrRandom}
-            alt="QR Code"
-            onClick={handleQrClick}
-            className="qr-code"
-          />
-          <div
-            style={{
-              height: '0.25rem',
-              width: '100%',
-              marginTop: '0.25rem',
-              marginBottom: '1rem',
-              borderBottom: '2px solid #323635',
-            }}
-          />
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: 'min(20vw, 100px)',
-            }}
-          >
-            <img
-              src={appleLogo}
-              alt="Apple Store"
-              onClick={handleAppleClick}
-              className="store-logo"
-            />
-            <img
-              src={androidLogo}
-              alt="Android Store"
-              onClick={handleAndroidClick}
-              className="store-logo"
-            />
+          <div className="mt-10 rounded-[32px] bg-[var(--white)] p-8 card-shadow">
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="rounded-3xl border border-[var(--soft-gray)] p-6">
+                <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-[var(--soft-gray)] px-4 py-1 text-xs font-semibold uppercase text-[var(--slate)]">
+                  Before
+                </p>
+                <p className="text-[var(--slate)]">
+                  Dictate for 20 minutes. The patient is leaving and you still have to re-type everything.
+                </p>
+              </div>
+              <div className="rounded-3xl border border-[var(--soft-gray)] bg-[var(--pale-blue)]/60 p-6">
+                <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-[var(--white)] px-4 py-1 text-xs font-semibold uppercase text-[var(--slate)]">
+                  After
+                </p>
+                <p className="text-[var(--slate)]">
+                  Dictate for 2 minutes. The draft pops up while you consult, ready to review and send.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          textAlign: 'center',
-          fontSize: '12px',
-          color: '#474646',
-        }}
-      >
-        Via Europa, 98-2, Mataró, Barcelona • wisdom.helpcontact@gmail.com • +34699187491
-      </div>
+      </section>
+
+      <main className="space-y-24 py-24">
+        <section className="mx-auto flex max-w-6xl flex-col gap-12 px-6">
+          <div className="text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--slate)]">Letters</p>
+            <h2 className="section-heading text-3xl font-semibold md:text-5xl">Save hours a week with Letters</h2>
+          </div>
+          <div className="grid gap-8 md:grid-cols-2">
+            {highlightCards.map((card) => (
+              <div key={card.id} className="soft-card-shadow rounded-[36px] bg-[var(--white)] p-8">
+                <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-[var(--soft-gray)] px-4 py-2 text-sm font-semibold text-[var(--slate)]">
+                  {card.accent} {card.badge}
+                </div>
+                <h3 className="text-2xl font-semibold text-[var(--rich-ink)]">{card.title}</h3>
+                <p className="mt-4 text-[var(--slate)]">{card.description}</p>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  {card.actions.map((action) => (
+                    <span key={action} className="rounded-full bg-[var(--pale-blue)] px-4 py-2 text-sm font-semibold text-[var(--slate)]">
+                      {action}
+                    </span>
+                  ))}
+                </div>
+                <button className="mt-8 text-[var(--ink)] underline-offset-4 hover:underline">About {card.badge}</button>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mx-auto flex max-w-6xl flex-col gap-8 px-6">
+          <div className="text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--slate)]">Workflow</p>
+            <h2 className="section-heading text-3xl font-semibold md:text-5xl">How Letters works</h2>
+          </div>
+          <div className="pill-toggle mx-auto flex max-w-md gap-3 rounded-full bg-[var(--soft-gray)] p-2">
+            <button className="w-1/2 rounded-full bg-[var(--white)] px-4 py-2 text-sm font-semibold text-[var(--ink)]">Letters</button>
+            <button className="w-1/2 rounded-full px-4 py-2 text-sm font-semibold text-[var(--slate)]">Transcribe</button>
+          </div>
+          <div className="mockup-panel card-shadow rounded-[40px] p-8">
+            <div className="flex flex-col gap-10 md:flex-row">
+              <div className="flex-1 space-y-4">
+                <h3 className="text-3xl font-semibold text-[var(--rich-ink)]">Welcome to Letters</h3>
+                <p className="text-[var(--slate)]">
+                  Toggle between Letters and Transcribe to see how your workflow adapts. The blue panel represents the clean UI that keeps you focused.
+                </p>
+                <button className="rounded-full bg-[var(--ink)] px-6 py-3 text-sm font-semibold text-[var(--white)]">
+                  Dejar de seleccionar
+                </button>
+              </div>
+              <div className="flex-1 rounded-[32px] bg-[var(--pale-blue)]/60 p-8 text-center">
+                <p className="text-sm font-semibold uppercase tracking-[0.4em] text-[var(--slate)]">Letters</p>
+                <h4 className="mt-6 text-2xl font-semibold text-[var(--rich-ink)]">Welcome To</h4>
+                <div className="mt-8 h-48 rounded-[28px] bg-[var(--white)]" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto flex max-w-6xl flex-col gap-10 px-6">
+          <div className="text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--slate)]">Drafts</p>
+            <h2 className="section-heading text-3xl font-semibold md:text-5xl">Writing letters has never been easier</h2>
+          </div>
+          <div className="grid gap-8 md:grid-cols-2">
+            {writingCards.map((card) => (
+              <div key={card.title} className="soft-card-shadow rounded-[36px] bg-[var(--white)] p-8">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[var(--soft-gray)] px-4 py-2 text-sm font-semibold text-[var(--slate)]">
+                  {card.badge}
+                </div>
+                <h3 className="text-2xl font-semibold text-[var(--rich-ink)]">{card.title}</h3>
+                <p className="mt-4 text-[var(--slate)]">{card.description}</p>
+                <div className="mt-8 h-40 rounded-[28px] bg-[var(--pale-blue)]/70"></div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mx-auto flex max-w-6xl flex-col gap-8 px-6 text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--slate)]">Transcriptions</p>
+          <h2 className="section-heading text-3xl font-semibold md:text-5xl">Gold-Standard Transcriptions</h2>
+          <p className="mx-auto max-w-3xl text-[var(--slate)]">
+            Extensive medical vocabulary & a custom dictionary supercharge transcription accuracy.
+          </p>
+          <div className="card-shadow mt-4 rounded-[40px] bg-[var(--white)] p-10">
+            <div className="mx-auto h-72 max-w-3xl rounded-[32px] bg-[var(--pale-blue)]/60"></div>
+          </div>
+        </section>
+
+        <section className="mx-auto flex max-w-6xl flex-col gap-10 px-6">
+          <div className="text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--slate)]">Onboarding</p>
+            <h2 className="section-heading text-3xl font-semibold md:text-5xl">Supercharge your practice with Letters</h2>
+          </div>
+          <div className="grid gap-8 md:grid-cols-3">
+            {practiceSteps.map((step) => (
+              <div key={step.step} className="soft-card-shadow rounded-[36px] bg-[var(--white)] p-8 text-left">
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--pale-blue)] text-2xl font-semibold text-[var(--ink)]">
+                  {step.step}
+                </div>
+                <h3 className="text-2xl font-semibold text-[var(--rich-ink)]">{step.title}</h3>
+                <p className="mt-4 text-[var(--slate)]">{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mx-auto flex max-w-6xl flex-col gap-8 px-6">
+          <div className="text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--slate)]">Testimonials</p>
+            <h2 className="section-heading text-3xl font-semibold md:text-5xl">Trusted by modern practices</h2>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {testimonials.map((testimonial) => (
+              <div key={testimonial.name} className="testimonial-card soft-card-shadow rounded-[32px] p-8 text-left">
+                <p className="text-[var(--slate)]">“{testimonial.quote}”</p>
+                <div className="mt-6">
+                  <p className="text-lg font-semibold text-[var(--rich-ink)]">{testimonial.name}</p>
+                  <p className="text-sm text-[var(--slate)]">{testimonial.role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mx-auto flex max-w-6xl flex-col gap-10 px-6">
+          <div className="text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--slate)]">Security</p>
+            <h2 className="section-heading text-3xl font-semibold md:text-5xl">Your data is safe</h2>
+          </div>
+          <div className="grid gap-8 md:grid-cols-3">
+            {securityHighlights.map((item) => (
+              <div key={item.title} className="soft-card-shadow rounded-[32px] bg-[var(--white)] p-8">
+                <h3 className="text-xl font-semibold text-[var(--rich-ink)]">{item.title}</h3>
+                <p className="mt-4 text-[var(--slate)]">{item.description}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mx-auto flex h-56 w-56 items-center justify-center rounded-full padlock-circle">
+            <div className="h-24 w-20 rounded-3xl bg-[var(--ink)]"></div>
+          </div>
+        </section>
+
+        <section className="hero-gradient py-20">
+          <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6">
+            <div className="text-center">
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--slate)]">Pricing</p>
+              <h2 className="section-heading text-3xl font-semibold md:text-5xl">Flexible pricing</h2>
+              <div className="mt-4 inline-flex rounded-full bg-[var(--white)] px-2 py-1 text-sm font-semibold text-[var(--slate)]">
+                <button className="rounded-full bg-[var(--ink)] px-4 py-1 text-[var(--white)]">Annual -16.7%</button>
+                <button className="rounded-full px-4 py-1 text-[var(--slate)]">Monthly</button>
+              </div>
+            </div>
+            <div className="grid gap-8 md:grid-cols-3">
+              {pricingPlans.map((plan) => (
+                <div
+                  key={plan.name}
+                  className={`soft-card-shadow rounded-[36px] p-8 ${
+                    plan.featured ? 'bg-[var(--white)] border border-[var(--ink)]' : 'bg-[var(--white)]'
+                  }`}
+                >
+                  <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--slate)]">{plan.name}</p>
+                  <h3 className="mt-4 text-4xl font-semibold text-[var(--rich-ink)]">{plan.price}</h3>
+                  <p className="mt-2 text-[var(--slate)]">{plan.description}</p>
+                  <ul className="mt-6 space-y-3 text-[var(--slate)]">
+                    {plan.items.map((item) => (
+                      <li key={item} className="flex items-center gap-2">
+                        <span className="text-[var(--accent)]">•</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <button
+                    className={`mt-8 w-full rounded-full border border-[var(--ink)] px-4 py-3 text-sm font-semibold ${
+                      plan.featured ? 'bg-[var(--ink)] text-[var(--white)]' : 'text-[var(--ink)]'
+                    }`}
+                  >
+                    {plan.cta}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto flex max-w-6xl flex-col gap-8 px-6 text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--slate)]">Devices</p>
+          <h2 className="section-heading text-3xl font-semibold md:text-5xl">Letters works seamlessly across all your devices</h2>
+          <p className="mx-auto max-w-3xl text-[var(--slate)]">
+            Whether you’re on web, iPad, or iOS — start on one device, pick up on another. Your letters and transcriptions sync instantly.
+          </p>
+          <button className="mx-auto rounded-full bg-[var(--rich-ink)] px-8 py-3 text-lg font-semibold text-[var(--white)]">
+            Sign up for free
+          </button>
+          <div className="grid gap-8 md:grid-cols-3">
+            {devicePreviews.map((device) => (
+              <div key={device.title} className="soft-card-shadow rounded-[32px] bg-[var(--white)] p-8">
+                <div className="mx-auto mb-6 h-48 w-full rounded-[28px] bg-[var(--pale-blue)]/70"></div>
+                <h3 className="text-xl font-semibold text-[var(--rich-ink)]">{device.title}</h3>
+                <p className="mt-2 text-[var(--slate)]">{device.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </main>
     </div>
   );
 }

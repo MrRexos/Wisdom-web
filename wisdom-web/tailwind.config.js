@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        inter: ['Inter', 'sans-serif'],
+      },
       keyframes: {
         slide: {
           '0%': { transform: 'translateX(100%)' },
