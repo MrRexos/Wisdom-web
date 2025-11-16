@@ -1,3 +1,5 @@
+import React, { useEffect, useRef, useState } from 'react';
+
 const navLinks = ['Use cases', 'Features', 'Pricing', 'Our doctors'];
 
 const saveTimeCards = [
@@ -128,35 +130,135 @@ const Card = ({ children, className = '' }) => (
 );
 
 function App() {
+
+  const headerRef = useRef(null);
+  const heroRef = useRef(null);
+  const [headerOverHero, setHeaderOverHero] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!headerRef.current || !heroRef.current) return;
+
+      const headerRect = headerRef.current.getBoundingClientRect();
+      const heroRect = heroRef.current.getBoundingClientRect();
+
+      // Hay “solapamiento” vertical entre header y hero
+      const isOverHero =
+        heroRect.top < headerRect.bottom && heroRect.bottom > headerRect.top;
+
+      setHeaderOverHero(isOverHero);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+    handleScroll(); // calcular al cargar
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [])
+
+
   return (
-    <div className="min-h-screen bg-[#000000] text-[#050505]">
-      <header className="fixed left-1/2 top-6 z-20 flex w-[calc(100%-2rem)] max-w-6xl -translate-x-1/2 items-center justify-between gap-4 rounded-full 0 bg-white/70 px-6 py-4 text-sm font-semibold text-[#4c5563] shadow-lg backdrop-blur-[10px]">
-        <div className="text-lg font-semibold text-[#050505]">Wisdom</div>
-        <nav className="hidden flex-wrap items-center gap-6 md:flex">
+    <div className="min-h-screen bg-[#ffffff] text-[#050505]">
+      <header
+        ref={headerRef}
+        className={`
+          fixed top-4 left-1/2 z-20
+          flex w-[calc(100%-2rem)] max-w-6xl -translate-x-1/2
+          items-center px-6 py-4 text-sm font-semibold
+          transition-[background-color,box-shadow,backdrop-filter] duration-300
+          ${headerOverHero
+            ? 'bg-transparent shadow-none'
+            : 'rounded-full bg-white/70 shadow-lg backdrop-blur-[10px]'}
+        `}
+      >
+        {/* Columna izquierda: Wisdom */}
+        <div
+          className={`
+            flex flex-1 justify-start
+            transition-transform duration-300
+            ${headerOverHero ? '-translate-x-6' : 'translate-x-0'}
+          `}
+        >
+          <div
+            className={`text-lg font-semibold transition-colors ${
+              headerOverHero ? 'text-white' : 'text-[#050505]'
+            }`}
+          >
+            Wisdom
+          </div>
+        </div>
+
+        {/* Centro: nav, NO se mueve */}
+        <nav className="hidden flex-none flex-wrap items-center justify-center gap-6 md:flex">
           {navLinks.map((link) => (
-            <a key={link} href="#" className="transition hover:text-[#050505]">
+            <a
+              key={link}
+              href="#"
+              className={`text-sm font-semibold transition-colors duration-300 ${
+                headerOverHero
+                  ? 'text-white/90 hover:text-white'
+                  : 'text-[#4c5563] hover:text-[#050505]'
+              }`}
+            >
               {link}
             </a>
           ))}
         </nav>
-        <div className="flex items-center gap-3 text-[#050505]">
-          <button className="rounded-full px-5 py-2 transition hover:bg-white/60">Login</button>
-          <button className="rounded-full bg-[#050505] px-6 py-2 text-white shadow-lg">Sign up</button>
+
+        {/* Columna derecha: Login + Sign up */}
+        <div
+          className={`
+            flex flex-1 justify-end gap-3
+            transition-transform duration-300
+            ${headerOverHero ? 'translate-x-6' : 'translate-x-0'}
+          `}
+        >
+          <button
+            className={`
+              rounded-full px-5 py-2 text-sm font-semibold
+              transition-colors duration-300
+              ${headerOverHero
+                ? 'text-white hover:bg-white/10'
+                : 'text-[#050505] hover:bg-white/60'}
+            `}
+          >
+            Login
+          </button>
+          <button
+            className={`
+              rounded-full px-6 py-2 text-sm font-semibold shadow-lg
+              transition-all duration-300
+              ${headerOverHero
+                ? 'bg-white text-[#050505] hover:bg-white/90'
+                : 'bg-[#050505] text-white hover:bg-black'}
+            `}
+          >
+            Sign up
+          </button>
         </div>
       </header>
 
       <main className="">
-        <section className="relative mx-4 mt-4 min-h-[calc(100vh-7rem)] overflow-hidden rounded-[48px] bg-[#9ec2dc] px-6 py-12 text-white">
+      <section
+          ref={heroRef}
+          className="relative m-4 min-h-[calc(100vh-2rem)] overflow-hidden rounded-[30px] bg-[#9ec2dc] px-6 pt-[140px] pb-12 text-white"
+        >
           <div className="relative z-10 flex h-full flex-col items-center justify-center text-center">
-            <div className="space-y-6">
-              <h1 className="text-5xl font-semibold leading-tight sm:text-6xl">Patients, not paperwork</h1>
-              <p className="mx-auto max-w-3xl text-lg text-white/90">
-                Write letters instantly that sound like you. Enjoy unlimited, gold-standard transcriptions. Save 5+ hours weekly on paperwork.
+            
+              <h1 className="text-5xl font-semibold leading-tight sm:text-6xl">Services, not searching</h1>
+              <p className="mx-auto mt-9 max-w-3xl text-lg text-white/90">
+                Book any professional in minutes.
               </p>
-              <button className="rounded-full bg-[#050505] px-8 py-3 text-base font-semibold text-white shadow-lg">
+              <p className="mx-auto max-w-3xl text-lg text-white/90">
+                Discover trusted services near you, compare in one view, and confirm instantly with secure payment.
+              </p>
+              <button className="rounded-full mt-9 bg-[#050505] px-8 py-3 text-base font-semibold text-white shadow-lg">
                 Sign up for free
               </button>
-            </div>
+            
 
             <div className="mt-16 w-full max-w-3xl rounded-[36px] bg-white/95 p-8 text-left text-[#050505] shadow-2xl">
               <div className="flex flex-wrap items-center justify-between gap-4 text-sm font-semibold">
