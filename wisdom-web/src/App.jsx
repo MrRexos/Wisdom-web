@@ -191,7 +191,7 @@ function App() {
             </nav>
             <div className="flex items-center space-x-4 text-sm font-semibold">
               <button type="button" className="text-slate-800">Login</button>
-              <button type="button" className="rounded-full bg-slate-900 px-5 py-2 text-white shadow-lg">Sign up</button>
+              <button type="button" className="rounded-full bg-slate-900 px-5 py-2 text-red-500 shadow-lg">Sign up</button>
             </div>
           </header>
           <div className="text-center pt-16">
