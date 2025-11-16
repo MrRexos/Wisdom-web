@@ -218,17 +218,6 @@ function App() {
         >
           <button
             className={`
-              rounded-full px-5 py-2 text-sm font-semibold
-              transition-colors duration-300
-              ${headerOverHero
-                ? 'text-white hover:bg-white/10'
-                : 'text-[#050505] hover:bg-white/60'}
-            `}
-          >
-            Login
-          </button>
-          <button
-            className={`
               rounded-full px-6 py-2 text-sm font-semibold shadow-lg
               transition-all duration-300
               ${headerOverHero
@@ -236,7 +225,7 @@ function App() {
                 : 'bg-[#050505] text-white hover:bg-black'}
             `}
           >
-            Sign up
+            Get the app
           </button>
         </div>
       </header>
