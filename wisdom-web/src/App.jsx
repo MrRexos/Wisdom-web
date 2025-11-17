@@ -1,4 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const sharedScreens = [
+  '/images/IMG_7890.PNG',
+  '/images/IMG_7959.PNG',
+  '/images/IMG_7960.PNG',
+  '/images/IMG_7965%20(1).PNG',
+];
 
 const navLinks = [
   'How it works',
@@ -8,6 +16,69 @@ const navLinks = [
   'Testimonials',
   'Pricing',
 ];
+
+const howItWorksFlows = {
+  customers: [
+    {
+      id: 'search',
+      label: 'Search',
+      description:
+        'Search by service, category or location to see trusted professionals around you.',
+      screen: sharedScreens[0],
+    },
+    {
+      id: 'compare',
+      label: 'Compare',
+      description:
+        'Compare prices, reviews, photos, availability and distance in one clean view.',
+      screen: sharedScreens[1],
+    },
+    {
+      id: 'book',
+      label: 'Book',
+      description:
+        'Pick a time that works for you, confirm instantly and keep every detail in one place.',
+      screen: sharedScreens[2],
+    },
+    {
+      id: 'pay',
+      label: 'Pay',
+      description:
+        'Pay securely in the app and save your favourites for one-tap rebooking next time.',
+      screen: sharedScreens[3],
+    },
+  ],
+  professionals: [
+    {
+      id: 'create',
+      label: 'Create',
+      description:
+        'Create a professional profile with your services, prices, locations, photos and availability.',
+      screen: sharedScreens[0],
+    },
+    {
+      id: 'decide',
+      label: 'Decide',
+      description:
+        'Receive clear booking requests and decide which ones to accept or reschedule.',
+      screen: sharedScreens[1],
+    },
+    {
+      id: 'work',
+      label: 'Work',
+      description:
+        'Deliver your services while Wisdom keeps bookings, messages and details organised.',
+      screen: sharedScreens[2],
+    },
+    {
+      id: 'charge',
+      label: 'Charge',
+      description:
+        'Get paid securely through Wisdom, with invoices and payouts handled for you.',
+      screen: sharedScreens[3],
+    },
+  ],
+};
 
 const heroButtons = [
   { label: 'Download for free', primary: true },
@@ -223,6 +294,98 @@ const Card = ({ children, className = '' }) => (
   <div className={`rounded-[32px] bg-[#f5f5f5] p-8 ${className}`}>{children}</div>
 );
 
+const HowItWorksScroller = ({ activeTab }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const containerRef = useRef(null);
+
+  const steps = howItWorksFlows[activeTab] || howItWorksFlows.customers;
+
+  // Reset al cambiar de pestaña (customers / professionals)
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [activeTab]);
+
+  // Cada “ruedazo” de scroll cambia +1 / -1
+  const handleWheel = (e) => {
+    if (!containerRef.current) return;
+
+    const direction = e.deltaY > 0 ? 1 : -1;
+
+    setActiveIndex((prev) => {
+      let next = prev + direction;
+      if (next < 0) next = 0;
+      if (next > steps.length - 1) next = steps.length - 1;
+      return next;
+    });
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      onWheel={handleWheel}
+      className="mt-10 rounded-[30px] px-4 py-12 md:px-0"
+    >
+      <div className="mx-auto flex max-w-6xl flex-col-reverse items-center gap-12 md:flex-row md:items-center md:justify-between">
+        {/* Ruleta de palabras a la izquierda */}
+        <div className="w-full md:w-1/2">
+          <div className="relative h-[220px] sm:h-[240px] md:h-[260px] overflow-hidden">
+            {steps.map((step, index) => {
+              const offset = index - activeIndex; // -3, -2, -1, 0, 1...
+
+              return (
+                <motion.span
+                  key={step.id}
+                  initial={false}
+                  animate={{
+                    y: offset * 70,          // separacion vertical entre palabras
+                    opacity: offset === 0 ? 1 : 0.15,
+                    scale: offset === 0 ? 1 : 0.96,
+                    rotate: offset === 0 ? 0 : offset * -6,
+                  }}
+                  transition={{ type: 'spring', stiffness: 120, damping: 18 }}
+                  className={`absolute left-0 top-1/2 -translate-y-1/2 select-none
+                    text-4xl font-semibold sm:text-5xl md:text-6xl
+                    ${offset === 0 ? 'text-[#050505]' : 'text-[#cfd3dd]'}`}
+                >
+                  {step.label}.
+                </motion.span>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Móvil con la captura correspondiente */}
+        <div className="flex w-full md:w-1/2 items-center justify-center">
+          <div className="relative aspect-[9/19] w-[220px] sm:w-[260px] md:w-[300px] lg:w-[340px]">
+            {/* Marco del móvil */}
+            <img
+              src="/images/phone.png"
+              alt="Wisdom app"
+              className="h-full w-full object-contain drop-shadow-xl"
+            />
+
+            {/* Pantalla dentro del marco */}
+            <div className="pointer-events-none absolute left-[9%] right-[8%] top-[7%] bottom-[7%] overflow-hidden rounded-[40px]">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={`${activeTab}-${steps[activeIndex].id}-screen`}
+                  src={steps[activeIndex].screen}
+                  alt={steps[activeIndex].label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.35 }}
+                  className="h-full w-full object-cover"
+                />
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 function App() {
   const headerRef = useRef(null);
   const heroRef = useRef(null);
@@ -342,27 +505,24 @@ function App() {
 
           <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
             <SectionHeading title="How Wisdom works" />
-            <div className="flex flex-wrap items-center gap-3 justify-center">
+            <div className="flex flex-wrap items-center justify-center gap-3">
               {['customers', 'professionals'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`rounded-full px-6 py-2 text-sm font-semibold capitalize ${
-                    activeTab === tab ? 'bg-[#050505] text-white' : 'bg-[#f5f5f5] text-[#4c5563]'
+                    activeTab === tab
+                      ? 'bg-[#050505] text-white'
+                      : 'bg-[#f5f5f5] text-[#4c5563]'
                   }`}
                 >
                   {tab === 'customers' ? 'For customers' : 'For professionals'}
                 </button>
               ))}
             </div>
-            <div className="grid gap-6 md:grid-cols-3">
-              {steps.map((step) => (
-                <Card key={step.title}>
-                  <h3 className="text-2xl font-semibold">{step.title}</h3>
-                  <p className="mt-4 text-[#4c5563]">{step.description}</p>
-                </Card>
-              ))}
-            </div>
+
+            {/* Nueva sección interactiva tipo "Summarize" */}
+            <HowItWorksScroller activeTab={activeTab} />
           </section>
 
 
