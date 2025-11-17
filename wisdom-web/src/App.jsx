@@ -135,11 +135,6 @@ const testimonials = [
 
 const safetyBlocks = [
   {
-    title: 'Secure by design',
-    description:
-      'Wisdom uses encrypted connections and trusted payment providers to protect your data and your money.',
-  },
-  {
     title: 'Transparent and local',
     description:
       'See total prices, fees and policies before you book. No hidden surprises when you confirm.',
@@ -316,7 +311,7 @@ function App() {
         <section
           ref={heroRef}
           className="relative m-4 min-h-[calc(100vh-2rem)] overflow-hidden rounded-[30px] bg-cover bg-center bg-no-repeat px-6 pt-[140px] pb-12 text-white"
-          style={{ backgroundImage: "url('../public/images/hand2.png')", opacity: 0.95 }}
+          style={{ backgroundImage: "url('https://storage.googleapis.com/wisdom-images/IMG_8517%20-%20copia.PNG')", opacity: 0.95 }}
         >
           <div className="relative z-10 flex h-full flex-col items-center justify-center text-center">
             <h1 className="text-5xl font-semibold leading-tight sm:text-6xl">Services, not searching</h1>
@@ -341,39 +336,13 @@ function App() {
           </div>
         </section>
 
-        <div className="mx-auto mt-24 max-w-6xl px-4 pb-24">
+        <div className="mt-24 items-center justify-center px-4 pb-24">
 
-          <section className="mt-24 space-y-10">
-            <SectionHeading title="Discover" subtitle="Find the right professional for anything you need." />
-            <p className="text-lg text-[#4c5563]">
-              From home cleaning to personal training, beauty, tutoring and more – Wisdom puts every kind of service in a single,
-              simple app. Search by category, budget, language, rating and location to see only the professionals that actually
-              fit your life.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              {discoverButtons.map((label) => (
-                <button key={label} className="rounded-full bg-[#050505] px-8 py-3 text-sm font-semibold text-white">
-                  {label}
-                </button>
-              ))}
-            </div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#7f8794]">About Discover</p>
-          </section>
+          {/* How Wisdom Works*/}
 
-          <section className="mt-24 space-y-8">
-            <SectionHeading title="Book" subtitle="Schedule, chat and pay in one place." />
-            <p className="text-lg text-[#4c5563]">
-              Pick a time that works for you, confirm the booking and pay securely without leaving the app. Message your professional,
-              share photos or details and keep every update in one clear conversation.
-            </p>
-            <a href="#" className="text-sm font-semibold text-[#050505] underline">
-              About Booking
-            </a>
-          </section>
-
-          <section className="mt-24 space-y-10">
+          <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
             <SectionHeading title="How Wisdom works" />
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3 justify-center">
               {['customers', 'professionals'].map((tab) => (
                 <button
                   key={tab}
@@ -396,14 +365,11 @@ function App() {
             </div>
           </section>
 
-          <section className="mt-24 space-y-10">
+
+          <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
             <SectionHeading
               title="Booking services has never been easier"
-              subtitle="Smart filters, personal favourites, effortless rebooking."
             />
-            <p className="text-lg text-[#4c5563]">
-              Wisdom learns how you like to book services so every search feels faster and more relevant.
-            </p>
             <div className="grid gap-6 md:grid-cols-2">
               {bookingHighlights.map((highlight) => (
                 <Card key={highlight.title}>
@@ -412,16 +378,7 @@ function App() {
                 </Card>
               ))}
             </div>
-            <div className="rounded-[32px] bg-[#050505] p-8 text-white">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/70">Before</p>
-              <p className="mt-3 text-lg">
-                “I need a cleaner this evening, who speaks Spanish, near my office and under €20/hour.”
-              </p>
-              <p className="mt-6 text-sm font-semibold uppercase tracking-[0.2em] text-white/70">After</p>
-              <p className="mt-3 text-lg">
-                Wisdom instantly shows you cleaners that match your filters, with ratings, distance and total price clearly displayed before you book.
-              </p>
-            </div>
+            
             <div className="grid gap-6 md:grid-cols-3">
               {bookingExtra.map((item) => (
                 <Card key={item.title}>
@@ -432,8 +389,8 @@ function App() {
             </div>
           </section>
 
-          <section className="mt-24 space-y-10">
-            <SectionHeading title="Simplify your day with Wisdom" subtitle="Real-time updates. Clear timelines. No more chasing." />
+          <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
+            <SectionHeading title="Simplify your day with Wisdom"  />
             <div className="grid gap-6 md:grid-cols-2">
               {simplifyHighlights.map((item) => (
                 <Card key={item.title}>
@@ -444,7 +401,39 @@ function App() {
             </div>
           </section>
 
-          <section className="mt-24 space-y-10">
+
+          {/* <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
+            <SectionHeading title="Discover" subtitle="Find the right professional for anything you need." />
+            <p className="text-lg text-[#4c5563]">
+              From home cleaning to personal training, beauty, tutoring and more – Wisdom puts every kind of service in a single,
+              simple app. Search by category, budget, language, rating and location to see only the professionals that actually
+              fit your life.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              {discoverButtons.map((label) => (
+                <button key={label} className="rounded-full bg-[#050505] px-8 py-3 text-sm font-semibold text-white">
+                  {label}
+                </button>
+              ))}
+            </div>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#7f8794]">About Discover</p>
+          </section>
+
+          <section className="mt-24 max-w-6xl mx-auto justify-center space-y-8">
+            <SectionHeading title="Book" subtitle="Schedule, chat and pay in one place." />
+            <p className="text-lg text-[#4c5563]">
+              Pick a time that works for you, confirm the booking and pay securely without leaving the app. Message your professional,
+              share photos or details and keep every update in one clear conversation.
+            </p>
+            <a href="#" className="text-sm font-semibold text-[#050505] underline">
+              About Booking
+            </a>
+          </section> */}
+          
+
+          {/*Comment*/}
+
+          <section className="mt-24 space-y-10 relative m-4 min-h-[calc(100vh-2rem)] overflow-hidden rounded-[30px] bg-[#f5f5f5] p-8 ">
             <SectionHeading title="Grow your business with Wisdom" subtitle="Alex — Personal Trainer" />
             <p className="text-lg text-[#4c5563]">Build a stronger client base with less admin.</p>
             <div className="space-y-4">
@@ -463,8 +452,10 @@ function App() {
               ))}
             </div>
           </section>
+          
+          {/*Safety*/}
 
-          <section className="mt-24 space-y-10">
+          <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
             <SectionHeading title="Your safety comes first" />
             <div className="grid gap-6 md:grid-cols-3">
               {safetyBlocks.map((block) => (
@@ -477,7 +468,9 @@ function App() {
             </div>
           </section>
 
-          <section className="mt-24 space-y-10">
+          {/*Pricing + Devices*/}
+
+          <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
             <SectionHeading title="Clear pricing" />
             <div className="grid gap-6 md:grid-cols-2">
               {pricingPlans.map((plan) => (
@@ -503,6 +496,7 @@ function App() {
               <button className="rounded-full bg-[#050505] px-8 py-3 text-sm font-semibold text-white">Download Wisdom</button>
             </div>
           </section>
+
         </div>
 
         <footer className="bg-[#050505] py-16 text-white">
