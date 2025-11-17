@@ -161,17 +161,16 @@ function App() {
 
 
   return (
-    <div className="min-h-screen bg-[#ffffff] text-[#050505]">
+    <div className="min-h-screen bg-[#ffffff] text-[#050505] ">
       <header
         ref={headerRef}
         className={`
-          fixed top-4 left-1/2 z-20
-          flex w-[calc(100%-2rem)] max-w-6xl -translate-x-1/2
-          items-center px-6 py-4 text-sm font-semibold
-          transition-[background-color,box-shadow,backdrop-filter] duration-300
+          fixed top-4 left-1/2 z-20 w-[calc(100%-2rem)] -translate-x-1/2 
+          flex items-center rounded-full px-4 py-4 text-sm font-semibold 
+          transition-[background-color,box-shadow,backdrop-filter,border-radius] duration-300
           ${headerOverHero
-            ? 'bg-transparent shadow-none'
-            : 'rounded-full bg-white/70 shadow-lg backdrop-blur-[10px]'}
+            ? 'max-w-none bg-transparent shadow-none backdrop-blur-none px-[40px]'
+            : 'max-w-6xl bg-white/70 shadow-lg backdrop-blur-[10px] px-6'}
         `}
       >
         {/* Columna izquierda: Wisdom */}
@@ -233,7 +232,11 @@ function App() {
       <main className="">
       <section
           ref={heroRef}
-          className="relative m-4 min-h-[calc(100vh-2rem)] overflow-hidden rounded-[30px] bg-[#9ec2dc] px-6 pt-[140px] pb-12 text-white"
+          className="
+          relative m-4 min-h-[calc(100vh-2rem)] overflow-hidden rounded-[30px]
+          px-6 pt-[140px] pb-12 text-white
+          bg-cover bg-center bg-no-repeat " 
+          style={{ backgroundImage: "url('../public/images/hand2.png')", opacity:0.9 }}
         >
           <div className="relative z-10 flex h-full flex-col items-center justify-center text-center">
             
@@ -242,29 +245,15 @@ function App() {
                 Book any professional in minutes.
               </p>
               <p className="mx-auto max-w-3xl text-lg text-white/90">
-                Discover trusted services near you, compare in one view, and confirm instantly with secure payment.
+                Discover trusted services near you, compare in one view and book them instantly.
               </p>
               <button className="rounded-full mt-9 bg-[#050505] px-8 py-3 text-base font-semibold text-white shadow-lg">
                 Sign up for free
               </button>
             
 
-            <div className="mt-16 w-full max-w-3xl rounded-[36px] bg-white/95 p-8 text-left text-[#050505] shadow-2xl">
-              <div className="flex flex-wrap items-center justify-between gap-4 text-sm font-semibold">
-                <span className="rounded-full bg-[#f5f6fb] px-4 py-1">Before</span>
-                <span className="rounded-full bg-[#050505] px-4 py-1 text-white">After</span>
-              </div>
-              <div className="mt-6 grid gap-6 text-sm text-[#4c5563] sm:grid-cols-2">
-                <div className="rounded-2xl bg-[#f4f7fb] p-5">
-                  <p>Dictate for 20 minutes. Transcribe manually. Tidy up formatting. Double check for typos.</p>
-                </div>
-                <div className="rounded-2xl bg-[#e9f3ff] p-5">
-                  <p>
-                    Upload the dictation, attach documents, and review your letter in minutes. Sign, send, done.
-                  </p>
-                </div>
-              </div>
-            </div>
+            
+            
           </div>
         </section>
 
