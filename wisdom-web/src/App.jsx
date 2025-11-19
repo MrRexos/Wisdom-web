@@ -51,28 +51,28 @@ const howItWorksFlows = {
   professionals: [
     {
       id: 'create',
-      label: 'Record',
+      label: 'Create',
       description:
         'Create a professional profile with your services, prices, locations, photos and availability.',
       screen: sharedScreens[0],
     },
     {
       id: 'decide',
-      label: 'Transcribe',
+      label: 'Decide',
       description:
         'Receive clear booking requests and decide which ones to accept or reschedule.',
       screen: sharedScreens[1],
     },
     {
       id: 'work',
-      label: 'Summarize',
+      label: 'Work',
       description:
         'Deliver your services while Wisdom keeps bookings, messages and details organised.',
       screen: sharedScreens[2],
     },
     {
       id: 'charge',
-      label: 'Share',
+      label: 'Charge',
       description:
         'Get paid securely through Wisdom, with invoices and payouts handled for you.',
       screen: sharedScreens[3],
@@ -303,61 +303,102 @@ const HowItWorks3D = ({ activeTab, flows }) => {
   const containerRef = useRef(null);
   const steps = flows[activeTab] || flows.customers;
 
+  // 1. Control del Scroll:
+  // Usamos un contenedor muy alto (350vh) para dar tiempo al usuario a leer y ver la animación.
   const { scrollYProgress } = useScroll({
-    container: containerRef,
+    target: containerRef,
     offset: ['start start', 'end end'],
   });
 
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 200,
-    damping: 20, 
-    restDelta: 0.0001
-  });
-
+  // 2. Estado discreto (Sin valores intermedios):
+  // En lugar de pasar el valor "float" del scroll a la rotación, 
+  // calculamos qué índice (0, 1, 2 o 3) debe estar activo.
   const [activeIndex, setActiveIndex] = useState(0);
 
-  useMotionValueEvent(smoothProgress, "change", (latest) => {
-    const newIndex = Math.round(latest * (steps.length - 1));
-    if (newIndex !== activeIndex) {
-      setActiveIndex(newIndex);
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    // Dividimos el scroll en pasos exactos
+    const stepLength = 1 / (steps.length - 1); 
+    // Math.round asegura que salte al más cercano, sin quedarse a medias
+    const newIndex = Math.round(latest / stepLength);
+    
+    // Aseguramos que no se salga de los límites
+    const clampedIndex = Math.min(Math.max(newIndex, 0), steps.length - 1);
+
+    if (clampedIndex !== activeIndex) {
+      setActiveIndex(clampedIndex);
     }
   });
 
   return (
+    // CONTENEDOR SCROLL TRACK:
+    // Tiene una altura grande (400vh) para permitir el scroll de la página.
+    // Es 'relative' para que el sticky de adentro funcione respecto a este padre.
     <div 
       ref={containerRef} 
-      className="relative h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth"
+      className="relative h-[200vh] w-full"
     >
-      <div className="sticky top-0 left-0 flex h-screen w-full items-center justify-center overflow-hidden pointer-events-none">
-        <div className="relative mx-auto flex h-full w-full flex-col items-center justify-center pl-[120px] gap-8 md:flex-row md:justify-between pointer-events-auto">
+      {/* 
+          CONTENEDOR STICKY:
+          Se pega al top:0 y ocupa toda la pantalla (h-screen).
+          El usuario hace scroll "a través" del padre, pero este div se queda fijo.
+      */}
+      <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden">
+        
+        <div className="relative mx-auto flex h-full w-full flex-col items-center justify-center pl-4 md:pl-12 gap-8 md:flex-row md:justify-between">
           
           {/* --- IZQUIERDA: RULETA --- */}
-          <div className="order-2 flex h-[300px] w-full flex-1 items-center justify-center md:order-1 md:h-[600px] md:justify-start">
-            <div className="relative flex h-full w-full flex-col items-center justify-center md:items-start md:pl-10 ">
-              {/* Ajustamos el contenedor para dar espacio al radio grande */}
-              <div className="relative h-[520px] w-full max-w-md">
-                {steps.map((step, index) => (
-                  <FanItem
-                    key={step.id}
-                    item={step}
-                    index={index}
-                    total={steps.length}
-                    progress={smoothProgress}
-                  />
-                ))}
+          <div className="order-2 flex h-[500px] w-full flex-1 items-center justify-center md:order-1 md:h-[700px] md:justify-start">
+            <div className="relative flex h-full w-full flex-col items-center justify-center md:items-start">
+              
+              <div 
+                className="relative h-[700px] w-full max-w-6xl"
+                style={{
+                  maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+                  WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)'
+                }}
+              >
+                {/* Tus ajustes de posición: left-14 y left-32 */}
+                <div className="relative h-full w-full left-14 md:left-32">
+                  {steps.map((step, index) => (
+                    <FanItem
+                      key={step.id}
+                      item={step}
+                      index={index}
+                      activeIndex={activeIndex} // Pasamos el índice entero
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* --- DERECHA: MÓVIL (Sin cambios) --- */}
+          {/* --- DERECHA: MÓVIL --- */}
           <div className="order-1 flex h-[45vh] w-full flex-1 items-center justify-center md:order-2 md:h-auto">
+            {/* Contenedor principal con las medidas del móvil */}
             <div className="relative aspect-[9/19] w-[220px] md:w-[340px]">
+              
+              {/* 
+                  CAPA 1: EL MARCO (Phone Frame) 
+                  Lo ponemos con z-20 para que esté POR ENCIMA de las fotos.
+                  Así, si la foto se sale un milímetro, el marco la tapa y queda perfecto.
+              */}
               <img
                 src="/images/phone.png"
                 alt="Wisdom app"
-                className="pointer-events-none relative z-20 h-full w-full object-contain drop-shadow-2xl"
+                className="pointer-events-none absolute inset-0 z-20 h-full w-full object-contain drop-shadow-2xl"
               />
-              <div className="absolute inset-[3%] z-10 overflow-hidden rounded-[36px] bg-black">
+
+              {/* 
+                  CAPA 2: LA PANTALLA (Screenshots)
+                  Lo ponemos con z-10 para que esté POR DEBAJO.
+                  
+                  AJUSTES CLAVE:
+                  1. inset-[10px] md:inset-[15px]: Ajuste preciso en píxeles. 
+                     Esto empuja la imagen hacia dentro lo justo para librar el borde del teléfono.
+                  2. rounded-[30px] md:rounded-[50px]: Aumentamos la curva. 
+                     Los iPhones modernos tienen esquinas muy redondas. Si pones menos, se ven picos negros.
+              */}
+              <div className="absolute inset-[10px] md:inset-[16px] z-10 overflow-hidden rounded-[32px] md:rounded-[50px] bg-black">
                  {steps.map((step, index) => (
                    <motion.img
                      key={step.id}
@@ -369,6 +410,7 @@ const HowItWorks3D = ({ activeTab, flows }) => {
                        scale: activeIndex === index ? 1 : 1.05 
                      }}
                      transition={{ duration: 0.4, ease: "easeInOut" }}
+                     // 'object-cover' asegura que la foto llene todo el hueco sin deformarse
                      className="absolute h-full w-full object-cover"
                    />
                  ))}
@@ -378,72 +420,55 @@ const HowItWorks3D = ({ activeTab, flows }) => {
 
         </div>
       </div>
-
-      <div className="absolute top-0 left-0 w-full">
-        {steps.map((_, index) => (
-          <div key={index} className="h-screen w-full snap-start" />
-        ))}
-      </div>
-
     </div>
   );
 };
 
-// --- FanItem Ajustado ---
-const FanItem = ({ item, index, total, progress }) => {
-  const currentIndex = useTransform(progress, [0, 1], [0, total - 1]);
-  const distance = useTransform(currentIndex, (v) => index - v);
+// --- FanItem Actualizado (Lógica Discreta) ---
+const FanItem = ({ item, index, activeIndex }) => {
+  // Calculamos la distancia basada en enteros puros.
+  // Si activeIndex es 1 y yo soy 0, la distancia es -1.
+  const distance = index - activeIndex;
   
-  // 1. CLAVE: La rotación es exacta: distancia * 15.5 grados
-  const rotate = useTransform(
-    distance,
-    [-VISIBLE_RANGE, 0, VISIBLE_RANGE],
-    [-ANGLE_PER_ITEM * VISIBLE_RANGE, 0, ANGLE_PER_ITEM * VISIBLE_RANGE]
-  );
+  // Multiplicamos por el ángulo fijo.
+  // Al ser 'distance' un entero, el resultado siempre es múltiplo de 15.5.
+  // Cero decimales = Cero rotaciones intermedias.
+  const rotate = distance * ANGLE_PER_ITEM;
   
-  // 2. CLAVE: Para un radio constante, NO debemos trasladar Y ni X linealmente.
-  // El arco lo crea la rotación alrededor del transformOrigin.
-  // Si mueves Y aquí, rompes el círculo y haces un óvalo.
-  const y = 0; 
-  const x = 0; 
-  
-  const opacity = useTransform(
-    distance,
-    [-VISIBLE_RANGE, 0, VISIBLE_RANGE],
-    [0, 1, 0] // Opacidad más estricta para que desaparezcan al girar
-  );
-  
-  const color = useTransform(
-    distance,
-    [-0.5, 0, 0.5], 
-    ["#e5e7eb", "#050505", "#e5e7eb"] 
-  );
+  // Definimos si el elemento es visible o el activo
+  const isActive = index === activeIndex;
+  const isVisible = Math.abs(distance) < VISIBLE_RANGE;
 
   return (
     <motion.div
+      // Usamos 'animate' en lugar de 'style'. 
+      // Framer Motion se encarga de la transición suave entre el estado A y B.
+      animate={{
+        rotate: rotate,
+        opacity: isVisible ? (isActive ? 1 : 0.3) : 0, // Opacidad simple: Activo=1, Cerca=0.3, Lejos=0
+        color: isActive ? "#050505" : "#e5e7eb",
+      }}
+      transition={{
+        // Ajustamos el resorte para que el "salto" se sienta bien
+        type: "spring",
+        stiffness: 250,
+        damping: 25
+      }}
       style={{
-        // Usamos las variables transformadas
-        rotate, 
-        opacity, 
-        color,
-        // Eliminamos x e y del style para asegurar que no interfieran
-        // 3. CLAVE: Ajustamos el origen. 
-        // -340px mueve el punto de pivote lejos a la izquierda.
         transformOrigin: `${-RADIUS}px 50%`, 
         position: "absolute",
         top: "50%",
-        left: 0, // Alineado al borde izquierdo del contenedor
+        left: 0,
         width: "100%"
       }}
       className="flex flex-col items-center justify-center md:items-start"
     >
-      <h3 className="whitespace-nowrap text-xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-[60px]">
+      <h3 className="whitespace-nowrap text-xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-[60px] cursor-pointer">
         {item.label}.
       </h3>
     </motion.div>
   );
 };
-
 
 
 // Componente individual para cada palabra en la ruleta
