@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
 
 const sharedScreens = [
   '/images/IMG_7890.PNG',
@@ -51,28 +51,28 @@ const howItWorksFlows = {
   professionals: [
     {
       id: 'create',
-      label: 'Create',
+      label: 'Record',
       description:
         'Create a professional profile with your services, prices, locations, photos and availability.',
       screen: sharedScreens[0],
     },
     {
       id: 'decide',
-      label: 'Decide',
+      label: 'Transcribe',
       description:
         'Receive clear booking requests and decide which ones to accept or reschedule.',
       screen: sharedScreens[1],
     },
     {
       id: 'work',
-      label: 'Work',
+      label: 'Summarize',
       description:
         'Deliver your services while Wisdom keeps bookings, messages and details organised.',
       screen: sharedScreens[2],
     },
     {
       id: 'charge',
-      label: 'Charge',
+      label: 'Share',
       description:
         'Get paid securely through Wisdom, with invoices and payouts handled for you.',
       screen: sharedScreens[3],
@@ -294,95 +294,206 @@ const Card = ({ children, className = '' }) => (
   <div className={`rounded-[32px] bg-[#f5f5f5] p-8 ${className}`}>{children}</div>
 );
 
-const HowItWorksScroller = ({ activeTab }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+const ITEM_HEIGHT = 90; 
+const VISIBLE_RANGE = 4; 
+const ANGLE_PER_ITEM = 15.5; // Tu ángulo solicitado
+const RADIUS = 340; // Radio calculado para que con 15.5° no se amontonen las palabras
+
+const HowItWorks3D = ({ activeTab, flows }) => {
   const containerRef = useRef(null);
+  const steps = flows[activeTab] || flows.customers;
 
-  const steps = howItWorksFlows[activeTab] || howItWorksFlows.customers;
+  const { scrollYProgress } = useScroll({
+    container: containerRef,
+    offset: ['start start', 'end end'],
+  });
 
-  // Reset al cambiar de pestaña (customers / professionals)
-  useEffect(() => {
-    setActiveIndex(0);
-  }, [activeTab]);
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 200,
+    damping: 20, 
+    restDelta: 0.0001
+  });
 
-  // Cada “ruedazo” de scroll cambia +1 / -1
-  const handleWheel = (e) => {
-    if (!containerRef.current) return;
+  const [activeIndex, setActiveIndex] = useState(0);
 
-    const direction = e.deltaY > 0 ? 1 : -1;
-
-    setActiveIndex((prev) => {
-      let next = prev + direction;
-      if (next < 0) next = 0;
-      if (next > steps.length - 1) next = steps.length - 1;
-      return next;
-    });
-  };
+  useMotionValueEvent(smoothProgress, "change", (latest) => {
+    const newIndex = Math.round(latest * (steps.length - 1));
+    if (newIndex !== activeIndex) {
+      setActiveIndex(newIndex);
+    }
+  });
 
   return (
-    <div
-      ref={containerRef}
-      onWheel={handleWheel}
-      className="mt-10 rounded-[30px] px-4 py-12 md:px-0"
+    <div 
+      ref={containerRef} 
+      className="relative h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth"
     >
-      <div className="mx-auto flex max-w-6xl flex-col-reverse items-center gap-12 md:flex-row md:items-center md:justify-between">
-        {/* Ruleta de palabras a la izquierda */}
-        <div className="w-full md:w-1/2">
-          <div className="relative h-[220px] sm:h-[240px] md:h-[260px] overflow-hidden">
-            {steps.map((step, index) => {
-              const offset = index - activeIndex; // -3, -2, -1, 0, 1...
-
-              return (
-                <motion.span
-                  key={step.id}
-                  initial={false}
-                  animate={{
-                    y: offset * 70,          // separacion vertical entre palabras
-                    opacity: offset === 0 ? 1 : 0.15,
-                    scale: offset === 0 ? 1 : 0.96,
-                    rotate: offset === 0 ? 0 : offset * -6,
-                  }}
-                  transition={{ type: 'spring', stiffness: 120, damping: 18 }}
-                  className={`absolute left-0 top-1/2 -translate-y-1/2 select-none
-                    text-4xl font-semibold sm:text-5xl md:text-6xl
-                    ${offset === 0 ? 'text-[#050505]' : 'text-[#cfd3dd]'}`}
-                >
-                  {step.label}.
-                </motion.span>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Móvil con la captura correspondiente */}
-        <div className="flex w-full md:w-1/2 items-center justify-center">
-          <div className="relative aspect-[9/19] w-[220px] sm:w-[260px] md:w-[300px] lg:w-[340px]">
-            {/* Marco del móvil */}
-            <img
-              src="/images/phone.png"
-              alt="Wisdom app"
-              className="h-full w-full object-contain drop-shadow-xl"
-            />
-
-            {/* Pantalla dentro del marco */}
-            <div className="pointer-events-none absolute left-[9%] right-[8%] top-[7%] bottom-[7%] overflow-hidden rounded-[40px]">
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={`${activeTab}-${steps[activeIndex].id}-screen`}
-                  src={steps[activeIndex].screen}
-                  alt={steps[activeIndex].label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.35 }}
-                  className="h-full w-full object-cover"
-                />
-              </AnimatePresence>
+      <div className="sticky top-0 left-0 flex h-screen w-full items-center justify-center overflow-hidden pointer-events-none">
+        <div className="relative mx-auto flex h-full w-full flex-col items-center justify-center pl-[120px] gap-8 md:flex-row md:justify-between pointer-events-auto">
+          
+          {/* --- IZQUIERDA: RULETA --- */}
+          <div className="order-2 flex h-[300px] w-full flex-1 items-center justify-center md:order-1 md:h-[600px] md:justify-start">
+            <div className="relative flex h-full w-full flex-col items-center justify-center md:items-start md:pl-10 ">
+              {/* Ajustamos el contenedor para dar espacio al radio grande */}
+              <div className="relative h-[520px] w-full max-w-md">
+                {steps.map((step, index) => (
+                  <FanItem
+                    key={step.id}
+                    item={step}
+                    index={index}
+                    total={steps.length}
+                    progress={smoothProgress}
+                  />
+                ))}
+              </div>
             </div>
           </div>
+
+          {/* --- DERECHA: MÓVIL (Sin cambios) --- */}
+          <div className="order-1 flex h-[45vh] w-full flex-1 items-center justify-center md:order-2 md:h-auto">
+            <div className="relative aspect-[9/19] w-[220px] md:w-[340px]">
+              <img
+                src="/images/phone.png"
+                alt="Wisdom app"
+                className="pointer-events-none relative z-20 h-full w-full object-contain drop-shadow-2xl"
+              />
+              <div className="absolute inset-[3%] z-10 overflow-hidden rounded-[36px] bg-black">
+                 {steps.map((step, index) => (
+                   <motion.img
+                     key={step.id}
+                     src={step.screen}
+                     alt={step.label}
+                     initial={{ opacity: 0 }}
+                     animate={{ 
+                       opacity: activeIndex === index ? 1 : 0,
+                       scale: activeIndex === index ? 1 : 1.05 
+                     }}
+                     transition={{ duration: 0.4, ease: "easeInOut" }}
+                     className="absolute h-full w-full object-cover"
+                   />
+                 ))}
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
+
+      <div className="absolute top-0 left-0 w-full">
+        {steps.map((_, index) => (
+          <div key={index} className="h-screen w-full snap-start" />
+        ))}
+      </div>
+
     </div>
+  );
+};
+
+// --- FanItem Ajustado ---
+const FanItem = ({ item, index, total, progress }) => {
+  const currentIndex = useTransform(progress, [0, 1], [0, total - 1]);
+  const distance = useTransform(currentIndex, (v) => index - v);
+  
+  // 1. CLAVE: La rotación es exacta: distancia * 15.5 grados
+  const rotate = useTransform(
+    distance,
+    [-VISIBLE_RANGE, 0, VISIBLE_RANGE],
+    [-ANGLE_PER_ITEM * VISIBLE_RANGE, 0, ANGLE_PER_ITEM * VISIBLE_RANGE]
+  );
+  
+  // 2. CLAVE: Para un radio constante, NO debemos trasladar Y ni X linealmente.
+  // El arco lo crea la rotación alrededor del transformOrigin.
+  // Si mueves Y aquí, rompes el círculo y haces un óvalo.
+  const y = 0; 
+  const x = 0; 
+  
+  const opacity = useTransform(
+    distance,
+    [-VISIBLE_RANGE, 0, VISIBLE_RANGE],
+    [0, 1, 0] // Opacidad más estricta para que desaparezcan al girar
+  );
+  
+  const color = useTransform(
+    distance,
+    [-0.5, 0, 0.5], 
+    ["#e5e7eb", "#050505", "#e5e7eb"] 
+  );
+
+  return (
+    <motion.div
+      style={{
+        // Usamos las variables transformadas
+        rotate, 
+        opacity, 
+        color,
+        // Eliminamos x e y del style para asegurar que no interfieran
+        // 3. CLAVE: Ajustamos el origen. 
+        // -340px mueve el punto de pivote lejos a la izquierda.
+        transformOrigin: `${-RADIUS}px 50%`, 
+        position: "absolute",
+        top: "50%",
+        left: 0, // Alineado al borde izquierdo del contenedor
+        width: "100%"
+      }}
+      className="flex flex-col items-center justify-center md:items-start"
+    >
+      <h3 className="whitespace-nowrap text-xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-[60px]">
+        {item.label}.
+      </h3>
+    </motion.div>
+  );
+};
+
+
+
+// Componente individual para cada palabra en la ruleta
+const WordItem = ({ item, index, total, progress }) => {
+  // Transformaciones matemáticas para simular el cilindro 3D
+  
+  // Opacidad: 1 cuando está en el centro, desvanece al alejarse
+  const opacity = useTransform(progress, (val) => {
+    const pos = index / (total - 1);
+    const distance = Math.abs(val - pos);
+    return 1 - distance * 2.5; // Ajusta 2.5 para que desaparezcan antes o después
+  });
+
+  // Posición Y: Se mueve hacia arriba/abajo
+  const y = useTransform(progress, (val) => {
+    const pos = index / (total - 1);
+    return (val - pos) * -400; // -400 controla la velocidad de separación vertical
+  });
+
+  // Rotación X: Crea el efecto de cilindro
+  const rotateX = useTransform(progress, (val) => {
+    const pos = index / (total - 1);
+    const distance = val - pos;
+    return distance * 60; // 60 grados de rotación máxima
+  });
+
+  // Escala: Se hace más pequeño al alejarse
+  const scale = useTransform(progress, (val) => {
+    const pos = index / (total - 1);
+    const distance = Math.abs(val - pos);
+    return 1 - distance * 0.4;
+  });
+
+  return (
+    <motion.div
+      style={{
+        opacity,
+        y,
+        rotateX,
+        scale,
+        transformStyle: "preserve-3d",
+        transformOrigin: "center center -100px", // Punto de fuga para el efecto 3D
+      }}
+      className="absolute inset-0 flex flex-col items-center justify-center md:items-start"
+    >
+      <h3 className="text-5xl font-semibold leading-tight text-[#050505] md:text-7xl">
+        {item.label}.
+      </h3>
+
+    </motion.div>
   );
 };
 
@@ -503,7 +614,7 @@ function App() {
 
           {/* How Wisdom Works*/}
 
-          <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
+          <section className=" justify-center space-y-10">
             <SectionHeading title="How Wisdom works" />
             <div className="flex flex-wrap items-center justify-center gap-3">
               {['customers', 'professionals'].map((tab) => (
@@ -522,7 +633,7 @@ function App() {
             </div>
 
             {/* Nueva sección interactiva tipo "Summarize" */}
-            <HowItWorksScroller activeTab={activeTab} />
+            <HowItWorks3D activeTab={activeTab} flows={howItWorksFlows} />
           </section>
 
 
