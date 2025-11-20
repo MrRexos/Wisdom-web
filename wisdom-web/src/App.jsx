@@ -335,7 +335,7 @@ const HowItWorks3D = ({ activeTab, flows }) => {
     // Es 'relative' para que el sticky de adentro funcione respecto a este padre.
     <div 
       ref={containerRef} 
-      className="relative h-[200vh] w-full"
+      className="relative h-[250vh] w-full"
     >
       {/* 
           CONTENEDOR STICKY:
@@ -610,7 +610,7 @@ function App() {
         <section
           ref={heroRef}
           className="relative m-4 min-h-[calc(100vh-2rem)] overflow-hidden rounded-[30px] bg-cover bg-center bg-no-repeat px-6 pt-[140px] pb-12 text-white"
-          style={{ backgroundImage: "url('https://storage.googleapis.com/wisdom-images/IMG_8517%20-%20copia.PNG')", opacity: 0.95 }}
+          style={{ backgroundImage: "url('https://storage.googleapis.com/wisdom-images/hand3.png')", opacity: 0.99 }}
         >
           <div className="relative z-10 flex h-full flex-col items-center justify-center text-center">
             <h1 className="text-5xl font-semibold leading-tight sm:text-6xl">Services, not searching</h1>
