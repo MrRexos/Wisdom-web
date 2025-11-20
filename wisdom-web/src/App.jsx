@@ -373,49 +373,35 @@ const HowItWorks3D = ({ activeTab, flows }) => {
           </div>
 
           {/* --- DERECHA: MÓVIL --- */}
+          
           <div className="order-1 flex h-[45vh] w-full flex-1 items-center justify-center md:order-2 md:h-auto">
-            {/* Contenedor principal con las medidas del móvil */}
-            <div className="relative aspect-[9/19] w-[220px] md:w-[340px]">
-              
-              {/* 
-                  CAPA 1: EL MARCO (Phone Frame) 
-                  Lo ponemos con z-20 para que esté POR ENCIMA de las fotos.
-                  Así, si la foto se sale un milímetro, el marco la tapa y queda perfecto.
-              */}
+
+            <div className="relative flex justify-center items-center w-[220px] md:w-[300px] h-auto">
+    
               <img
                 src="/images/phone.png"
-                alt="Wisdom app"
-                className="pointer-events-none absolute inset-0 z-20 h-full w-full object-contain drop-shadow-2xl"
+                alt="Phone frame"
+                className="relative z-20 w-full h-auto pointer-events-none drop-shadow-2xl"
               />
 
-              {/* 
-                  CAPA 2: LA PANTALLA (Screenshots)
-                  Lo ponemos con z-10 para que esté POR DEBAJO.
-                  
-                  AJUSTES CLAVE:
-                  1. inset-[10px] md:inset-[15px]: Ajuste preciso en píxeles. 
-                     Esto empuja la imagen hacia dentro lo justo para librar el borde del teléfono.
-                  2. rounded-[30px] md:rounded-[50px]: Aumentamos la curva. 
-                     Los iPhones modernos tienen esquinas muy redondas. Si pones menos, se ven picos negros.
-              */}
-              <div className="absolute inset-[10px] md:inset-[16px] z-10 overflow-hidden rounded-[32px] md:rounded-[50px] bg-black">
-                 {steps.map((step, index) => (
-                   <motion.img
-                     key={step.id}
-                     src={step.screen}
-                     alt={step.label}
-                     initial={{ opacity: 0 }}
-                     animate={{ 
-                       opacity: activeIndex === index ? 1 : 0,
-                       scale: activeIndex === index ? 1 : 1.05 
-                     }}
-                     transition={{ duration: 0.4, ease: "easeInOut" }}
-                     // 'object-cover' asegura que la foto llene todo el hueco sin deformarse
-                     className="absolute h-full w-full object-cover"
-                   />
-                 ))}
-              </div>
-            </div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-[85%] h-[94%] rounded-[30px] md:rounded-[46px] overflow-hidden bg-black">
+                  {steps.map((step, index) => (
+                    <motion.img
+                      key={step.id}
+                      src={step.screen}
+                      alt={step.label}
+                      initial={{ opacity: 0 }}
+                      animate={{ 
+                        opacity: activeIndex === index ? 1 : 0,
+                        scale: activeIndex === index ? 1 : 1.02 
+                      }}
+                      transition={{ duration: 0.4, ease: "easeInOut" }}
+                      className="absolute inset-0 h-full w-full object-fill"
+                    />
+                  ))}
+                </div>
+
+          </div>
           </div>
 
         </div>
@@ -466,58 +452,6 @@ const FanItem = ({ item, index, activeIndex }) => {
       <h3 className="whitespace-nowrap text-xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-[60px] cursor-pointer">
         {item.label}.
       </h3>
-    </motion.div>
-  );
-};
-
-
-// Componente individual para cada palabra en la ruleta
-const WordItem = ({ item, index, total, progress }) => {
-  // Transformaciones matemáticas para simular el cilindro 3D
-  
-  // Opacidad: 1 cuando está en el centro, desvanece al alejarse
-  const opacity = useTransform(progress, (val) => {
-    const pos = index / (total - 1);
-    const distance = Math.abs(val - pos);
-    return 1 - distance * 2.5; // Ajusta 2.5 para que desaparezcan antes o después
-  });
-
-  // Posición Y: Se mueve hacia arriba/abajo
-  const y = useTransform(progress, (val) => {
-    const pos = index / (total - 1);
-    return (val - pos) * -400; // -400 controla la velocidad de separación vertical
-  });
-
-  // Rotación X: Crea el efecto de cilindro
-  const rotateX = useTransform(progress, (val) => {
-    const pos = index / (total - 1);
-    const distance = val - pos;
-    return distance * 60; // 60 grados de rotación máxima
-  });
-
-  // Escala: Se hace más pequeño al alejarse
-  const scale = useTransform(progress, (val) => {
-    const pos = index / (total - 1);
-    const distance = Math.abs(val - pos);
-    return 1 - distance * 0.4;
-  });
-
-  return (
-    <motion.div
-      style={{
-        opacity,
-        y,
-        rotateX,
-        scale,
-        transformStyle: "preserve-3d",
-        transformOrigin: "center center -100px", // Punto de fuga para el efecto 3D
-      }}
-      className="absolute inset-0 flex flex-col items-center justify-center md:items-start"
-    >
-      <h3 className="text-5xl font-semibold leading-tight text-[#050505] md:text-7xl">
-        {item.label}.
-      </h3>
-
     </motion.div>
   );
 };
