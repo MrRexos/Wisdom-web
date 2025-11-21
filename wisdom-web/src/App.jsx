@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
+import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 
+// ... (Mantén tus arrays de datos: sharedScreens, navLinks, howItWorksFlows, etc. IGUAL QUE ANTES) ...
 const sharedScreens = [
   '/images/IMG_7890.PNG',
   '/images/IMG_7959.PNG',
@@ -9,10 +10,9 @@ const sharedScreens = [
 ];
 
 const navLinks = [
-  'How it works',
-  'For Customers',
-  'For Professionals',
-  'Categories',
+  'Use cases',
+  'Services',
+  'Features',
   'Testimonials',
   'Pricing',
 ];
@@ -82,19 +82,9 @@ const howItWorksFlows = {
 
 const heroButtons = [
   { label: 'Download for free', primary: true },
-  //{ label: 'Get it on Google Play' },
 ];
 
-const beforeAfter = {
-  before:
-    'You open five tabs, text three providers, wait hours for replies and never see the final price until the last message.',
-  after:
-    'You open Wisdom, type “cleaning tomorrow at 6pm”, compare rated professionals with clear prices, and confirm your booking in a few taps.',
-  midText: 'Save hours every week with Wisdom.',
-};
-
-const discoverButtons = ['Browse categories', 'View nearby services'];
-
+// ... (Mantén el resto de constantes: heroButtons, discoverButtons, customerSteps, etc.) ...
 const customerSteps = [
   {
     title: 'Tell us what you need',
@@ -294,34 +284,25 @@ const Card = ({ children, className = '' }) => (
   <div className={`rounded-[32px] bg-[#f5f5f5] p-8 ${className}`}>{children}</div>
 );
 
-const ITEM_HEIGHT = 90; 
-const VISIBLE_RANGE = 4; 
-const ANGLE_PER_ITEM = 15.5; // Tu ángulo solicitado
-const RADIUS = 340; // Radio calculado para que con 15.5° no se amontonen las palabras
+const ITEM_HEIGHT = 90;
+const VISIBLE_RANGE = 4;
+const ANGLE_PER_ITEM = 15.5;
+const RADIUS = 340;
 
 const HowItWorks3D = ({ activeTab, flows }) => {
   const containerRef = useRef(null);
   const steps = flows[activeTab] || flows.customers;
 
-  // 1. Control del Scroll:
-  // Usamos un contenedor muy alto (350vh) para dar tiempo al usuario a leer y ver la animación.
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   });
 
-  // 2. Estado discreto (Sin valores intermedios):
-  // En lugar de pasar el valor "float" del scroll a la rotación, 
-  // calculamos qué índice (0, 1, 2 o 3) debe estar activo.
   const [activeIndex, setActiveIndex] = useState(0);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    // Dividimos el scroll en pasos exactos
-    const stepLength = 1 / (steps.length - 1); 
-    // Math.round asegura que salte al más cercano, sin quedarse a medias
+    const stepLength = 1 / (steps.length - 1);
     const newIndex = Math.round(latest / stepLength);
-    
-    // Aseguramos que no se salga de los límites
     const clampedIndex = Math.min(Math.max(newIndex, 0), steps.length - 1);
 
     if (clampedIndex !== activeIndex) {
@@ -330,41 +311,26 @@ const HowItWorks3D = ({ activeTab, flows }) => {
   });
 
   return (
-    // CONTENEDOR SCROLL TRACK:
-    // Tiene una altura grande (400vh) para permitir el scroll de la página.
-    // Es 'relative' para que el sticky de adentro funcione respecto a este padre.
-    <div 
-      ref={containerRef} 
-      className="relative h-[250vh] w-full"
-    >
-      {/* 
-          CONTENEDOR STICKY:
-          Se pega al top:0 y ocupa toda la pantalla (h-screen).
-          El usuario hace scroll "a través" del padre, pero este div se queda fijo.
-      */}
+    <div ref={containerRef} className="relative h-[250vh] w-full">
       <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden">
-        
         <div className="relative mx-auto flex h-full w-full flex-col items-center justify-center pl-4 md:pl-12 gap-8 md:flex-row md:justify-between">
-          
           {/* --- IZQUIERDA: RULETA --- */}
           <div className="order-2 flex h-[500px] w-full flex-1 items-center justify-center md:order-1 md:h-[700px] md:justify-start">
             <div className="relative flex h-full w-full flex-col items-center justify-center md:items-start">
-              
-              <div 
+              <div
                 className="relative h-[700px] w-full max-w-6xl"
                 style={{
                   maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
                   WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)'
                 }}
               >
-                {/* Tus ajustes de posición: left-14 y left-32 */}
                 <div className="relative h-full w-full left-14 md:left-32">
                   {steps.map((step, index) => (
                     <FanItem
                       key={step.id}
                       item={step}
                       index={index}
-                      activeIndex={activeIndex} // Pasamos el índice entero
+                      activeIndex={activeIndex}
                     />
                   ))}
                 </div>
@@ -373,75 +339,57 @@ const HowItWorks3D = ({ activeTab, flows }) => {
           </div>
 
           {/* --- DERECHA: MÓVIL --- */}
-          
           <div className="order-1 flex h-[45vh] w-full flex-1 items-center justify-center md:order-2 md:h-auto">
-
             <div className="relative flex justify-center items-center w-[220px] md:w-[300px] h-auto">
-    
               <img
                 src="/images/phone.png"
                 alt="Phone frame"
                 className="relative z-20 w-full h-auto pointer-events-none drop-shadow-2xl"
               />
-
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-[85%] h-[94%] rounded-[30px] md:rounded-[46px] overflow-hidden bg-black">
-                  {steps.map((step, index) => (
-                    <motion.img
-                      key={step.id}
-                      src={step.screen}
-                      alt={step.label}
-                      initial={{ opacity: 0 }}
-                      animate={{ 
-                        opacity: activeIndex === index ? 1 : 0,
-                        scale: activeIndex === index ? 1 : 1.02 
-                      }}
-                      transition={{ duration: 0.4, ease: "easeInOut" }}
-                      className="absolute inset-0 h-full w-full object-fill"
-                    />
-                  ))}
-                </div>
-
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-[85%] h-[94%] rounded-[30px] md:rounded-[46px] overflow-hidden bg-black">
+                {steps.map((step, index) => (
+                  <motion.img
+                    key={step.id}
+                    src={step.screen}
+                    alt={step.label}
+                    initial={{ opacity: 0 }}
+                    animate={{
+                      opacity: activeIndex === index ? 1 : 0,
+                      scale: activeIndex === index ? 1 : 1.02
+                    }}
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                    className="absolute inset-0 h-full w-full object-fill"
+                  />
+                ))}
+              </div>
+            </div>
           </div>
-          </div>
-
         </div>
       </div>
     </div>
   );
 };
 
-// --- FanItem Actualizado (Lógica Discreta) ---
 const FanItem = ({ item, index, activeIndex }) => {
-  // Calculamos la distancia basada en enteros puros.
-  // Si activeIndex es 1 y yo soy 0, la distancia es -1.
   const distance = index - activeIndex;
-  
-  // Multiplicamos por el ángulo fijo.
-  // Al ser 'distance' un entero, el resultado siempre es múltiplo de 15.5.
-  // Cero decimales = Cero rotaciones intermedias.
   const rotate = distance * ANGLE_PER_ITEM;
-  
-  // Definimos si el elemento es visible o el activo
   const isActive = index === activeIndex;
   const isVisible = Math.abs(distance) < VISIBLE_RANGE;
 
   return (
     <motion.div
-      // Usamos 'animate' en lugar de 'style'. 
-      // Framer Motion se encarga de la transición suave entre el estado A y B.
       animate={{
         rotate: rotate,
-        opacity: isVisible ? (isActive ? 1 : 0.3) : 0, // Opacidad simple: Activo=1, Cerca=0.3, Lejos=0
+        opacity: isVisible ? (isActive ? 1 : 0.3) : 0,
         color: isActive ? "#050505" : "#e5e7eb",
       }}
       transition={{
-        // Ajustamos el resorte para que el "salto" se sienta bien
         type: "spring",
         stiffness: 250,
         damping: 25
       }}
       style={{
-        transformOrigin: `${-RADIUS}px 50%`, 
+        transformOrigin: `${-RADIUS}px 50%`,
         position: "absolute",
         top: "50%",
         left: 0,
@@ -464,11 +412,11 @@ function App() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!headerRef.current || !heroRef.current) return;
-
-      const headerRect = headerRef.current.getBoundingClientRect();
+      // Solo necesitamos saber la posición del scroll relative al hero
+      if (!heroRef.current) return;
       const heroRect = heroRef.current.getBoundingClientRect();
-      const isOverHero = heroRect.top < headerRect.bottom && heroRect.bottom > headerRect.top;
+      // Si el fondo del hero pasa hacia arriba más allá de un punto (ej: 100px), activamos el modo "sticky"
+      const isOverHero = heroRect.bottom > 100; 
       setHeaderOverHero(isOverHero);
     };
 
@@ -482,35 +430,54 @@ function App() {
     };
   }, []);
 
-  const steps = activeTab === 'customers' ? customerSteps : professionalSteps;
-
   return (
     <div className="min-h-screen bg-[#ffffff] text-[#050505]">
-      <header
+      {/* HEADER CORREGIDO:
+         Usamos motion.header para animar el width, background y padding simultáneamente.
+      */}
+      <motion.header
         ref={headerRef}
-        className={`
-          fixed top-4 left-1/2 z-20 w-[calc(100%-2rem)] -translate-x-1/2
-          flex items-center rounded-full px-4 py-4 text-sm font-semibold
-          transition-[background-color,box-shadow,backdrop-filter,border-radius] duration-300
-          ${headerOverHero
-            ? 'max-w-none bg-transparent shadow-none backdrop-blur-none pr-[40px] pl-[50px]'
-            : 'max-w-6xl bg-white/80 shadow-lg backdrop-blur-[10px] px-6'}
-        `}
+        // Posicionamiento fijo base
+        className="fixed top-4 left-1/2 z-20 flex -translate-x-1/2 items-center rounded-full font-semibold overflow-hidden"
+        // Definimos los estilos iniciales
+        initial={false}
+        // Animamos propiedades según el estado
+        animate={{
+          // Width: 100% cuando está en Hero, 72rem (max-w-6xl) cuando está sticky
+          width: headerOverHero ? "calc(100% - 2rem)" : "min(100% - 2rem, 72rem)",
+          // Fondo: Transparente en Hero, Blanco borroso en sticky
+          backgroundColor: headerOverHero ? "rgba(255,255,255,0)" : "rgba(255,255,255,0.8)",
+          backdropFilter: headerOverHero ? "blur(0px)" : "blur(10px)",
+          boxShadow: headerOverHero 
+            ? "0 0 0 0 rgba(0,0,0,0)" 
+            : "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+          // Padding: Más grande en Hero para separar elementos, normal en sticky
+          paddingLeft: headerOverHero ? "50px" : "24px",
+          paddingRight: headerOverHero ? "40px" : "24px",
+          paddingTop: "16px",
+          paddingBottom: "16px",
+        }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
       >
-        <div
-          className={`flex flex-1 justify-start transition-transform duration-300 ${
-            headerOverHero ? '-translate-x-6' : 'translate-x-0'
-          }`}
+        {/* LOGO WISDOM: Se mueve hacia el centro (x:0) desde la izquierda (x:-20) */}
+        <motion.div
+          className="flex flex-1 justify-start"
+          animate={{
+            x: headerOverHero ? -20 : 200,
+            opacity: 1 
+          }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
         >
           <div
-            className={`text-lg font-semibold transition-colors ${
+            className={`text-lg font-semibold transition-colors duration-300 ${
               headerOverHero ? 'text-white' : 'text-[#050505]'
             }`}
           >
             Wisdom
           </div>
-        </div>
+        </motion.div>
 
+        {/* NAV LINKS (No se mueven, solo fade de color) */}
         <nav className="hidden flex-none flex-wrap items-center justify-center gap-4 md:flex">
           {navLinks.map((link) => (
             <a
@@ -525,20 +492,23 @@ function App() {
           ))}
         </nav>
 
-        <div
-          className={`flex flex-1 justify-end gap-3 transition-transform duration-300 ${
-            headerOverHero ? 'translate-x-6' : 'translate-x-0'
-          }`}
+        {/* BOTÓN GET APP: Se mueve hacia el centro (x:0) desde la derecha (x:20) */}
+        <motion.div
+          className="flex flex-1 justify-end gap-3"
+          animate={{
+            x: headerOverHero ? 20 : -145
+          }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
         >
           <button
-            className={`rounded-full px-6 py-2 text-sm font-semibold shadow-lg transition-all duration-300 ${
+            className={`rounded-full px-6 py-2 text-sm font-semibold shadow-lg transition-colors duration-300 ${
               headerOverHero ? 'bg-white text-[#050505] hover:bg-white/90' : 'bg-[#050505] text-white hover:bg-black'
             }`}
           >
             Get the app
           </button>
-        </div>
-      </header>
+        </motion.div>
+      </motion.header>
 
       <main>
         <section
@@ -569,10 +539,8 @@ function App() {
           </div>
         </section>
 
+        {/* ... Resto del contenido (sin cambios) ... */}
         <div className="mt-24 items-center justify-center px-4 pb-24">
-
-          {/* How Wisdom Works*/}
-
           <section className=" justify-center space-y-10">
             <SectionHeading title="How Wisdom works" />
             <div className="flex flex-wrap items-center justify-center gap-3">
@@ -590,16 +558,11 @@ function App() {
                 </button>
               ))}
             </div>
-
-            {/* Nueva sección interactiva tipo "Summarize" */}
             <HowItWorks3D activeTab={activeTab} flows={howItWorksFlows} />
           </section>
 
-
           <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
-            <SectionHeading
-              title="Booking services has never been easier"
-            />
+            <SectionHeading title="Booking services has never been easier" />
             <div className="grid gap-6 md:grid-cols-2">
               {bookingHighlights.map((highlight) => (
                 <Card key={highlight.title}>
@@ -608,7 +571,6 @@ function App() {
                 </Card>
               ))}
             </div>
-            
             <div className="grid gap-6 md:grid-cols-3">
               {bookingExtra.map((item) => (
                 <Card key={item.title}>
@@ -620,7 +582,7 @@ function App() {
           </section>
 
           <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
-            <SectionHeading title="Simplify your day with Wisdom"  />
+            <SectionHeading title="Simplify your day with Wisdom" />
             <div className="grid gap-6 md:grid-cols-2">
               {simplifyHighlights.map((item) => (
                 <Card key={item.title}>
@@ -630,38 +592,6 @@ function App() {
               ))}
             </div>
           </section>
-
-
-          {/* <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
-            <SectionHeading title="Discover" subtitle="Find the right professional for anything you need." />
-            <p className="text-lg text-[#4c5563]">
-              From home cleaning to personal training, beauty, tutoring and more – Wisdom puts every kind of service in a single,
-              simple app. Search by category, budget, language, rating and location to see only the professionals that actually
-              fit your life.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              {discoverButtons.map((label) => (
-                <button key={label} className="rounded-full bg-[#050505] px-8 py-3 text-sm font-semibold text-white">
-                  {label}
-                </button>
-              ))}
-            </div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#7f8794]">About Discover</p>
-          </section>
-
-          <section className="mt-24 max-w-6xl mx-auto justify-center space-y-8">
-            <SectionHeading title="Book" subtitle="Schedule, chat and pay in one place." />
-            <p className="text-lg text-[#4c5563]">
-              Pick a time that works for you, confirm the booking and pay securely without leaving the app. Message your professional,
-              share photos or details and keep every update in one clear conversation.
-            </p>
-            <a href="#" className="text-sm font-semibold text-[#050505] underline">
-              About Booking
-            </a>
-          </section> */}
-          
-
-          {/*Comment*/}
 
           <section className="mt-24 space-y-10 relative m-4 min-h-[calc(100vh-2rem)] overflow-hidden rounded-[30px] bg-[#f5f5f5] p-8 ">
             <SectionHeading title="Grow your business with Wisdom" subtitle="Alex — Personal Trainer" />
@@ -682,8 +612,6 @@ function App() {
               ))}
             </div>
           </section>
-          
-          {/*Safety*/}
 
           <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
             <SectionHeading title="Your safety comes first" />
@@ -697,8 +625,6 @@ function App() {
               ))}
             </div>
           </section>
-
-          {/*Pricing + Devices*/}
 
           <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
             <SectionHeading title="Clear pricing" />
@@ -726,7 +652,6 @@ function App() {
               <button className="rounded-full bg-[#050505] px-8 py-3 text-sm font-semibold text-white">Download Wisdom</button>
             </div>
           </section>
-
         </div>
 
         <footer className="bg-[#050505] py-16 text-white">
