@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { motion, useScroll, useMotionValueEvent, AnimatePresence, useSpring, useTransform } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -67,7 +67,17 @@ const grayShapes = [
   { size: 'w-14 h-32 md:w-20 md:h-44', style: { top: '23%', left: '6%' } },
   { size: 'w-20 h-28 md:w-28 md:h-40', style: { top: '5%', left: '47%' } },
   { size: 'w-24 h-24 md:w-32 md:h-32', style: { top: '70%', right: '28%' } },
-  { size: 'w-20 h-28 md:w-28 md:h-40', style: { bottom: '13%', left: '28%' } }, //ANIMADA
+  
+  // --- CAMBIO EN ESTE OBJETO (ÍNDICE 3) ---
+  { 
+    size: 'w-20 h-28 md:w-28 md:h-40', 
+    style: { bottom: '13%', left: '28%' }, 
+    isAnimated: true, // Marcador para identificarlo
+    // Esta es la imagen que aparecerá DENTRO del cuadro gris
+    imageInside: "https://storage.googleapis.com/wisdom-images/search_services.png" 
+  }, 
+  // ----------------------------------------
+
   { size: 'w-28 h-32 md:w-38 md:h-44', style: { bottom: '23%', right: '-3%' } },
   { size: 'w-32 h-14 md:w-48 md:h-20', style: { top: '37%', right: '10%' } },
 ];
@@ -619,20 +629,26 @@ const FloatingImage = ({ index, total, images }) => {
 
 function App() {
   const [activeTab, setActiveTab] = useState('customers');
+  
+  // --- AÑADIR ESTO ---
+  const appRef = useRef(null);
+  const animadaBoxRef = useRef(null);    // El cuadro gris
+  const searchSectionRef = useRef(null); // La sección destino
+  const searchImageRef = useRef(null);   // La imagen destino
+  const searchTextRef = useRef(null);    // El texto destino
 
   useEffect(() => {
-    // 1. Configuración inicial
+    // 1. Configuración de Lenis (Scroll Suave)
     gsap.registerPlugin(ScrollTrigger);
-    const lenis = new Lenis({ 
-      lerp: 0.08, 
-      smoothWheel: true, 
-      wheelMultiplier: 1.1 
+    
+    const lenis = new Lenis({
+      lerp: 0.08, // Un poco más alto para que se sienta fluido con los pins
+      smoothWheel: true,
+      wheelMultiplier: 1,
     });
 
-    // Conectar Lenis con ScrollTrigger para máxima fluidez
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Loop de animación
     let rafId;
     const raf = (time) => {
       lenis.raf(time);
@@ -640,52 +656,32 @@ function App() {
     };
     rafId = requestAnimationFrame(raf);
 
-    // Desactivar el scroll restoration manual del navegador para evitar saltos al recargar
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
 
-    // 2. Lógica para las Secciones
+    // 2. Lógica de "Pinning" (1200px por sección)
+    // Seleccionamos solo las secciones de texto/imagen que queremos congelar
     const sections = gsap.utils.toArray('.fade-section');
-    
-    sections.forEach((section) => {
-      
-      // A. Animación de entrada (SIN mover la Y para evitar conflictos con el pin)
-      gsap.fromTo(
-        section,
-        { 
-          autoAlpha: 0, 
-          filter: "blur(10px)", // Efecto elegante en lugar de mover Y
-          scale: 0.98 // Un ligero escalado queda muy bien
-        },
-        {
-          autoAlpha: 1,
-          filter: "blur(0px)",
-          scale: 1,
-          duration: 1,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 90%', // Empieza un poco antes
-            toggleActions: 'play none none reverse',
-          },
-        },
-      );
 
-      // B. Efecto de "Resistencia/Imán" (Pinning)
-      ScrollTrigger.create({
-        trigger: section,
-        start: "center center", // Se fija EXACTAMENTE en el centro
-        end: "+=500", // Aumenté a 500 para que se note más la "resistencia"
-        pin: true, 
-        pinSpacing: true,
-        anticipatePin: 1, // <--- CLAVE: Esto suaviza el momento exacto en que se engancha
-        scrub: true, 
+    sections.forEach((section) => {
+      // Creamos una Timeline para tener control total
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "center center", // Se engancha cuando el CENTRO de la sección toca el CENTRO de la pantalla
+          end: "+=1200",          // Aquí defines la "duración" del scroll (1200px)
+          pin: false,              // Congela la sección
+          pinSpacing: true,       // Empuja el siguiente contenido hacia abajo
+          scrub: 0.5,             // Inercia suave (0.5s) para que no sea robótico
+          anticipatePin: 1,       // <--- CLAVE: Evita el pequeño "salto" al enganchar
+        }
       });
 
+     
     });
 
-    // 3. Lógica de Parallax del ratón (existente)
+    // 3. Parallax del ratón (Igual que antes)
     const parallaxItems = document.querySelectorAll('.parallax-item');
     const handleMouseMove = (e) => {
       const x = (e.clientX / window.innerWidth) - 0.5;
@@ -696,7 +692,7 @@ function App() {
         gsap.to(item, {
           x: -x * speed,
           y: -y * speed,
-          duration: 0.5,
+          duration: 1,
           ease: 'power2.out',
           overwrite: 'auto'
         });
@@ -715,9 +711,87 @@ function App() {
     };
   }, []);
 
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      
+      // 1. Configuración general (Igual que antes)
+      const sections = gsap.utils.toArray('.fade-section');
+      sections.forEach((section) => {
+        if (section !== searchSectionRef.current) {
+           gsap.timeline({
+            scrollTrigger: {
+              trigger: section, start: "center center", end: "+=1200",
+              pin: false, pinSpacing: true, scrub: 0.5, anticipatePin: 1,
+            }
+          });
+        }
+      });
+
+      // 2. Animación ESPECÍFICA: Cuadro Gris -> Imagen Final
+      if (animadaBoxRef.current && searchImageRef.current && searchSectionRef.current) {
+        
+        // Seleccionamos la imagen que está DENTRO del cuadro gris
+        const innerImage = animadaBoxRef.current.querySelector('img');
+
+        // TIMELINE PRINCIPAL (Movimiento + Transformación visual)
+        const tlMove = gsap.timeline({
+            scrollTrigger: {
+                trigger: document.body,
+                start: "top top",
+                endTrigger: searchSectionRef.current,
+                end: "center center", 
+                scrub: 1, 
+            }
+        });
+
+        tlMove
+        // a) Movimiento físico hacia la posición de destino
+        .to(animadaBoxRef.current, {
+            x: () => {
+                const box = animadaBoxRef.current.getBoundingClientRect();
+                const target = searchImageRef.current.getBoundingClientRect();
+                return target.left - box.left;
+            },
+            y: () => {
+                const box = animadaBoxRef.current.getBoundingClientRect();
+                const target = searchImageRef.current.getBoundingClientRect();
+                return target.top - box.top;
+            },
+            width: () => searchImageRef.current.getBoundingClientRect().width,
+            height: () => searchImageRef.current.getBoundingClientRect().height,
+            rotation: 0, // Aseguramos que termine recto si tenía rotación
+            borderRadius: "0px", // Si quieres que pierda bordes redondeados al llegar
+            ease: "power1.inOut" // Un movimiento un poco más natural
+        })
+        // b) Transformación visual: El gris desaparece y la imagen aparece
+        // Ocurre DURANTE el viaje ("<" significa al inicio de la anterior)
+        .to(animadaBoxRef.current, { backgroundColor: 'transparent' }, "<+=10%") // Empieza un pelín después de moverse
+        .to(innerImage, { opacity: 1 }, "<") // La imagen aparece a la vez que se va el gris
+
+        // 3. PINNING (Sección Search se queda quieta un rato)
+        const tlPin = gsap.timeline({
+            scrollTrigger: {
+                trigger: searchSectionRef.current,
+                start: "center center",
+                end: "+=400", // PINEADA 400 PX
+                pin: true,
+                scrub: true,
+            }
+        });
+
+        // Solo animamos el texto, el cuadro ya llegó y es la imagen visible
+        tlPin.fromTo(searchTextRef.current, 
+            { y: 100, opacity: 0 }, 
+            { y: 0, opacity: 1, duration: 1 }
+        );
+      }
+    }, appRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-white text-[#050505]">
+    <div ref={appRef} className="min-h-screen bg-white text-[#050505]">
 
       <header className="fixed backdrop-blur-xl top-4 left-1/2 z-20 flex w-[min(1100px,calc(100%-2rem))] -translate-x-1/2 items-center rounded-full bg-white/70 px-4 py-3 font-semibold">
         <div className="flex flex-1 justify-start text-lg">Wisdom</div>
@@ -735,69 +809,79 @@ function App() {
 
       <main className=" pb-20">
 
-        {/* 1. PORTADA */}
-        <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 fade-section">
+        {/* 1. PORTADA - IMPORTANTE: Quitamos 'overflow-hidden' para que el cuadro pueda salir */}
+        <section className="relative flex min-h-screen items-center justify-center px-6 fade-section z-10">
           
-          {/* 1. Capa de Cuadrados Grises (FONDO) */}
+          {/* Capa de Cuadrados Grises (FONDO) */}
           <div className="absolute inset-0 w-full h-full pointer-events-none">
-            {grayShapes.map((shape, index) => (
-              <div
-                key={`shape-${index}`}
-                // Agregamos clase 'parallax-item' y velocidad 'data-speed'
-                className={`parallax-item absolute bg-[#F9F8F8] ${shape.size}`}
-                style={shape.style}
-                data-speed="40" // Velocidad suave
-              />
-            ))}
+            {grayShapes.map((shape, index) => {
+                const isAnimatedBox = index === 3; 
+                
+                return (
+                  <div
+                    key={`shape-${index}`}
+                    ref={isAnimatedBox ? animadaBoxRef : null}
+                    // AÑADIDO: 'overflow-hidden' al propio cuadro para que recorte la imagen interna
+                    className={`absolute bg-[#F9F8F8] ${shape.size} ${isAnimatedBox ? 'z-50 overflow-hidden' : 'parallax-item'}`} 
+                    style={shape.style}
+                    data-speed="40"
+                  >
+                    {/* SI ES EL CUADRO ANIMADO, RENDERIZAMOS LA IMAGEN DENTRO (OCULTA AL PRINCIPIO) */}
+                    {isAnimatedBox && (
+                      <img 
+                        src={shape.imageInside} 
+                        alt="Transition" 
+                        className="w-full h-full object-cover opacity-0" // Empieza invisible (gris)
+                        // Usamos una clase específica para seleccionarla con GSAP luego si queremos, 
+                        // o simplemente confiamos en que es la única img dentro.
+                        id="inner-anim-img"
+                      />
+                    )}
+                  </div>
+                );
+            })}
           </div>
 
-          {/* 2. Capa de Imágenes (FRENTE) */}
+          {/* Capa de Imágenes (FRENTE) - Sin cambios */}
           <div className="absolute inset-0 w-full h-full pointer-events-none">
             {heroTiles.map((tile, index) => (
-              <div
-                key={`tile-${index}`}
-                // Agregamos clase 'parallax-item' y velocidad 'data-speed' mayor para efecto 3D
-                className={`parallax-item absolute overflow-hidden opacity-75 ${tile.size}`}
-                style={tile.style}
-                data-speed="60" // Velocidad más fuerte
-              >
+              <div key={`tile-${index}`} className={`parallax-item absolute overflow-hidden opacity-75 ${tile.size}`} style={tile.style} data-speed="60">
                 <img src={tile.url} alt="" className="w-full h-full object-cover"/>
               </div>
             ))}
           </div>
 
+          {/* Contenido Texto Hero - Sin cambios */}
           <div className="relative z-10 mx-auto max-w-xl text-center justify-center items-center">
             <h1 className="text-[44px] sm:text-[48px] font-semibold text-[#464545] leading-tight">
               Wisdom is where you find a{" "}
-              <span className="text-[55px] sm:text-[55px] text-[#050505] font-bold">
-                Professional.
-              </span>
+              <span className="text-[55px] sm:text-[55px] text-[#050505] font-bold">Professional.</span>
             </h1>
-            <p className="text-2xl font-medium text-[#9F9F9F] mt-7">
-              The first unified marketplace for every service. Simple. Secure. One app.
-            </p>
-            <button className="rounded-full bg-[#050505] mt-12 px-8 py-3 text-base font-semibold text-white hover:bg-black">
-              Download for free
-            </button>
+            <p className="text-2xl font-medium text-[#9F9F9F] mt-7">The first unified marketplace for every service. Simple. Secure. One app.</p>
+            <button className="rounded-full bg-[#050505] mt-12 px-8 py-3 text-base font-semibold text-white hover:bg-black">Download for free</button>
           </div>
         </section>
         
-        {/* 2. Search */}
-        <section className="fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center gap-12 md:gap-44 px-6 py-24 md:flex-row">
-          {/* Contenedor imagen: cambiado max-w-md por max-w-sm para hacerla más pequeña */}
-          <div className="aspect-[3/4] w-full max-w-[420px] shrink-0">
+        {/* 2. Search (TARGET SECTION) */}
+        <section ref={searchSectionRef} className="min-h-screen w-full mx-auto flex flex-col justify-center items-center gap-12 md:gap-44 px-6 py-24 md:flex-row relative z-0">
+          
+          {/* Contenedor imagen con REF - La imagen aquí es INVISIBLE (opacity-0) */}
+          {/* Sirve solo para marcar el tamaño y la posición donde debe aterrizar el cuadro gris */}
+          <div ref={searchImageRef} className="aspect-[3/4] w-full max-w-[420px] shrink-0 relative">
             <img 
               src="https://storage.googleapis.com/wisdom-images/search_services.png" 
               alt="" 
-              className="w-full h-full object-cover " 
+              className="w-full h-full object-cover opacity-0" // <--- IMPORTANTE: Invisible
             />
           </div>
           
-          <p className="max-w-2xl text-4xl md:text-6xl font-semibold leading-tight text-center md:text-left">
-            Looking for help used to be a leap of faith.
-          </p>
+          <div ref={searchTextRef} className="max-w-2xl">
+              <p className="text-4xl md:text-6xl font-semibold leading-tight text-center md:text-left">
+                Looking for help used to be a leap of faith.
+              </p>
+          </div>
         </section>
-
+        
         {/* 3. Search 2 */}
         <section className="fade-section min-h-screen mx-auto flex min-w-screen justify-center items-center px-6 py-24">
           <p className="mx-auto max-w-[820px] text-center text-[42px] leading-[1.3] font-semibold leading-relaxed text-[#050505]">
