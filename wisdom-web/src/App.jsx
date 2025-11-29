@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useMotionValueEvent, AnimatePresence, useSpring, useTransform } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from '@studio-freight/lenis';
@@ -499,24 +499,30 @@ const CosmosSpiral = ({ serviceFamilies }) => {
         <div className="flex w-full justify-center"> {/* Contenedor para centrar el grupo completo */}
         
           {/* Agrupamos con motion.div y layout para que el movimiento sea fluido */}
-          <motion.div layout className="flex items-center gap-3">
+          <motion.div
+            layout
+            className="flex items-center gap-3"
+            transition={{ layout: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
+          >
               
               {/* Pequeño texto conector */}
-              <motion.span 
-                layout 
+              <motion.span
+                layout
+                transition={{ layout: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
                 className="text-md font-semibold uppercase tracking-widest text-[#9F9F9F]"
               >
                   Like
               </motion.span>
 
               {/* Cápsula animada */}
-              <motion.div 
-                layout 
+              <motion.div
+                layout
                 className="relative h-12 overflow-hidden rounded-full bg-white/80 backdrop-blur-sm px-2 "
                 transition={{ layout: { duration: 0.7, type: "spring", stiffness: 300, damping: 30 } }}
               >
                   <AnimatePresence mode="wait">
                       <motion.div
+                          layout
                           key={textIndex}
                           // Quitamos 'absolute inset-0' para que el div tenga el ancho del texto
                           initial={{ y: 0, opacity: 0, filter: 'blur(1px)' }}
@@ -585,6 +591,7 @@ const FloatingImage = ({ index, total, images }) => {
       transition={{
         duration: randomParams.duration,
         repeat: Infinity,
+        repeatType: "loop",
         delay: -randomParams.delay, // Delay negativo para que la animación empiece ya "empezada"
         ease: "linear",
       }}
@@ -614,55 +621,80 @@ function App() {
   const [activeTab, setActiveTab] = useState('customers');
 
   useEffect(() => {
-    // 1. Configuración de Lenis y ScrollTrigger
+    // 1. Configuración inicial
     gsap.registerPlugin(ScrollTrigger);
-    const lenis = new Lenis({ lerp: 0.08, smoothWheel: true, wheelMultiplier: 1.1 });
+    const lenis = new Lenis({ 
+      lerp: 0.08, 
+      smoothWheel: true, 
+      wheelMultiplier: 1.1 
+    });
 
+    // Conectar Lenis con ScrollTrigger para máxima fluidez
+    lenis.on('scroll', ScrollTrigger.update);
+
+    // Loop de animación
     let rafId;
     const raf = (time) => {
       lenis.raf(time);
-      ScrollTrigger.update();
       rafId = requestAnimationFrame(raf);
     };
     rafId = requestAnimationFrame(raf);
 
-    // 2. Animación de entrada (Fade Sections)
+    // Desactivar el scroll restoration manual del navegador para evitar saltos al recargar
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+
+    // 2. Lógica para las Secciones
     const sections = gsap.utils.toArray('.fade-section');
+    
     sections.forEach((section) => {
+      
+      // A. Animación de entrada (SIN mover la Y para evitar conflictos con el pin)
       gsap.fromTo(
         section,
-        { autoAlpha: 0, y: 50 },
+        { 
+          autoAlpha: 0, 
+          filter: "blur(10px)", // Efecto elegante en lugar de mover Y
+          scale: 0.98 // Un ligero escalado queda muy bien
+        },
         {
           autoAlpha: 1,
-          y: 0,
-          duration: 0.9,
+          filter: "blur(0px)",
+          scale: 1,
+          duration: 1,
           ease: 'power2.out',
           scrollTrigger: {
             trigger: section,
-            start: 'top 85%',
+            start: 'top 90%', // Empieza un poco antes
             toggleActions: 'play none none reverse',
           },
         },
       );
+
+      // B. Efecto de "Resistencia/Imán" (Pinning)
+      ScrollTrigger.create({
+        trigger: section,
+        start: "center center", // Se fija EXACTAMENTE en el centro
+        end: "+=500", // Aumenté a 500 para que se note más la "resistencia"
+        pin: true, 
+        pinSpacing: true,
+        anticipatePin: 1, // <--- CLAVE: Esto suaviza el momento exacto en que se engancha
+        scrub: true, 
+      });
+
     });
 
-    // 3. LOGICA NUEVA DE PARALLAX CON GSAP (Más robusta)
-    // Seleccionamos todos los elementos con clase 'parallax-item'
+    // 3. Lógica de Parallax del ratón (existente)
     const parallaxItems = document.querySelectorAll('.parallax-item');
-    
     const handleMouseMove = (e) => {
-      // Calculamos posición relativa del ratón (-0.5 a 0.5)
       const x = (e.clientX / window.innerWidth) - 0.5;
       const y = (e.clientY / window.innerHeight) - 0.5;
 
       parallaxItems.forEach((item) => {
-        // Obtenemos la velocidad definida en el atributo data-speed
         const speed = parseFloat(item.getAttribute('data-speed')) || 20;
-        
-        // Movemos el elemento en sentido contrario usando GSAP
-        // Usamos duration y ease para suavizar el movimiento (como un spring)
         gsap.to(item, {
-          x: -x * speed, // El negativo hace que vaya en contra del ratón
+          x: -x * speed,
           y: -y * speed,
           duration: 0.5,
           ease: 'power2.out',
@@ -671,7 +703,6 @@ function App() {
       });
     };
 
-    // Solo activamos si hay elementos y no es móvil (opcional, pero recomendado)
     if (window.matchMedia("(hover: hover)").matches) {
       window.addEventListener('mousemove', handleMouseMove);
     }
@@ -683,6 +714,7 @@ function App() {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
+
 
   return (
     <div className="min-h-screen bg-white text-[#050505]">
@@ -868,11 +900,9 @@ function App() {
         {/* 8. Dual experience */}
         <InteractiveToggleSection />
 
-        <CosmosSpiral serviceFamilies={serviceFamilies} />
+        <CosmosSpiral serviceFamilies={serviceFamilies} />   
 
-        
-
-        {/* 10. Carrousel */}
+        {/* 9. Carrousel */}
         <section className="justify-center space-y-10">
           <SectionHeading title="How Wisdom works" />
           
@@ -908,7 +938,7 @@ function App() {
           <HowItWorks3D activeTab={activeTab} flows={howItWorksFlows} />
         </section>
 
-        {/* 9. Secure & Trust */}
+        {/* 10. Secure & Trust */}
         <section className="fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24">
           
           {/* Título Serif estilo imagen */}
@@ -946,6 +976,19 @@ function App() {
               </motion.div>
             ))}
           </div>
+        </section>
+
+        {/* 11. CTA Final */}
+        <section className="fade-section w-full min-h-screen w-full py-32 px-6 flex flex-col items-center justify-center text-center">
+          <h2 className="text-4xl md:text-[42px] font-bold tracking-tight text-[#050505]">
+            Ready to simplify your life?
+          </h2>
+          <p className="mt-5 text-lg md:text-xl text-[#9ca3af] font-medium max-w-md leading-relaxed">
+            Join the new standard for services today on Apple and Android.
+          </p>
+          <button className="mt-10 rounded-full bg-[#0F0F0F] px-8 py-3 text-sm font-bold text-white transition-transform hover:">
+            Give Wisdom a try
+          </button>
         </section>
 
       </main>
