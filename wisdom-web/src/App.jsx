@@ -1,7 +1,77 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
+import React, { useMemo, useState, useEffect } from 'react';
+import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from '@studio-freight/lenis';
 
-// ... (Mantén tus arrays de datos: sharedScreens, navLinks, howItWorksFlows, etc. IGUAL QUE ANTES) ...
+const navLinks = ['Use cases', 'Services', 'Features', 'Testimonials', 'Pricing'];
+
+const heroTiles = [
+  // Arriba Izquierda
+  { 
+    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174847.png", 
+    size: 'w-32 h-20 md:w-40 md:h-28', 
+    style: { top: '-4%', left: '-2%' } 
+  },
+  // Arriba Centro-Izquierda
+  { 
+    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180612.png", 
+    size: 'w-40 h-20 md:w-60 md:h-32', 
+    style: { top: '7%', left: '20%' } 
+  },
+  // Arriba Centro-Derecha
+  { 
+    url: "https://storage.googleapis.com/wisdom-images/77502ab75202d6b38aa0df57113b6746.jpg", 
+    size: 'w-36 h-20 md:w-52 md:h-32', 
+    style: { top: '4%', right: '23%' } 
+  },
+  // Arriba Derecha
+  { 
+    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180656.png", 
+    size: 'w-40 h-20 md:w-60 md:h-32', 
+    style: { top: '12%', right: '-3%' } 
+  },
+  // Abajo Izquierda
+  { 
+    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181310.png", 
+    size: 'w-40 h-24 md:w-60 md:h-40', 
+    style: { bottom: '31%', left: '10%' } 
+  },
+  // Abajo Izquierda Esquina
+  { 
+    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20190223.png", 
+    size: 'w-36 h-24 md:w-56 md:h-40', 
+    style: { bottom: '-4%', left: '-3%' } 
+  },
+  // Abajo Derecha
+  { 
+    url: "https://storage.googleapis.com/wisdom-images/237ee01c-4454-4d81-8f27-f502f74ac9d3.jpeg", 
+    size: 'w-28 h-36 md:w-44 md:h-56', 
+    style: { bottom: '14%', right: '21%' } 
+  },
+  // Abajo Derecha Esquina
+  { 
+    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175117.png", 
+    size: 'w-40 h-20 md:w-60 md:h-32', 
+    style: { bottom: '-5%', right: '5%' } 
+  },
+  // Abajo Centro
+  { 
+    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174733.png", 
+    size: 'w-20 h-32 md:w-32 md:h-48', 
+    style: { bottom: '-6%', right: '49%' } 
+  },
+];
+
+const grayShapes = [
+  { size: 'w-14 h-32 md:w-20 md:h-44', style: { top: '23%', left: '6%' } },
+  { size: 'w-20 h-28 md:w-28 md:h-40', style: { top: '5%', left: '47%' } },
+  { size: 'w-24 h-24 md:w-32 md:h-32', style: { top: '70%', right: '28%' } },
+  { size: 'w-20 h-28 md:w-28 md:h-40', style: { bottom: '13%', left: '28%' } }, //ANIMADA
+  { size: 'w-28 h-32 md:w-38 md:h-44', style: { bottom: '23%', right: '-3%' } },
+  { size: 'w-32 h-14 md:w-48 md:h-20', style: { top: '37%', right: '10%' } },
+];
+
 const sharedScreens = [
   '/images/IMG_7890.PNG',
   '/images/IMG_7959.PNG',
@@ -9,288 +79,161 @@ const sharedScreens = [
   '/images/IMG_7965%20(1).PNG',
 ];
 
-const navLinks = [
-  'Use cases',
-  'Services',
-  'Features',
-  'Testimonials',
-  'Pricing',
+const securityFeatures = [
+  {
+    title: 'Transparent and local',
+    description: 'See total prices, fees and policies before you book. No hidden surprises when you confirm.',
+    icon: (
+      // strokeWidth cambiado a "2"
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    ),
+  },
+  {
+    title: 'Wisdom Guarantee',
+    description: 'If something does not go as expected, our Wisdom Guarantee and clear booking policies help you get support.',
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+    ),
+  },
+  {
+    title: 'Verified professionals',
+    description: 'Professionals are required to provide key information and are rated after every booking, helping you choose with confidence.',
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    ),
+  },
+  {
+    title: 'Control over your data',
+    description: 'You decide what to share with professionals. Your messages, photos and payment details stay inside Wisdom.',
+    icon: (
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    ),
+  },
+];
+
+const serviceFamilies = [
+  {
+    family: 'For you',
+    categories: [
+      { id: 2, category: 'Plumbing', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174847.png" },
+      { id: 89, category: 'AI Development', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20201215.png" },
+      { id: 1, category: 'Home Cleaning', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174733.png" },
+      { id: 31, category: 'Personal Training', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175621.png" },
+      { id: 317, category: 'Dog Walkers', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20190223.png" },
+      { id: 318, category: 'Pet Care', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20190446.png" },
+      { id: 5, category: 'Masonry', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175117.png" },
+      { id: 83, category: 'App Development', url: "https://storage.googleapis.com/wisdom-images/451067aa-4bd3-43d8-874d-ff8b5e50ce7e.jpeg" },
+      { id: 84, category: 'Web Development', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181853.png" },
+      { id: 151, category: 'Architects', url: "https://storage.googleapis.com/wisdom-images/526bda5b-c0c2-4170-b552-12a17db69fa9.jpeg" },
+      { id: 8, category: 'Painting', url: "https://storage.googleapis.com/wisdom-images/237ee01c-4454-4d81-8f27-f502f74ac9d3.jpeg" }
+    ]
+  },
+  {
+    family: 'Home & Maintenance',
+    description: 'Find trusted professionals for your home.',
+    categories: [
+      { id: 1, category: 'Home Cleaning', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174733.png" },
+      { id: 2, category: 'Plumbing', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174847.png" },
+      { id: 3, category: 'Electrical Work', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175034.png" },
+      { id: 5, category: 'Masonry', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175117.png" },
+      { id: 6, category: 'Gardening', url: "https://storage.googleapis.com/wisdom-images/4a4881ba-a06f-4bb1-be9d-016d2b49eae4.jpeg" },
+      { id: 8, category: 'Painting', url: "https://storage.googleapis.com/wisdom-images/237ee01c-4454-4d81-8f27-f502f74ac9d3.jpeg" }
+    ]
+  },
+  {
+    family: 'Health & Wellbeing',
+    description: 'Take care of your body and mind.',
+    categories: [
+      { id: 31, category: 'Personal Training', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175621.png" },
+      { id: 32, category: 'Nutritionists', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175812.png" },
+      { id: 34, category: 'Psychology', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180032.png" },
+      { id: 35, category: 'Yoga', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180113.png" },
+      { id: 36, category: 'Meditation', url: "https://storage.googleapis.com/wisdom-images/53a50b05-32d7-4e90-86ce-62702bc97d65.jpeg" },
+      { id: 37, category: 'Massages', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180612.png" },
+      { id: 54, category: 'Therapy', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180656.png" }
+    ]
+  },
+  {
+    family: 'Education',
+    description: 'Learn something new today.',
+    categories: [
+      { id: 56, category: 'Private Tutors', url: "https://storage.googleapis.com/wisdom-images/77502ab75202d6b38aa0df57113b6746.jpg" },
+      { id: 57, category: 'Math Classes', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180933.png" },
+      { id: 58, category: 'Languages', url: "https://storage.googleapis.com/wisdom-images/6f1a64adbbe28f7d572a9fef189ea542.jpg" },
+      { id: 59, category: 'Science', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181138.png" },
+      { id: 68, category: 'Job Interview', url: "https://storage.googleapis.com/wisdom-images/36548671ef1476a260d9e3dbb8fe4706.jpg" },
+      { id: 65, category: 'Music', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181310.png" },
+      { id: 61, category: 'Programming', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181628.png" }
+    ]
+  },
+  {
+    family: 'Digital & Online',
+    description: 'Digital services for the modern world.',
+    categories: [
+      { id: 83, category: 'App Dev', url: "https://storage.googleapis.com/wisdom-images/451067aa-4bd3-43d8-874d-ff8b5e50ce7e.jpeg" },
+      { id: 84, category: 'Web Dev', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181853.png" },
+      { id: 89, category: 'AI Dev', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20201215.png" },
+      { id: 85, category: 'Frontend', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20182501.png" },
+      { id: 86, category: 'Backend', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20182034.png" },
+      { id: 90, category: 'Design', url: "https://storage.googleapis.com/wisdom-images/a2b2c958-2d21-4308-8b07-51a1820f6faa.jpeg" },
+      { id: 94, category: 'Video Editing', url: "https://storage.googleapis.com/wisdom-images/ad3a9403cb4273ff3bfb2ab24429bb62.jpg" },
+      { id: 100, category: '3D Design', url: "https://storage.googleapis.com/wisdom-images/4475f6e7e9766c27834ae79e308907db2d4fe361f741e26a2e9357b0a6c63082_1920x1080.webp" },
+      { id: 101, category: 'Content Creation', url: "https://storage.googleapis.com/wisdom-images/contentcretor.png" },
+    ]
+  },
+  {
+    family: 'Events',
+    description: 'Make your events memorable.',
+    categories: [
+      { id: 172, category: 'Wedding Planners', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184608.png" },
+      { id: 173, category: 'Catering', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184635.png" },
+      { id: 174, category: 'Photography', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184808.png" },
+      { id: 175, category: 'DJs', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184853.png" },
+      { id: 178, category: 'Entertainers', url: "https://storage.googleapis.com/wisdom-images/1.webp" },
+      { id: 181, category: 'Security', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20185110.png" }
+    ]
+  }
 ];
 
 const howItWorksFlows = {
   customers: [
-    {
-      id: 'search',
-      label: 'Search',
-      description:
-        'Search by service, category or location to see trusted professionals around you.',
-      screen: sharedScreens[0],
-    },
-    {
-      id: 'compare',
-      label: 'Compare',
-      description:
-        'Compare prices, reviews, photos, availability and distance in one clean view.',
-      screen: sharedScreens[1],
-    },
-    {
-      id: 'book',
-      label: 'Book',
-      description:
-        'Pick a time that works for you, confirm instantly and keep every detail in one place.',
-      screen: sharedScreens[2],
-    },
-    {
-      id: 'pay',
-      label: 'Pay',
-      description:
-        'Pay securely in the app and save your favourites for one-tap rebooking next time.',
-      screen: sharedScreens[3],
-    },
+    { id: 'search', label: 'Search', description: 'Search by service, category or location to see trusted professionals around you.', screen: sharedScreens[0] },
+    { id: 'compare', label: 'Compare', description: 'Compare prices, reviews, photos, availability and distance in one clean view.', screen: sharedScreens[1] },
+    { id: 'book', label: 'Book', description: 'Pick a time that works for you, confirm instantly and keep every detail in one place.', screen: sharedScreens[2] },
+    { id: 'pay', label: 'Pay', description: 'Pay securely in the app and save your favourites for one-tap rebooking next time.', screen: sharedScreens[3] },
   ],
   professionals: [
-    {
-      id: 'create',
-      label: 'Create',
-      description:
-        'Create a professional profile with your services, prices, locations, photos and availability.',
-      screen: sharedScreens[0],
-    },
-    {
-      id: 'decide',
-      label: 'Decide',
-      description:
-        'Receive clear booking requests and decide which ones to accept or reschedule.',
-      screen: sharedScreens[1],
-    },
-    {
-      id: 'work',
-      label: 'Work',
-      description:
-        'Deliver your services while Wisdom keeps bookings, messages and details organised.',
-      screen: sharedScreens[2],
-    },
-    {
-      id: 'charge',
-      label: 'Charge',
-      description:
-        'Get paid securely through Wisdom, with invoices and payouts handled for you.',
-      screen: sharedScreens[3],
-    },
+    { id: 'create', label: 'Create', description: 'Create a professional profile with your services, prices, locations, photos and availability.', screen: sharedScreens[0] },
+    { id: 'decide', label: 'Decide', description: 'Receive clear booking requests and decide which ones to accept or reschedule.', screen: sharedScreens[1] },
+    { id: 'work', label: 'Work', description: 'Deliver your services while Wisdom keeps bookings, messages and details organised.', screen: sharedScreens[2] },
+    { id: 'charge', label: 'Charge', description: 'Get paid securely through Wisdom, with invoices and payouts handled for you.', screen: sharedScreens[3] },
   ],
 };
-
-const heroButtons = [
-  { label: 'Download for free', primary: true },
-];
-
-// ... (Mantén el resto de constantes: heroButtons, discoverButtons, customerSteps, etc.) ...
-const customerSteps = [
-  {
-    title: 'Tell us what you need',
-    description: 'Search by service, category or location to see trusted professionals around you.',
-  },
-  {
-    title: 'Compare your options',
-    description: 'Check prices, reviews, photos, availability and distance at a glance.',
-  },
-  {
-    title: 'Book with confidence',
-    description:
-      'Choose a time, pay securely in the app, and relax. You are covered by the Wisdom Guarantee and clear cancellation policies.',
-  },
-];
-
-const professionalSteps = [
-  {
-    title: 'Create your profile',
-    description:
-      'Show your services, photos, prices, locations and availability in a clean, professional profile.',
-  },
-  {
-    title: 'Receive bookings, not random messages',
-    description:
-      'Get clear requests with all the details you need, accept or propose a new time and manage your calendar from your phone.',
-  },
-  {
-    title: 'Get paid securely',
-    description: 'Wisdom handles payments, receipts and payouts, so you can focus on delivering great work.',
-  },
-];
-
-const bookingHighlights = [
-  {
-    title: 'Keep everything in one place',
-    description:
-      'Save your home, gym or office addresses, preferred times and favourite professionals for one-tap rebooking.',
-  },
-  {
-    title: 'Add multiple sources',
-    description:
-      'Find services by searching, browsing categories, exploring the map or using personalised suggestions.',
-  },
-];
-
-const bookingExtra = [
-  {
-    title: 'Smart filters',
-    description:
-      'Filter by price, rating, distance, availability, language and more – then save your favourite combinations for next time.',
-  },
-  {
-    title: 'Request changes',
-    description:
-      'Need to adjust the time or add an extra service? Request edits directly in the chat and keep all changes in one thread.',
-  },
-  {
-    title: 'Advanced personalisation',
-    description:
-      'From recurring bookings to flexible locations, Wisdom adapts to your routine instead of forcing you to adapt to the app.',
-  },
-];
-
-const simplifyHighlights = [
-  {
-    title: 'Live status',
-    description:
-      'See when a professional confirms your booking, is on the way, or has completed the service.',
-  },
-  {
-    title: 'Stay focused on what matters',
-    description:
-      'Automatic reminders and notifications help you stay organised without managing endless chats and notes.',
-  },
-  {
-    title: 'One conversation, all the details',
-    description:
-      'Share photos, videos or voice notes inside Wisdom so your professional knows exactly what you need – before they arrive.',
-  },
-  {
-    title: 'Flexible when plans change',
-    description:
-      'Reschedule or adjust your booking within the policies set by each professional, without awkward phone calls.',
-  },
-];
-
-const businessHighlights = [
-  'Invite your team or work solo — Whether you are an independent professional or part of a larger team, Wisdom helps you centralise bookings, clients and payments.',
-  'Simple onboarding — Create a professional profile in minutes. Add your services, prices, locations, photos and languages – no website required.',
-  'See your impact — Track bookings, earnings and repeat clients to understand how Wisdom is helping you grow.',
-  'Built for trust — Verified profiles, transparent prices and real reviews help new clients choose you with confidence.',
-];
-
-const testimonials = [
-  {
-    quote: '“Wisdom makes it easy for clients to find me and book without back-and-forth.”',
-    author: 'Laura, Hair stylist',
-  },
-  {
-    quote: '“I stopped juggling messages in three different apps. Now everything goes through Wisdom.”',
-    author: 'Karim, Handyman',
-  },
-  {
-    quote: '“Clear prices, instant bookings and a clean dashboard – this is how services should work.”',
-    author: 'Marta, Cleaner',
-  },
-];
-
-const safetyBlocks = [
-  {
-    title: 'Transparent and local',
-    description:
-      'See total prices, fees and policies before you book. No hidden surprises when you confirm.',
-  },
-  {
-    title: 'Wisdom Guarantee',
-    description:
-      'If something does not go as expected, our Wisdom Guarantee and clear booking policies help you get support and a fair resolution.',
-  },
-  {
-    title: 'Verified professionals',
-    description:
-      'Professionals are required to provide key information and are rated after every booking, helping you choose with confidence.',
-  },
-  {
-    title: 'Control over your data',
-    description:
-      'You decide what to share with professionals. Your messages, photos and payment details stay inside Wisdom and are never sold.',
-  },
-];
-
-const pricingPlans = [
-  {
-    audience: 'For customers',
-    price: 'Free',
-    description: 'Download Wisdom for free and pay only for the services you book.',
-    features: ['Up-front pricing', 'No subscription required', 'Secure in-app payments'],
-  },
-  {
-    audience: 'For professionals',
-    price: 'Simple, flexible fees',
-    description:
-      'Get started for free. Pay a small fee per booking when you earn through Wisdom.',
-    features: [
-      'No fixed monthly commitment to start',
-      'Tools to manage bookings and clients',
-      'Support when you need it',
-    ],
-  },
-];
 
 const footerNav = {
-  primary: [
-    'Home',
-    'How it works',
-    'For Customers',
-    'For Professionals',
-    'Categories',
-    'Testimonials',
-    'Safety',
-    'Pricing',
-    'Help & FAQ',
-    'Devices',
-  ],
+  primary: ['Home', 'How it works', 'For Customers', 'For Professionals', 'Categories', 'Testimonials', 'Safety', 'Pricing', 'Help & FAQ', 'Devices'],
   secondary: ['Blog', 'About Wisdom'],
-  useCases: [
-    'Home Services',
-    'Health & Wellness',
-    'Classes & Tutoring',
-    'Beauty & Grooming',
-    'Events & Experiences',
-    'Online Services',
-  ],
-  legal: [
-    'Privacy Policy',
-    'Terms of Use',
-    'Cancellation Policy',
-    'Booking Policy',
-    'Wisdom Guarantee',
-  ],
+  useCases: ['Home Services', 'Health & Wellness', 'Classes & Tutoring', 'Beauty & Grooming', 'Events & Experiences', 'Online Services'],
+  legal: ['Privacy Policy', 'Terms of Use', 'Cancellation Policy', 'Booking Policy', 'Wisdom Guarantee'],
 };
 
-const SectionHeading = ({ eyebrow, title, subtitle }) => (
-  <div className="mb-10 text-center">
-    {eyebrow && (
-      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#7f8794]">
-        {eyebrow}
-      </p>
-    )}
-    <h2 className="mt-3 text-[45px] font-semibold text-[#050505]">{title}</h2>
-    {subtitle && <p className="mt-4 text-lg text-[#4c5563]">{subtitle}</p>}
+
+const PlaceholderBox = ({ className, style = {} }) => (
+  <div className={`bg-[#d9d9d9] ${className}`} style={style} aria-hidden />
+);
+
+const SectionHeading = ({ title, subtitle, eyebrow }) => (
+  <div className="space-y-3 text-center">
+    <h2 className="text-5xl font-semibold text-[#050505]">{title}</h2>
   </div>
 );
 
-const Card = ({ children, className = '' }) => (
-  <div className={`rounded-[32px] bg-[#f5f5f5] p-8 ${className}`}>{children}</div>
-);
-
-const ITEM_HEIGHT = 90;
 const VISIBLE_RANGE = 4;
 const ANGLE_PER_ITEM = 15.5;
 const RADIUS = 340;
 
 const HowItWorks3D = ({ activeTab, flows }) => {
-  const containerRef = useRef(null);
+  const containerRef = React.useRef(null);
   const steps = flows[activeTab] || flows.customers;
 
   const { scrollYProgress } = useScroll({
@@ -300,7 +243,7 @@ const HowItWorks3D = ({ activeTab, flows }) => {
 
   const [activeIndex, setActiveIndex] = useState(0);
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     const stepLength = 1 / (steps.length - 1);
     const newIndex = Math.round(latest / stepLength);
     const clampedIndex = Math.min(Math.max(newIndex, 0), steps.length - 1);
@@ -313,40 +256,34 @@ const HowItWorks3D = ({ activeTab, flows }) => {
   return (
     <div ref={containerRef} className="relative h-[250vh] w-full">
       <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden">
-        <div className="relative mx-auto flex h-full w-full flex-col items-center justify-center pl-4 md:pl-12 gap-8 md:flex-row md:justify-between">
-          {/* --- IZQUIERDA: RULETA --- */}
+        <div className="relative mx-auto flex h-full w-full flex-col items-center justify-center gap-10 px-4 md:flex-row md:gap-16">
           <div className="order-2 flex h-[500px] w-full flex-1 items-center justify-center md:order-1 md:h-[700px] md:justify-start">
             <div className="relative flex h-full w-full flex-col items-center justify-center md:items-start">
-              <div
-                className="relative h-[700px] w-full max-w-6xl"
-                style={{
-                  maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
-                  WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)'
-                }}
-              >
-                <div className="relative h-full w-full left-14 md:left-32">
-                  {steps.map((step, index) => (
-                    <FanItem
-                      key={step.id}
-                      item={step}
-                      index={index}
-                      activeIndex={activeIndex}
-                    />
-                  ))}
-                </div>
+            <div
+              className="relative h-[700px] w-full max-w-5xl"
+              style={{
+                maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+              }}
+            >
+              {/* Aumenté left-8 a left-12 y md:left-24 a md:left-40 para moverlo a la derecha */}
+              <div className="relative h-full w-full left-12 md:left-40">
+                {steps.map((step, index) => (
+                  <FanItem key={step.id} item={step} index={index} activeIndex={activeIndex} />
+                ))}
               </div>
+            </div>
             </div>
           </div>
 
-          {/* --- DERECHA: MÓVIL --- */}
           <div className="order-1 flex h-[45vh] w-full flex-1 items-center justify-center md:order-2 md:h-auto">
-            <div className="relative flex justify-center items-center w-[220px] md:w-[300px] h-auto">
+            <div className="relative flex h-auto w-[220px] items-center justify-center md:w-[300px]">
               <img
                 src="/images/phone.png"
                 alt="Phone frame"
-                className="relative z-20 w-full h-auto pointer-events-none drop-shadow-2xl"
+                className="relative z-20 h-auto w-full pointer-events-none drop-shadow-2xl"
               />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-[85%] h-[94%] rounded-[30px] md:rounded-[46px] overflow-hidden bg-black">
+              <div className="absolute left-1/2 top-1/2 z-10 h-[94%] w-[85%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[30px] bg-black md:rounded-[46px]">
                 {steps.map((step, index) => (
                   <motion.img
                     key={step.id}
@@ -355,9 +292,9 @@ const HowItWorks3D = ({ activeTab, flows }) => {
                     initial={{ opacity: 0 }}
                     animate={{
                       opacity: activeIndex === index ? 1 : 0,
-                      scale: activeIndex === index ? 1 : 1.02
+                      scale: activeIndex === index ? 1 : 1.02,
                     }}
-                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                    transition={{ duration: 0.4, ease: 'easeInOut' }}
                     className="absolute inset-0 h-full w-full object-fill"
                   />
                 ))}
@@ -381,322 +318,680 @@ const FanItem = ({ item, index, activeIndex }) => {
       animate={{
         rotate: rotate,
         opacity: isVisible ? (isActive ? 1 : 0.3) : 0,
-        color: isActive ? "#050505" : "#e5e7eb",
+        color: isActive ? '#050505' : '#e5e7eb',
       }}
       transition={{
-        type: "spring",
+        type: 'spring',
         stiffness: 250,
-        damping: 25
+        damping: 25,
       }}
       style={{
         transformOrigin: `${-RADIUS}px 50%`,
-        position: "absolute",
-        top: "50%",
+        position: 'absolute',
+        top: '50%',
         left: 0,
-        width: "100%"
+        width: '100%',
       }}
       className="flex flex-col items-center justify-center md:items-start"
     >
-      <h3 className="whitespace-nowrap text-xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-[60px] cursor-pointer">
+      <h3 className="cursor-pointer whitespace-nowrap text-xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-[60px]">
         {item.label}.
       </h3>
+      {/* <p className="mt-3 max-w-md text-center text-sm text-[#4c5563] md:text-left md:text-base">{item.description}</p> */}
     </motion.div>
   );
 };
 
+const InteractiveToggleSection = () => {
+  const [activeMode, setActiveMode] = useState('Letters');
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  const toggleItems = [
+    { label: 'Letters', icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+    )},
+    { label: 'Transcribe', icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+    )}
+  ];
+
+  const contentItems = [
+    { title: "One search.", description: "Connect all your accounts and find exactly what you need in milliseconds." },
+    { title: "Total clarity.", description: "See everything in a unified view, stripping away the noise of multiple apps." },
+    { title: "Secure.", description: "Your data is encrypted end-to-end and never used to train models." },
+  ];
+
+  return (
+    <section className="fade-section min-h-[80vh] w-full mx-auto flex flex-col justify-center items-center py-24">
+      
+      {/* Selector Superior */}
+      <div className="mb-16 rounded-full bg-[#F3F4F6] p-1 flex relative">
+        {toggleItems.map((item) => (
+          <button
+            key={item.label}
+            onClick={() => setActiveMode(item.label)}
+            className={`relative z-10 flex items-center gap-2 px-6 py-2 text-sm font-semibold transition-colors duration-200 ${
+              activeMode === item.label ? 'text-[#050505]' : 'text-[#6B7280]'
+            }`}
+          >
+            {/* Fondo Blanco Animado (Motion) */}
+            {activeMode === item.label && (
+              <motion.div
+                layoutId="toggle-bg"
+                className="absolute inset-0 rounded-full bg-white shadow-sm"
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              />
+            )}
+            <span className="relative z-10 flex items-center gap-2">
+              {item.icon}
+              {item.label}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {/* Textos Principales Expandibles */}
+      <div className="flex flex-col items-center text-center gap-2">
+        {contentItems.map((item, index) => (
+          <div 
+            key={index}
+            className="flex flex-col items-center cursor-default"
+            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseLeave={() => setHoveredIndex(null)}
+          >
+            <motion.h2 
+              className="text-5xl md:text-6xl font-semibold tracking-tight text-[#050505] transition-colors duration-300"
+              animate={{ opacity: hoveredIndex !== null && hoveredIndex !== index ? 0.6 : 1 }}
+            >
+              {item.title}
+            </motion.h2>
+
+            <AnimatePresence>
+              {hoveredIndex === index && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0, y: -10 }}
+                  animate={{ opacity: 1, height: 'auto', y: 0 }}
+                  exit={{ opacity: 0, height: 0, y: -10 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="overflow-hidden"
+                >
+                  <p className="pt-2 pb-4 text-lg text-[#6B7280] max-w-md mx-auto">
+                    {item.description}
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        ))}
+      </div>
+
+    </section>
+  );
+};
+
+
+const CosmosSpiral = ({ serviceFamilies }) => {
+  // 1. Aplanar todas las categorías para obtener imágenes y nombres
+  const contentPool = useMemo(() => {
+    const pool = [];
+    serviceFamilies.forEach((family) => {
+      if (family.categories) {
+        family.categories.forEach((cat) => {
+          if (cat.url) {
+            pool.push({
+              image: cat.url,
+              label: cat.category // Usaremos esto para el texto cambiante
+            });
+          }
+        });
+      }
+    });
+    return pool;
+  }, [serviceFamilies]);
+
+  // 2. Estado para el texto cambiante (rotator)
+  const [textIndex, setTextIndex] = useState(0);
+
+  useEffect(() => {
+    if (contentPool.length === 0) return;
+    const interval = setInterval(() => {
+      setTextIndex((prev) => (prev + 1) % contentPool.length);
+    }, 2000); // Cambia cada 2 segundos
+    return () => clearInterval(interval);
+  }, [contentPool]);
+
+  // Si no hay datos, no renderizamos nada
+  if (!contentPool.length) return null;
+
+  return (
+    // CAMBIO 1: Se cambió bg-[#F3F3F3] por bg-white
+    <section className="relative h-screen w-full overflow-hidden bg-white flex items-center justify-center" style={{
+      maskImage: 'linear-gradient(to bottom, transparent 0%, black 40%, black 70%, transparent 100%)',
+      WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 40%, black 70%, transparent 100%)',
+    }}>
+      
+      {/* --- CAPA DE ESPIRAL DE IMÁGENES --- */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none">
+        {Array.from({ length: 25 }).map((_, i) => (
+          <FloatingImage 
+            key={i} 
+            index={i} 
+            total={25} 
+            images={contentPool} 
+          />
+        ))}
+      </div>
+
+      {/* --- CONTENIDO CENTRAL (TEXTO) --- */}
+      <div className="relative z-10 text-center flex flex-col items-center justify-center px-4 mix-blend-multiply">
+        
+        {/* 1. TÍTULO GRANDE */}
+        <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-[#1a1a1a] mb-6 drop-shadow-sm">
+          No categories. Just talent.
+        </h1>
+        
+        {/* 2. SUBTÍTULO FIJO */}
+        <p className="text-lg md:text-xl text-[#9F9F9F] font-medium max-w-2xl leading-relaxed mb-8  ">
+          Wisdom gives you the freedom to find or offer whatever the world needs.
+        </p>
+
+        {/* 3. ELEMENTO DINÁMICO (CÁPSULA) */}
+        <div className="flex w-full justify-center"> {/* Contenedor para centrar el grupo completo */}
+        
+          {/* Agrupamos con motion.div y layout para que el movimiento sea fluido */}
+          <motion.div layout className="flex items-center gap-3">
+              
+              {/* Pequeño texto conector */}
+              <motion.span 
+                layout 
+                className="text-md font-semibold uppercase tracking-widest text-[#9F9F9F]"
+              >
+                  Like
+              </motion.span>
+
+              {/* Cápsula animada */}
+              <motion.div 
+                layout 
+                className="relative h-12 overflow-hidden rounded-full bg-white/80 backdrop-blur-sm px-2 "
+                transition={{ layout: { duration: 0.7, type: "spring", stiffness: 300, damping: 30 } }}
+              >
+                  <AnimatePresence mode="wait">
+                      <motion.div
+                          key={textIndex}
+                          // Quitamos 'absolute inset-0' para que el div tenga el ancho del texto
+                          initial={{ y: 0, opacity: 0, filter: 'blur(1px)' }}
+                          animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
+                          exit={{ y: 0, opacity: 0, filter: 'blur(1px)' }}
+                          transition={{ duration: 0.5, ease: "easeOut" }}
+                          className="flex items-center justify-center h-full"
+                      >
+                          {/* whitespace-nowrap es vital para que no se parta la linea */}
+                          <span className="text-[#1a1a1a] font-bold text-xl whitespace-nowrap">
+                              {contentPool[textIndex]?.label || "Magic"}
+                          </span>
+                      </motion.div>
+                  </AnimatePresence>
+              </motion.div>
+              
+          </motion.div>
+        </div>
+
+      </div>
+      
+      {/* CAMBIO 2: Se ha eliminado el div del overlay con gradiente radial que había aquí */}
+    </section>
+  );
+};
+
+// Sub-componente para cada imagen flotante individual
+const FloatingImage = ({ index, total, images }) => {
+  // Seleccionar una imagen aleatoria del pool
+  const randomImage = useMemo(() => images[Math.floor(Math.random() * images.length)].image, [images]);
+  
+  // Calcular posición inicial aleatoria en un anillo exterior
+  const randomParams = useMemo(() => {
+    const angle = Math.random() * 360; // Ángulo aleatorio
+    const radius = 80 + Math.random() * 40; // Distancia del centro (en vw/vh relativos)
+    const duration = 10 + Math.random() * 10; // Duración lenta (10-20s)
+    const delay = (index / total) * 15; // Delay escalonado para que no salgan todas a la vez
+    const size = 100 + Math.random() * 150; // Tamaño aleatorio entre 100px y 250px
+    const rotation = Math.random() * 360; // Rotación inicial de la foto
+    
+    // Convertir coordenadas polares a cartesianas para el inicio (fuera de pantalla)
+    // Usamos 'vw' y 'vh' para asegurar que salgan desde lejos
+    const xStart = Math.cos(angle * (Math.PI / 180)) * 100; 
+    const yStart = Math.sin(angle * (Math.PI / 180)) * 100;
+
+    return { xStart, yStart, duration, delay, size, rotation };
+  }, [index, total]);
+
+  return (
+    <motion.div
+      initial={{ 
+        x: `${randomParams.xStart}vw`, 
+        y: `${randomParams.yStart}vh`, 
+        opacity: 0, 
+        scale: 1.5,
+        rotate: randomParams.rotation,
+        z: 0
+      }}
+      animate={{ 
+        x: 0, // Va al centro
+        y: 0, // Va al centro
+        opacity: [0, 1, 1, 0], // Aparece y luego desaparece al llegar al centro
+        scale: [1.2, 0.2], // Se hace pequeña al irse al fondo/centro
+        rotate: randomParams.rotation + 180, // Gira mientras viaja
+      }}
+      transition={{
+        duration: randomParams.duration,
+        repeat: Infinity,
+        delay: -randomParams.delay, // Delay negativo para que la animación empiece ya "empezada"
+        ease: "linear",
+      }}
+      className="absolute left-1/2 top-1/2 flex items-center justify-center pointer-events-none"
+      style={{
+        width: randomParams.size,
+        height: randomParams.size * 1.4, // Aspecto vertical
+        marginLeft: `-${randomParams.size / 2}px`, // Centrar el div
+        marginTop: `-${(randomParams.size * 1.4) / 2}px`,
+      }}
+    >
+      <img 
+        src={randomImage} 
+        alt="" 
+        className="w-full h-full object-cover rounded-sm shadow-xl opacity-80 hover:opacity-100 transition-opacity"
+      />
+    </motion.div>
+  );
+};
+
+
+
+
+
+
 function App() {
-  const headerRef = useRef(null);
-  const heroRef = useRef(null);
-  const [headerOverHero, setHeaderOverHero] = useState(true);
   const [activeTab, setActiveTab] = useState('customers');
 
   useEffect(() => {
-    const handleScroll = () => {
-      // Solo necesitamos saber la posición del scroll relative al hero
-      if (!heroRef.current) return;
-      const heroRect = heroRef.current.getBoundingClientRect();
-      // Si el fondo del hero pasa hacia arriba más allá de un punto (ej: 100px), activamos el modo "sticky"
-      const isOverHero = heroRect.bottom > 100; 
-      setHeaderOverHero(isOverHero);
+    // 1. Configuración de Lenis y ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
+    const lenis = new Lenis({ lerp: 0.08, smoothWheel: true, wheelMultiplier: 1.1 });
+
+    let rafId;
+    const raf = (time) => {
+      lenis.raf(time);
+      ScrollTrigger.update();
+      rafId = requestAnimationFrame(raf);
+    };
+    rafId = requestAnimationFrame(raf);
+
+    // 2. Animación de entrada (Fade Sections)
+    const sections = gsap.utils.toArray('.fade-section');
+    sections.forEach((section) => {
+      gsap.fromTo(
+        section,
+        { autoAlpha: 0, y: 50 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.9,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        },
+      );
+    });
+
+    // 3. LOGICA NUEVA DE PARALLAX CON GSAP (Más robusta)
+    // Seleccionamos todos los elementos con clase 'parallax-item'
+    const parallaxItems = document.querySelectorAll('.parallax-item');
+    
+    const handleMouseMove = (e) => {
+      // Calculamos posición relativa del ratón (-0.5 a 0.5)
+      const x = (e.clientX / window.innerWidth) - 0.5;
+      const y = (e.clientY / window.innerHeight) - 0.5;
+
+      parallaxItems.forEach((item) => {
+        // Obtenemos la velocidad definida en el atributo data-speed
+        const speed = parseFloat(item.getAttribute('data-speed')) || 20;
+        
+        // Movemos el elemento en sentido contrario usando GSAP
+        // Usamos duration y ease para suavizar el movimiento (como un spring)
+        gsap.to(item, {
+          x: -x * speed, // El negativo hace que vaya en contra del ratón
+          y: -y * speed,
+          duration: 0.5,
+          ease: 'power2.out',
+          overwrite: 'auto'
+        });
+      });
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll);
-    handleScroll();
+    // Solo activamos si hay elementos y no es móvil (opcional, pero recomendado)
+    if (window.matchMedia("(hover: hover)").matches) {
+      window.addEventListener('mousemove', handleMouseMove);
+    }
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#ffffff] text-[#050505]">
-      {/* HEADER CORREGIDO:
-         Usamos motion.header para animar el width, background y padding simultáneamente.
-      */}
-      <motion.header
-        ref={headerRef}
-        // Posicionamiento fijo base
-        className="fixed top-4 left-1/2 z-20 flex -translate-x-1/2 items-center rounded-full font-semibold overflow-hidden"
-        // Definimos los estilos iniciales
-        initial={false}
-        // Animamos propiedades según el estado
-        animate={{
-          // Width: 100% cuando está en Hero, 72rem (max-w-6xl) cuando está sticky
-          width: headerOverHero ? "calc(100% - 2rem)" : "min(100% - 2rem, 72rem)",
-          // Fondo: Transparente en Hero, Blanco borroso en sticky
-          backgroundColor: headerOverHero ? "rgba(255,255,255,0)" : "rgba(255,255,255,0.8)",
-          backdropFilter: headerOverHero ? "blur(0px)" : "blur(10px)",
-          boxShadow: headerOverHero 
-            ? "0 0 0 0 rgba(0,0,0,0)" 
-            : "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
-          // Padding: Más grande en Hero para separar elementos, normal en sticky
-          paddingLeft: headerOverHero ? "50px" : "24px",
-          paddingRight: headerOverHero ? "40px" : "24px",
-          paddingTop: "16px",
-          paddingBottom: "16px",
-        }}
-        transition={{ duration: 0.4, ease: "easeInOut" }}
-      >
-        {/* LOGO WISDOM: Se mueve hacia el centro (x:0) desde la izquierda (x:-20) */}
-        <motion.div
-          className="flex flex-1 justify-start"
-          animate={{
-            x: headerOverHero ? -20 : 200,
-            opacity: 1 
-          }}
-          transition={{ duration: 0.4, ease: "easeInOut" }}
-        >
-          <div
-            className={`text-lg font-semibold transition-colors duration-300 ${
-              headerOverHero ? 'text-white' : 'text-[#050505]'
-            }`}
-          >
-            Wisdom
-          </div>
-        </motion.div>
+    <div className="min-h-screen bg-white text-[#050505]">
 
-        {/* NAV LINKS (No se mueven, solo fade de color) */}
+      <header className="fixed backdrop-blur-xl top-4 left-1/2 z-20 flex w-[min(1100px,calc(100%-2rem))] -translate-x-1/2 items-center rounded-full bg-white/70 px-4 py-3 font-semibold">
+        <div className="flex flex-1 justify-start text-lg">Wisdom</div>
         <nav className="hidden flex-none flex-wrap items-center justify-center gap-4 md:flex">
           {navLinks.map((link) => (
-            <a
-              key={link}
-              href="#"
-              className={`text-sm font-semibold transition-colors duration-300 ${
-                headerOverHero ? 'text-white/90 hover:text-white' : 'text-[#4c5563] hover:text-[#050505]'
-              }`}
-            >
+            <a key={link} href="#" className="text-sm font-semibold text-[#4c5563] hover:text-[#050505]">
               {link}
             </a>
           ))}
         </nav>
+        <div className="flex flex-1 justify-end">
+          <button className="rounded-full bg-[#050505] px-6 py-2 text-sm font-semibold text-white hover:bg-black">Get the app</button>
+        </div>
+      </header>
 
-        {/* BOTÓN GET APP: Se mueve hacia el centro (x:0) desde la derecha (x:20) */}
-        <motion.div
-          className="flex flex-1 justify-end gap-3"
-          animate={{
-            x: headerOverHero ? 20 : -145
-          }}
-          transition={{ duration: 0.4, ease: "easeInOut" }}
-        >
-          <button
-            className={`rounded-full px-6 py-2 text-sm font-semibold shadow-lg transition-colors duration-300 ${
-              headerOverHero ? 'bg-white text-[#050505] hover:bg-white/90' : 'bg-[#050505] text-white hover:bg-black'
-            }`}
-          >
-            Get the app
-          </button>
-        </motion.div>
-      </motion.header>
+      <main className=" pb-20">
 
-      <main>
-        <section
-          ref={heroRef}
-          className="relative m-4 min-h-[calc(100vh-2rem)] overflow-hidden rounded-[30px] bg-cover bg-center bg-no-repeat px-6 pt-[140px] pb-12 text-white"
-          style={{ backgroundImage: "url('https://storage.googleapis.com/wisdom-images/hand3.png')", opacity: 0.99 }}
-        >
-          <div className="relative z-10 flex h-full flex-col items-center justify-center text-center">
-            <h1 className="text-5xl font-semibold leading-tight sm:text-6xl">Services, not searching</h1>
-            <p className="mx-auto mt-9 max-w-3xl text-lg text-white/90">
-              Book any professional in minutes.
+        {/* 1. PORTADA */}
+        <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 fade-section">
+          
+          {/* 1. Capa de Cuadrados Grises (FONDO) */}
+          <div className="absolute inset-0 w-full h-full pointer-events-none">
+            {grayShapes.map((shape, index) => (
+              <div
+                key={`shape-${index}`}
+                // Agregamos clase 'parallax-item' y velocidad 'data-speed'
+                className={`parallax-item absolute bg-[#F9F8F8] ${shape.size}`}
+                style={shape.style}
+                data-speed="40" // Velocidad suave
+              />
+            ))}
+          </div>
+
+          {/* 2. Capa de Imágenes (FRENTE) */}
+          <div className="absolute inset-0 w-full h-full pointer-events-none">
+            {heroTiles.map((tile, index) => (
+              <div
+                key={`tile-${index}`}
+                // Agregamos clase 'parallax-item' y velocidad 'data-speed' mayor para efecto 3D
+                className={`parallax-item absolute overflow-hidden opacity-75 ${tile.size}`}
+                style={tile.style}
+                data-speed="60" // Velocidad más fuerte
+              >
+                <img src={tile.url} alt="" className="w-full h-full object-cover"/>
+              </div>
+            ))}
+          </div>
+
+          <div className="relative z-10 mx-auto max-w-xl text-center justify-center items-center">
+            <h1 className="text-[44px] sm:text-[48px] font-semibold text-[#464545] leading-tight">
+              Wisdom is where you find a{" "}
+              <span className="text-[55px] sm:text-[55px] text-[#050505] font-bold">
+                Professional.
+              </span>
+            </h1>
+            <p className="text-2xl font-medium text-[#9F9F9F] mt-7">
+              The first unified marketplace for every service. Simple. Secure. One app.
             </p>
-            <p className="mx-auto max-w-3xl text-lg text-white/90">
-              Discover trusted services near you, compare in one view, and confirm instantly with secure payment.
+            <button className="rounded-full bg-[#050505] mt-12 px-8 py-3 text-base font-semibold text-white hover:bg-black">
+              Download for free
+            </button>
+          </div>
+        </section>
+        
+        {/* 2. Search */}
+        <section className="fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center gap-12 md:gap-44 px-6 py-24 md:flex-row">
+          {/* Contenedor imagen: cambiado max-w-md por max-w-sm para hacerla más pequeña */}
+          <div className="aspect-[3/4] w-full max-w-[420px] shrink-0">
+            <img 
+              src="https://storage.googleapis.com/wisdom-images/search_services.png" 
+              alt="" 
+              className="w-full h-full object-cover " 
+            />
+          </div>
+          
+          <p className="max-w-2xl text-4xl md:text-6xl font-semibold leading-tight text-center md:text-left">
+            Looking for help used to be a leap of faith.
+          </p>
+        </section>
+
+        {/* 3. Search 2 */}
+        <section className="fade-section min-h-screen mx-auto flex min-w-screen justify-center items-center px-6 py-24">
+          <p className="mx-auto max-w-[820px] text-center text-[42px] leading-[1.3] font-semibold leading-relaxed text-[#050505]">
+            Endless searches. Reliance on word-of-mouth. Zero guarantees. The service world was fragmented, forcing you to guess instead of choose.
+          </p>
+        </section>
+
+        {/* 4. Pro alone */}
+        <section className="fade-section relative overflow-hidden min-h-screen mx-auto flex min-w-screen justify-center items-center bg-gradient-to-br from-[#e8ecf0] via-white to-[#e8ecf0] px-6 py-28">
+          <div className="absolute inset-0 opacity-100">
+            <img src='https://storage.googleapis.com/wisdom-images/pro_alone.png' className="absolute inset-0" />
+          </div>
+          <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-12 text-white md:flex-row md:items-center md:gap-16">
+            <p className="max-w-sm text-xl font-semibold leading-snug drop-shadow-lg">
+              Looking for help used to be a leap of faith.
             </p>
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              {heroButtons.map((button) => (
-                <button
-                  key={button.label}
-                  className={`rounded-full px-8 py-3 text-base font-semibold shadow-lg ${
-                    button.primary ? 'bg-white text-[#050505]' : 'bg-[#050505] text-white'
-                  }`}
-                >
-                  {button.label}
-                </button>
-              ))}
-            </div>
+            <p className="max-w-sm text-xl font-semibold leading-snug drop-shadow-lg">
+              Great skills got lost in noise. Managing bookings was manual, trust was hard to build, and credibility took years to establish.
+            </p>
           </div>
         </section>
 
-        {/* ... Resto del contenido (sin cambios) ... */}
-        <div className="mt-24 items-center justify-center px-4 pb-24">
-          <section className=" justify-center space-y-10">
-            <SectionHeading title="How Wisdom works" />
-            <div className="flex flex-wrap items-center justify-center gap-3">
+        {/* 5. Until now */}
+        <section className="fade-section min-h-screen mx-auto flex min-w-screen justify-center items-center px-6 py-24">
+          <p className="text-center text-8xl font-semibold">Until now.</p>
+        </section>
+
+        {/* 6. Unified */}
+        <section className="fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center gap-12 overflow-hidden pt-20">
+
+            <div className="relative flex flex-1 w-full items-center justify-center">
+            
+              {/* 1. MEDITACIÓN */}
+              <div className="absolute top-[2%] right-[35%] w-32 h-20 md:w-56 md:h-36 shadow-lg rotate-1">
+                <img 
+                  src="https://storage.googleapis.com/wisdom-images/53a50b05-32d7-4e90-86ce-62702bc97d65.jpeg" 
+                  alt="Meditation" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* 2. CATERING */}
+              <div className="absolute top-[14%] left-[20%] md:left-[21%] w-36 h-24 md:w-60 md:h-40 shadow-lg -rotate-2">
+                <img 
+                  src="https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184635.png" 
+                  alt="Catering" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* 3. ARQUITECTO */}
+              <div className="absolute bottom-[14%] left-[20%] md:left-[25%] w-32 h-24 md:w-56 md:h-40 shadow-lg rotate-2">
+                <img 
+                  src="https://storage.googleapis.com/wisdom-images/526bda5b-c0c2-4170-b552-12a17db69fa9.jpeg" 
+                  alt="Architect" 
+                  className="w-full h-full object-cover" 
+                />
+              </div>
+
+              {/* 4. FINANZAS */}
+              <div className="absolute top-[35%] right-[17%] md:right-[18%] w-36 h-24 md:w-60 md:h-40 shadow-lg rotate-1">
+                <img 
+                  src="https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20185810.png" 
+                  alt="Finances" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* 5. JARDINERO */}
+              <div className="absolute bottom-[5%] right-[26%] md:right-[28%] w-24 h-32 md:w-40 md:h-52 shadow-lg rotate-2">
+                <img 
+                  src="https://storage.googleapis.com/wisdom-images/393cd8b9-f908-4d5a-a67b-cf6850b287e9.jpg" 
+                  alt="Gardener" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* LOGO CENTRAL */}
+              <img 
+                src='https://storage.googleapis.com/wisdom-images/app_icon.png' 
+                alt="Wisdom Icon"
+                className="relative z-10 flex h-40 w-40 md:h-72 md:w-72 items-center justify-center"
+              />
+            </div>
+
+            {/* Texto inferior (le añadí un py-10 para darle aire abajo) */}
+            {/* <div className="flex flex-col items-center gap-4 text-center z-20 pb-10 px-6">
+              <p className="text-[32px] md:text-[42px] font-semibold">Wisdom unifies the chaos.</p>
+            </div> */}
+
+        </section>
+
+        {/* 7. Chaos */}
+        <section className="fade-section min-h-screen mx-auto flex min-w-screen justify-center items-center px-6 py-20">
+          <p className="mx-auto max-w-[1000px] text-center text-[42px] leading-[1.3] font-semibold leading-relaxed text-[#050505]">
+            We replaced word-of-mouth with verified data. We replaced uncertainty with transparent profiles. A single ecosystem where quality is visible, and trust is the default.
+          </p>
+        </section>
+
+        {/* 8. Dual experience */}
+        <InteractiveToggleSection />
+
+        <CosmosSpiral serviceFamilies={serviceFamilies} />
+
+        
+
+        {/* 10. Carrousel */}
+        <section className="justify-center space-y-10">
+          <SectionHeading title="How Wisdom works" />
+          
+          {/* Contenedor del Selector Centrado */}
+          <div className="flex justify-center">
+            <div className="rounded-full bg-[#F3F4F6] p-1 flex relative">
               {['customers', 'professionals'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`rounded-full px-6 py-2 text-sm font-semibold capitalize ${
-                    activeTab === tab
-                      ? 'bg-[#050505] text-white'
-                      : 'bg-[#f5f5f5] text-[#4c5563]'
+                  className={`relative z-10 px-6 py-2 text-sm font-semibold transition-colors duration-200 ${
+                    activeTab === tab ? 'text-[#050505]' : 'text-[#6B7280]'
                   }`}
                 >
-                  {tab === 'customers' ? 'For customers' : 'For professionals'}
+                  {/* Fondo Blanco Animado */}
+                  {activeTab === tab && (
+                    <motion.div
+                      layoutId="works-toggle-bg" // ID único para esta sección
+                      className="absolute inset-0 rounded-full bg-white shadow-sm"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                  
+                  {/* Texto (con z-10 para estar encima del fondo blanco) */}
+                  <span className="relative z-10 capitalize">
+                    {tab === 'customers' ? 'For customers' : 'For professionals'}
+                  </span>
                 </button>
               ))}
             </div>
-            <HowItWorks3D activeTab={activeTab} flows={howItWorksFlows} />
-          </section>
+          </div>
 
-          <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
-            <SectionHeading title="Booking services has never been easier" />
-            <div className="grid gap-6 md:grid-cols-2">
-              {bookingHighlights.map((highlight) => (
-                <Card key={highlight.title}>
-                  <h3 className="text-2xl font-semibold">{highlight.title}</h3>
-                  <p className="mt-4 text-[#4c5563]">{highlight.description}</p>
-                </Card>
-              ))}
-            </div>
-            <div className="grid gap-6 md:grid-cols-3">
-              {bookingExtra.map((item) => (
-                <Card key={item.title}>
-                  <h3 className="text-xl font-semibold">{item.title}</h3>
-                  <p className="mt-3 text-[#4c5563]">{item.description}</p>
-                </Card>
-              ))}
-            </div>
-          </section>
+          <HowItWorks3D activeTab={activeTab} flows={howItWorksFlows} />
+        </section>
 
-          <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
-            <SectionHeading title="Simplify your day with Wisdom" />
-            <div className="grid gap-6 md:grid-cols-2">
-              {simplifyHighlights.map((item) => (
-                <Card key={item.title}>
-                  <h3 className="text-2xl font-semibold">{item.title}</h3>
-                  <p className="mt-4 text-[#4c5563]">{item.description}</p>
-                </Card>
-              ))}
-            </div>
-          </section>
+        {/* 9. Secure & Trust */}
+        <section className="fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24">
+          
+          {/* Título Serif estilo imagen */}
+          <div className="mb-20 text-center">
+            <h2 className="text-4xl md:text-5xl font-semibold  text-[#050505]">
+              Wisdom is security
+            </h2>
+          </div>
 
-          <section className="mt-24 space-y-10 relative m-4 min-h-[calc(100vh-2rem)] overflow-hidden rounded-[30px] bg-[#f5f5f5] p-8 ">
-            <SectionHeading title="Grow your business with Wisdom" subtitle="Alex — Personal Trainer" />
-            <p className="text-lg text-[#4c5563]">Build a stronger client base with less admin.</p>
-            <div className="space-y-4">
-              {businessHighlights.map((highlight) => (
-                <p key={highlight} className="text-[#4c5563]">
-                  {highlight}
-                </p>
-              ))}
-            </div>
-            <div className="grid gap-6 md:grid-cols-3">
-              {testimonials.map((testimonial) => (
-                <Card key={testimonial.author} className="bg-white">
-                  <p className="text-lg font-medium">{testimonial.quote}</p>
-                  <p className="mt-4 text-sm font-semibold text-[#7f8794]">{testimonial.author}</p>
-                </Card>
-              ))}
-            </div>
-          </section>
+          {/* Grid de tarjetas */}
+          <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {securityFeatures.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -8 }} // Animación suave al pasar el ratón (subir)
+                className="group flex flex-col rounded-3xl bg-[#F9FAFB] p-6 transition-shadow duration-300 "
+              >
+                {/* Contenedor del Icono (Caja blanca dentro de la tarjeta gris) */}
+                <div className="mb-6 flex h-24 w-full items-center justify-center rounded-2xl bg-white transition-transform duration-300 group-hover:scale-105">
+                  <div className="text-[#050505]">
+                    {feature.icon}
+                  </div>
+                </div>
 
-          <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
-            <SectionHeading title="Your safety comes first" />
-            <div className="grid gap-6 md:grid-cols-3">
-              {safetyBlocks.map((block) => (
-                <Card key={block.title}>
-                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#7f8794]">{block.label}</p>
-                  <h3 className="mt-3 text-2xl font-semibold">{block.title}</h3>
-                  <p className="mt-4 text-[#4c5563]">{block.description}</p>
-                </Card>
-              ))}
-            </div>
-          </section>
+                {/* Textos */}
+                <div className="flex flex-col flex-grow">
+                  <h3 className="mb-3 text-lg font-bold text-[#050505]">{feature.title}</h3>
+                  <p className="text-sm font-medium leading-relaxed text-[#6B7280]">
+                    {feature.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
 
-          <section className="mt-24 max-w-6xl mx-auto justify-center space-y-10">
-            <SectionHeading title="Clear pricing" />
-            <div className="grid gap-6 md:grid-cols-2">
-              {pricingPlans.map((plan) => (
-                <Card key={plan.audience} className="bg-white">
-                  <p className="text-sm font-semibold text-[#7f8794]">{plan.audience}</p>
-                  <p className="mt-3 text-3xl font-semibold">{plan.price}</p>
-                  <p className="mt-4 text-[#4c5563]">{plan.description}</p>
-                  <ul className="mt-6 space-y-2 text-sm text-[#050505]">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2">
-                        <span className="text-lg">•</span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </Card>
-              ))}
-            </div>
-            <p className="text-lg text-[#4c5563]">
-              One app, all your devices — Use Wisdom on your phone or tablet. Start a search on one device and continue on another – your favourites, bookings and messages are always in sync.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <button className="rounded-full bg-[#050505] px-8 py-3 text-sm font-semibold text-white">Download Wisdom</button>
-            </div>
-          </section>
-        </div>
+      </main>
 
-        <footer className="bg-[#050505] py-16 text-white">
-          <div className="mx-auto max-w-6xl px-4">
-            <div className="grid gap-10 md:grid-cols-4">
-              <div>
-                <p className="text-lg font-semibold">Primary navigation</p>
-                <ul className="mt-4 space-y-2 text-sm text-white/80">
-                  {footerNav.primary.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <p className="text-lg font-semibold">Secondary navigation</p>
-                <ul className="mt-4 space-y-2 text-sm text-white/80">
-                  {footerNav.secondary.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <p className="text-lg font-semibold">Use Cases</p>
-                <ul className="mt-4 space-y-2 text-sm text-white/80">
-                  {footerNav.useCases.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <p className="text-lg font-semibold">Legal</p>
-                <ul className="mt-4 space-y-2 text-sm text-white/80">
-                  {footerNav.legal.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
+      <footer className="bg-[#050505] py-16 text-white">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="grid gap-10 md:grid-cols-4">
+            <div>
+              <p className="text-lg font-semibold">Primary navigation</p>
+              <ul className="mt-4 space-y-2 text-sm text-white/80">
+                {footerNav.primary.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
             </div>
-            <div className="mt-10 border-t border-white/20 pt-8 text-sm text-white/70">
-              <p>All rights reserved.</p>
-              <p>Built in Barcelona, Spain – made for people who value their time.</p>
+            <div>
+              <p className="text-lg font-semibold">Secondary navigation</p>
+              <ul className="mt-4 space-y-2 text-sm text-white/80">
+                {footerNav.secondary.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="text-lg font-semibold">Use Cases</p>
+              <ul className="mt-4 space-y-2 text-sm text-white/80">
+                {footerNav.useCases.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="text-lg font-semibold">Legal</p>
+              <ul className="mt-4 space-y-2 text-sm text-white/80">
+                {footerNav.legal.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
             </div>
           </div>
-        </footer>
-      </main>
+          <div className="mt-10 border-t border-white/20 pt-8 text-sm text-white/70">
+            <p>All rights reserved.</p>
+            <p>Built in Barcelona, Spain – made for people who value their time.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
