@@ -8,58 +8,58 @@ const navLinks = ['Use cases', 'Services', 'Features', 'Testimonials', 'Pricing'
 
 const heroTiles = [
   // Arriba Izquierda
-  { 
-    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174847.png", 
-    size: 'w-32 h-20 md:w-40 md:h-28', 
-    style: { top: '-4%', left: '-2%' } 
+  {
+    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174847.png",
+    size: 'w-32 h-20 md:w-40 md:h-28',
+    style: { top: '-4%', left: '-2%' }
   },
   // Arriba Centro-Izquierda
-  { 
-    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180612.png", 
-    size: 'w-40 h-20 md:w-60 md:h-32', 
-    style: { top: '7%', left: '20%' } 
+  {
+    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180612.png",
+    size: 'w-40 h-20 md:w-60 md:h-32',
+    style: { top: '7%', left: '20%' }
   },
   // Arriba Centro-Derecha
-  { 
-    url: "https://storage.googleapis.com/wisdom-images/77502ab75202d6b38aa0df57113b6746.jpg", 
-    size: 'w-36 h-20 md:w-52 md:h-32', 
-    style: { top: '4%', right: '23%' } 
+  {
+    url: "https://storage.googleapis.com/wisdom-images/77502ab75202d6b38aa0df57113b6746.jpg",
+    size: 'w-36 h-20 md:w-52 md:h-32',
+    style: { top: '4%', right: '23%' }
   },
   // Arriba Derecha
-  { 
-    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180656.png", 
-    size: 'w-40 h-20 md:w-60 md:h-32', 
-    style: { top: '12%', right: '-3%' } 
+  {
+    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180656.png",
+    size: 'w-40 h-20 md:w-60 md:h-32',
+    style: { top: '12%', right: '-3%' }
   },
   // Abajo Izquierda
-  { 
-    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181310.png", 
-    size: 'w-40 h-24 md:w-60 md:h-40', 
-    style: { bottom: '31%', left: '10%' } 
+  {
+    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181310.png",
+    size: 'w-40 h-24 md:w-60 md:h-40',
+    style: { bottom: '31%', left: '10%' }
   },
   // Abajo Izquierda Esquina
-  { 
-    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20190223.png", 
-    size: 'w-36 h-24 md:w-56 md:h-40', 
-    style: { bottom: '-4%', left: '-3%' } 
+  {
+    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20190223.png",
+    size: 'w-36 h-24 md:w-56 md:h-40',
+    style: { bottom: '-4%', left: '-3%' }
   },
   // Abajo Derecha
-  { 
-    url: "https://storage.googleapis.com/wisdom-images/237ee01c-4454-4d81-8f27-f502f74ac9d3.jpeg", 
-    size: 'w-28 h-36 md:w-44 md:h-56', 
-    style: { bottom: '14%', right: '21%' } 
+  {
+    url: "https://storage.googleapis.com/wisdom-images/237ee01c-4454-4d81-8f27-f502f74ac9d3.jpeg",
+    size: 'w-28 h-36 md:w-44 md:h-56',
+    style: { bottom: '14%', right: '21%' }
   },
   // Abajo Derecha Esquina
-  { 
-    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175117.png", 
-    size: 'w-40 h-20 md:w-60 md:h-32', 
-    style: { bottom: '-5%', right: '5%' } 
+  {
+    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175117.png",
+    size: 'w-40 h-20 md:w-60 md:h-32',
+    style: { bottom: '-5%', right: '5%' }
   },
   // Abajo Centro
-  { 
-    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174733.png", 
-    size: 'w-20 h-32 md:w-32 md:h-48', 
-    style: { bottom: '-6%', right: '49%' } 
+  {
+    url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174733.png",
+    size: 'w-20 h-32 md:w-32 md:h-48',
+    style: { bottom: '-6%', right: '49%' }
   },
 ];
 
@@ -67,15 +67,15 @@ const grayShapes = [
   { size: 'w-14 h-32 md:w-20 md:h-44', style: { top: '23%', left: '6%' } },
   { size: 'w-20 h-28 md:w-28 md:h-40', style: { top: '5%', left: '47%' } },
   { size: 'w-24 h-24 md:w-32 md:h-32', style: { top: '70%', right: '28%' } },
-  
+
   // --- CAMBIO EN ESTE OBJETO (ÍNDICE 3) ---
-  { 
-    size: 'w-20 h-28 md:w-28 md:h-40', 
-    style: { bottom: '13%', left: '28%' }, 
+  {
+    size: 'w-20 h-28 md:w-28 md:h-40',
+    style: { bottom: '13%', left: '28%' },
     isAnimated: true, // Marcador para identificarlo
     // Esta es la imagen que aparecerá DENTRO del cuadro gris
-    imageInside: "https://storage.googleapis.com/wisdom-images/search_services.png" 
-  }, 
+    imageInside: "https://storage.googleapis.com/wisdom-images/search_services.png"
+  },
   // ----------------------------------------
 
   { size: 'w-28 h-32 md:w-38 md:h-44', style: { bottom: '23%', right: '-3%' } },
@@ -95,28 +95,28 @@ const securityFeatures = [
     description: 'See total prices, fees and policies before you book. No hidden surprises when you confirm.',
     icon: (
       // strokeWidth cambiado a "2"
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
     ),
   },
   {
     title: 'Wisdom Guarantee',
     description: 'If something does not go as expected, our Wisdom Guarantee and clear booking policies help you get support.',
     icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="m9 12 2 2 4-4" /></svg>
     ),
   },
   {
     title: 'Verified professionals',
     description: 'Professionals are required to provide key information and are rated after every booking, helping you choose with confidence.',
     icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
     ),
   },
   {
     title: 'Control over your data',
     description: 'You decide what to share with professionals. Your messages, photos and payment details stay inside Wisdom.',
     icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
     ),
   },
 ];
@@ -241,6 +241,7 @@ const SectionHeading = ({ title, subtitle, eyebrow }) => (
 const VISIBLE_RANGE = 4;
 const ANGLE_PER_ITEM = 15.5;
 const RADIUS = 340;
+const SEARCH_PIN_DISTANCE = 400;
 
 const HowItWorks3D = ({ activeTab, flows }) => {
   const containerRef = React.useRef(null);
@@ -269,20 +270,20 @@ const HowItWorks3D = ({ activeTab, flows }) => {
         <div className="relative mx-auto flex h-full w-full flex-col items-center justify-center gap-10 px-4 md:flex-row md:gap-16">
           <div className="order-2 flex h-[500px] w-full flex-1 items-center justify-center md:order-1 md:h-[700px] md:justify-start">
             <div className="relative flex h-full w-full flex-col items-center justify-center md:items-start">
-            <div
-              className="relative h-[700px] w-full max-w-5xl"
-              style={{
-                maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
-              }}
-            >
-              {/* Aumenté left-8 a left-12 y md:left-24 a md:left-40 para moverlo a la derecha */}
-              <div className="relative h-full w-full left-12 md:left-40">
-                {steps.map((step, index) => (
-                  <FanItem key={step.id} item={step} index={index} activeIndex={activeIndex} />
-                ))}
+              <div
+                className="relative h-[700px] w-full max-w-5xl"
+                style={{
+                  maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+                  WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+                }}
+              >
+                {/* Aumenté left-8 a left-12 y md:left-24 a md:left-40 para moverlo a la derecha */}
+                <div className="relative h-full w-full left-12 md:left-40">
+                  {steps.map((step, index) => (
+                    <FanItem key={step.id} item={step} index={index} activeIndex={activeIndex} />
+                  ))}
+                </div>
               </div>
-            </div>
             </div>
           </div>
 
@@ -353,36 +354,48 @@ const FanItem = ({ item, index, activeIndex }) => {
 };
 
 const InteractiveToggleSection = () => {
-  const [activeMode, setActiveMode] = useState('Letters');
+  const [activeMode, setActiveMode] = useState('Client');
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
+  // Reiniciar el hover cuando cambiamos de pestaña para evitar bugs visuales
+  useEffect(() => {
+    setHoveredIndex(null);
+  }, [activeMode]);
+
   const toggleItems = [
-    { label: 'Letters', icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-    )},
-    { label: 'Transcribe', icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
-    )}
+    { label: 'Client' },
+    { label: 'Profesional' }
   ];
 
-  const contentItems = [
-    { title: "One search.", description: "Connect all your accounts and find exactly what you need in milliseconds." },
-    { title: "Total clarity.", description: "See everything in a unified view, stripping away the noise of multiple apps." },
-    { title: "Secure.", description: "Your data is encrypted end-to-end and never used to train models." },
-  ];
+  // Definimos el contenido para ambos modos
+  const allContent = {
+    'Client': [
+      { title: "One search.", description: "From plumbers to piano teachers." },
+      { title: "Total clarity.", description: "See prices and reviews upfront." },
+      { title: "Secure.", description: "Your data and payments, protected." },
+    ],
+    'Profesional': [
+      { title: "Freedom.", description: "Offer any service you can imagine." },
+      { title: "Control.", description: "Set your rates, schedule, and rules." },
+      { title: "Growth.", description: "Automated tools to manage clients and payments." },
+    ]
+  };
+
+  // Seleccionamos el contenido según el modo activo
+  const contentItems = allContent[activeMode];
 
   return (
     <section className="fade-section min-h-[80vh] w-full mx-auto flex flex-col justify-center items-center py-24">
-      
+
       {/* Selector Superior */}
-      <div className="mb-16 rounded-full bg-[#F3F4F6] p-1 flex relative">
+      {/* <SectionHeading title="The dual experience" /> */}
+      <div className="mt-4 mb-16 rounded-full bg-[#F3F4F6] p-1 flex relative">
         {toggleItems.map((item) => (
           <button
             key={item.label}
             onClick={() => setActiveMode(item.label)}
-            className={`relative z-10 flex items-center gap-2 px-6 py-2 text-sm font-semibold transition-colors duration-200 ${
-              activeMode === item.label ? 'text-[#050505]' : 'text-[#6B7280]'
-            }`}
+            className={`relative z-10 flex items-center gap-2 px-6 py-2 text-sm font-semibold transition-colors duration-200 ${activeMode === item.label ? 'text-[#050505]' : 'text-[#6B7280]'
+              }`}
           >
             {/* Fondo Blanco Animado (Motion) */}
             {activeMode === item.label && (
@@ -402,37 +415,49 @@ const InteractiveToggleSection = () => {
 
       {/* Textos Principales Expandibles */}
       <div className="flex flex-col items-center text-center gap-2">
-        {contentItems.map((item, index) => (
-          <div 
-            key={index}
-            className="flex flex-col items-center cursor-default"
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
+        <AnimatePresence mode='wait'>
+          {/* Usamos un fragmento o div contenedor que se actualiza al cambiar activeMode */}
+          <motion.div
+            key={activeMode} // Clave para forzar re-renderizado suave al cambiar de modo
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="flex flex-col items-center gap-2"
           >
-            <motion.h2 
-              className="text-5xl md:text-6xl font-semibold tracking-tight text-[#050505] transition-colors duration-300"
-              animate={{ opacity: hoveredIndex !== null && hoveredIndex !== index ? 0.6 : 1 }}
-            >
-              {item.title}
-            </motion.h2>
-
-            <AnimatePresence>
-              {hoveredIndex === index && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0, y: -10 }}
-                  animate={{ opacity: 1, height: 'auto', y: 0 }}
-                  exit={{ opacity: 0, height: 0, y: -10 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className="overflow-hidden"
+            {contentItems.map((item, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center cursor-default"
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
+                <motion.h2
+                  className="text-5xl md:text-6xl font-semibold tracking-tight text-[#050505] transition-colors duration-300"
+                  animate={{ opacity: hoveredIndex !== null && hoveredIndex !== index ? 0.6 : 1 }}
                 >
-                  <p className="pt-2 pb-4 text-lg text-[#6B7280] max-w-md mx-auto">
-                    {item.description}
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        ))}
+                  {item.title}
+                </motion.h2>
+
+                <AnimatePresence>
+                  {hoveredIndex === index && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0, y: -10 }}
+                      animate={{ opacity: 1, height: 'auto', y: 0 }}
+                      exit={{ opacity: 0, height: 0, y: -10 }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
+                      className="overflow-hidden"
+                    >
+                      <p className="pt-2 pb-4 text-lg text-[#6B7280] max-w-md mx-auto">
+                        {item.description}
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
     </section>
@@ -479,27 +504,27 @@ const CosmosSpiral = ({ serviceFamilies }) => {
       maskImage: 'linear-gradient(to bottom, transparent 0%, black 40%, black 70%, transparent 100%)',
       WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 40%, black 70%, transparent 100%)',
     }}>
-      
+
       {/* --- CAPA DE ESPIRAL DE IMÁGENES --- */}
       <div className="absolute inset-0 w-full h-full pointer-events-none">
         {Array.from({ length: 25 }).map((_, i) => (
-          <FloatingImage 
-            key={i} 
-            index={i} 
-            total={25} 
-            images={contentPool} 
+          <FloatingImage
+            key={i}
+            index={i}
+            total={25}
+            images={contentPool}
           />
         ))}
       </div>
 
       {/* --- CONTENIDO CENTRAL (TEXTO) --- */}
       <div className="relative z-10 text-center flex flex-col items-center justify-center px-4 mix-blend-multiply">
-        
+
         {/* 1. TÍTULO GRANDE */}
         <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-[#1a1a1a] mb-6 drop-shadow-sm">
           No categories. Just talent.
         </h1>
-        
+
         {/* 2. SUBTÍTULO FIJO */}
         <p className="text-lg md:text-xl text-[#9F9F9F] font-medium max-w-2xl leading-relaxed mb-8  ">
           Wisdom gives you the freedom to find or offer whatever the world needs.
@@ -507,53 +532,53 @@ const CosmosSpiral = ({ serviceFamilies }) => {
 
         {/* 3. ELEMENTO DINÁMICO (CÁPSULA) */}
         <div className="flex w-full justify-center"> {/* Contenedor para centrar el grupo completo */}
-        
+
           {/* Agrupamos con motion.div y layout para que el movimiento sea fluido */}
           <motion.div
             layout
             className="flex items-center gap-3"
             transition={{ layout: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
           >
-              
-              {/* Pequeño texto conector */}
-              <motion.span
-                layout
-                transition={{ layout: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
-                className="text-md font-semibold uppercase tracking-widest text-[#9F9F9F]"
-              >
-                  Like
-              </motion.span>
 
-              {/* Cápsula animada */}
-              <motion.div
-                layout
-                className="relative h-12 overflow-hidden rounded-full bg-white/80 backdrop-blur-sm px-2 "
-                transition={{ layout: { duration: 0.7, type: "spring", stiffness: 300, damping: 30 } }}
-              >
-                  <AnimatePresence mode="wait">
-                      <motion.div
-                          layout
-                          key={textIndex}
-                          // Quitamos 'absolute inset-0' para que el div tenga el ancho del texto
-                          initial={{ y: 0, opacity: 0, filter: 'blur(1px)' }}
-                          animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
-                          exit={{ y: 0, opacity: 0, filter: 'blur(1px)' }}
-                          transition={{ duration: 0.5, ease: "easeOut" }}
-                          className="flex items-center justify-center h-full"
-                      >
-                          {/* whitespace-nowrap es vital para que no se parta la linea */}
-                          <span className="text-[#1a1a1a] font-bold text-xl whitespace-nowrap">
-                              {contentPool[textIndex]?.label || "Magic"}
-                          </span>
-                      </motion.div>
-                  </AnimatePresence>
-              </motion.div>
-              
+            {/* Pequeño texto conector */}
+            <motion.span
+              layout
+              transition={{ layout: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
+              className="text-md font-semibold uppercase tracking-widest text-[#9F9F9F]"
+            >
+              Like
+            </motion.span>
+
+            {/* Cápsula animada */}
+            <motion.div
+              layout
+              className="relative h-12 overflow-hidden rounded-full bg-white/80 backdrop-blur-sm px-2 "
+              transition={{ layout: { duration: 0.7, type: "spring", stiffness: 300, damping: 30 } }}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  layout
+                  key={textIndex}
+                  // Quitamos 'absolute inset-0' para que el div tenga el ancho del texto
+                  initial={{ y: 0, opacity: 0, filter: 'blur(1px)' }}
+                  animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
+                  exit={{ y: 0, opacity: 0, filter: 'blur(1px)' }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="flex items-center justify-center h-full"
+                >
+                  {/* whitespace-nowrap es vital para que no se parta la linea */}
+                  <span className="text-[#1a1a1a] font-bold text-xl whitespace-nowrap">
+                    {contentPool[textIndex]?.label || "Magic"}
+                  </span>
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
+
           </motion.div>
         </div>
 
       </div>
-      
+
       {/* CAMBIO 2: Se ha eliminado el div del overlay con gradiente radial que había aquí */}
     </section>
   );
@@ -563,7 +588,7 @@ const CosmosSpiral = ({ serviceFamilies }) => {
 const FloatingImage = ({ index, total, images }) => {
   // Seleccionar una imagen aleatoria del pool
   const randomImage = useMemo(() => images[Math.floor(Math.random() * images.length)].image, [images]);
-  
+
   // Calcular posición inicial aleatoria en un anillo exterior
   const randomParams = useMemo(() => {
     const angle = Math.random() * 360; // Ángulo aleatorio
@@ -572,10 +597,10 @@ const FloatingImage = ({ index, total, images }) => {
     const delay = (index / total) * 15; // Delay escalonado para que no salgan todas a la vez
     const size = 100 + Math.random() * 150; // Tamaño aleatorio entre 100px y 250px
     const rotation = Math.random() * 360; // Rotación inicial de la foto
-    
+
     // Convertir coordenadas polares a cartesianas para el inicio (fuera de pantalla)
     // Usamos 'vw' y 'vh' para asegurar que salgan desde lejos
-    const xStart = Math.cos(angle * (Math.PI / 180)) * 100; 
+    const xStart = Math.cos(angle * (Math.PI / 180)) * 100;
     const yStart = Math.sin(angle * (Math.PI / 180)) * 100;
 
     return { xStart, yStart, duration, delay, size, rotation };
@@ -583,15 +608,15 @@ const FloatingImage = ({ index, total, images }) => {
 
   return (
     <motion.div
-      initial={{ 
-        x: `${randomParams.xStart}vw`, 
-        y: `${randomParams.yStart}vh`, 
-        opacity: 0, 
+      initial={{
+        x: `${randomParams.xStart}vw`,
+        y: `${randomParams.yStart}vh`,
+        opacity: 0,
         scale: 1.5,
         rotate: randomParams.rotation,
         z: 0
       }}
-      animate={{ 
+      animate={{
         x: 0, // Va al centro
         y: 0, // Va al centro
         opacity: [0, 1, 1, 0], // Aparece y luego desaparece al llegar al centro
@@ -613,9 +638,9 @@ const FloatingImage = ({ index, total, images }) => {
         marginTop: `-${(randomParams.size * 1.4) / 2}px`,
       }}
     >
-      <img 
-        src={randomImage} 
-        alt="" 
+      <img
+        src={randomImage}
+        alt=""
         className="w-full h-full object-cover rounded-sm shadow-xl opacity-80 hover:opacity-100 transition-opacity"
       />
     </motion.div>
@@ -629,7 +654,7 @@ const FloatingImage = ({ index, total, images }) => {
 
 function App() {
   const [activeTab, setActiveTab] = useState('customers');
-  
+
   // --- AÑADIR ESTO ---
   const appRef = useRef(null);
   const animadaBoxRef = useRef(null);    // El cuadro gris
@@ -640,7 +665,7 @@ function App() {
   useEffect(() => {
     // 1. Configuración de Lenis (Scroll Suave)
     gsap.registerPlugin(ScrollTrigger);
-    
+
     const lenis = new Lenis({
       lerp: 0.08, // Un poco más alto para que se sienta fluido con los pins
       smoothWheel: true,
@@ -678,7 +703,7 @@ function App() {
         }
       });
 
-     
+
     });
 
     // 3. Parallax del ratón (Igual que antes)
@@ -713,12 +738,12 @@ function App() {
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      
+
       // 1. Configuración general (Igual que antes)
       const sections = gsap.utils.toArray('.fade-section');
       sections.forEach((section) => {
         if (section !== searchSectionRef.current) {
-           gsap.timeline({
+          gsap.timeline({
             scrollTrigger: {
               trigger: section, start: "center center", end: "+=1200",
               pin: false, pinSpacing: true, scrub: 0.5, anticipatePin: 1,
@@ -729,60 +754,82 @@ function App() {
 
       // 2. Animación ESPECÍFICA: Cuadro Gris -> Imagen Final
       if (animadaBoxRef.current && searchImageRef.current && searchSectionRef.current) {
-        
+
         // Seleccionamos la imagen que está DENTRO del cuadro gris
         const innerImage = animadaBoxRef.current.querySelector('img');
 
         // TIMELINE PRINCIPAL (Movimiento + Transformación visual)
         const tlMove = gsap.timeline({
-            scrollTrigger: {
-                trigger: document.body,
-                start: "top top",
-                endTrigger: searchSectionRef.current,
-                end: "center center", 
-                scrub: 1, 
-            }
+          scrollTrigger: {
+            trigger: document.body,
+            start: "top top",
+            endTrigger: searchSectionRef.current,
+            end: "center center",
+            scrub: 1,
+            invalidateOnRefresh: true,
+          }
         });
 
         tlMove
-        // a) Movimiento físico hacia la posición de destino
-        .to(animadaBoxRef.current, {
+          // a) Movimiento físico hacia la posición de destino
+          .to(animadaBoxRef.current, {
             x: () => {
-                const box = animadaBoxRef.current.getBoundingClientRect();
-                const target = searchImageRef.current.getBoundingClientRect();
-                return target.left - box.left;
+              const box = animadaBoxRef.current.getBoundingClientRect();
+              const target = searchImageRef.current.getBoundingClientRect();
+              return target.left - box.left;
             },
             y: () => {
-                const box = animadaBoxRef.current.getBoundingClientRect();
-                const target = searchImageRef.current.getBoundingClientRect();
-                return target.top - box.top;
+              const box = animadaBoxRef.current.getBoundingClientRect();
+              const target = searchImageRef.current.getBoundingClientRect();
+              return target.top - box.top;
             },
             width: () => searchImageRef.current.getBoundingClientRect().width,
             height: () => searchImageRef.current.getBoundingClientRect().height,
             rotation: 0, // Aseguramos que termine recto si tenía rotación
             borderRadius: "0px", // Si quieres que pierda bordes redondeados al llegar
             ease: "power1.inOut" // Un movimiento un poco más natural
-        })
-        // b) Transformación visual: El gris desaparece y la imagen aparece
-        // Ocurre DURANTE el viaje ("<" significa al inicio de la anterior)
-        .to(animadaBoxRef.current, { backgroundColor: 'transparent' }, "<+=10%") // Empieza un pelín después de moverse
-        .to(innerImage, { opacity: 1 }, "<") // La imagen aparece a la vez que se va el gris
+          })
+          // b) Transformación visual: El gris desaparece y la imagen aparece
+          // Ocurre DURANTE el viaje ("<" significa al inicio de la anterior)
+          .to(animadaBoxRef.current, { backgroundColor: 'transparent' }, "<+=10%") // Empieza un pelín después de moverse
+          .to(innerImage, { opacity: 1 }, "<") // La imagen aparece a la vez que se va el gris
+
+        // Mantener la imagen alineada mientras la sección está pineada
+        const tlHold = gsap.timeline({
+          scrollTrigger: {
+            trigger: searchSectionRef.current,
+            start: "center center",
+            end: `+=${SEARCH_PIN_DISTANCE}`,
+            scrub: true,
+            invalidateOnRefresh: true,
+          }
+        });
+
+        tlHold.to(animadaBoxRef.current, {
+          y: () => {
+            const box = animadaBoxRef.current.getBoundingClientRect();
+            const target = searchImageRef.current.getBoundingClientRect();
+            return (target.top - box.top) + SEARCH_PIN_DISTANCE;
+          },
+          ease: "none",
+        });
 
         // 3. PINNING (Sección Search se queda quieta un rato)
         const tlPin = gsap.timeline({
-            scrollTrigger: {
-                trigger: searchSectionRef.current,
-                start: "center center",
-                end: "+=400", // PINEADA 400 PX
-                pin: true,
-                scrub: true,
-            }
+          scrollTrigger: {
+            trigger: searchSectionRef.current,
+            start: "center center",
+            end: `+=${SEARCH_PIN_DISTANCE}`, // PINEADA 400 PX
+            pin: true,
+            scrub: true,
+            invalidateOnRefresh: true,
+          }
         });
 
         // Solo animamos el texto, el cuadro ya llegó y es la imagen visible
-        tlPin.fromTo(searchTextRef.current, 
-            { y: 100, opacity: 0 }, 
-            { y: 0, opacity: 1, duration: 1 }
+        tlPin.fromTo(searchTextRef.current,
+          { y: 100, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1 }
         );
       }
     }, appRef);
@@ -811,34 +858,34 @@ function App() {
 
         {/* 1. PORTADA - IMPORTANTE: Quitamos 'overflow-hidden' para que el cuadro pueda salir */}
         <section className="relative flex min-h-screen items-center justify-center px-6 fade-section z-10">
-          
+
           {/* Capa de Cuadrados Grises (FONDO) */}
           <div className="absolute inset-0 w-full h-full pointer-events-none">
             {grayShapes.map((shape, index) => {
-                const isAnimatedBox = index === 3; 
-                
-                return (
-                  <div
-                    key={`shape-${index}`}
-                    ref={isAnimatedBox ? animadaBoxRef : null}
-                    // AÑADIDO: 'overflow-hidden' al propio cuadro para que recorte la imagen interna
-                    className={`absolute bg-[#F9F8F8] ${shape.size} ${isAnimatedBox ? 'z-50 overflow-hidden' : 'parallax-item'}`} 
-                    style={shape.style}
-                    data-speed="40"
-                  >
-                    {/* SI ES EL CUADRO ANIMADO, RENDERIZAMOS LA IMAGEN DENTRO (OCULTA AL PRINCIPIO) */}
-                    {isAnimatedBox && (
-                      <img 
-                        src={shape.imageInside} 
-                        alt="Transition" 
-                        className="w-full h-full object-cover opacity-0" // Empieza invisible (gris)
-                        // Usamos una clase específica para seleccionarla con GSAP luego si queremos, 
-                        // o simplemente confiamos en que es la única img dentro.
-                        id="inner-anim-img"
-                      />
-                    )}
-                  </div>
-                );
+              const isAnimatedBox = index === 3;
+
+              return (
+                <div
+                  key={`shape-${index}`}
+                  ref={isAnimatedBox ? animadaBoxRef : null}
+                  // AÑADIDO: 'overflow-hidden' al propio cuadro para que recorte la imagen interna
+                  className={`absolute bg-[#F9F8F8] ${shape.size} ${isAnimatedBox ? 'z-50 overflow-hidden' : 'parallax-item'}`}
+                  style={shape.style}
+                  data-speed="40"
+                >
+                  {/* SI ES EL CUADRO ANIMADO, RENDERIZAMOS LA IMAGEN DENTRO (OCULTA AL PRINCIPIO) */}
+                  {isAnimatedBox && (
+                    <img
+                      src={shape.imageInside}
+                      alt="Transition"
+                      className="w-full h-full object-cover opacity-0" // Empieza invisible (gris)
+                      // Usamos una clase específica para seleccionarla con GSAP luego si queremos, 
+                      // o simplemente confiamos en que es la única img dentro.
+                      id="inner-anim-img"
+                    />
+                  )}
+                </div>
+              );
             })}
           </div>
 
@@ -846,7 +893,7 @@ function App() {
           <div className="absolute inset-0 w-full h-full pointer-events-none">
             {heroTiles.map((tile, index) => (
               <div key={`tile-${index}`} className={`parallax-item absolute overflow-hidden opacity-75 ${tile.size}`} style={tile.style} data-speed="60">
-                <img src={tile.url} alt="" className="w-full h-full object-cover"/>
+                <img src={tile.url} alt="" className="w-full h-full object-cover" />
               </div>
             ))}
           </div>
@@ -861,27 +908,27 @@ function App() {
             <button className="rounded-full bg-[#050505] mt-12 px-8 py-3 text-base font-semibold text-white hover:bg-black">Download for free</button>
           </div>
         </section>
-        
+
         {/* 2. Search (TARGET SECTION) */}
         <section ref={searchSectionRef} className="min-h-screen w-full mx-auto flex flex-col justify-center items-center gap-12 md:gap-44 px-6 py-24 md:flex-row relative z-0">
-          
+
           {/* Contenedor imagen con REF - La imagen aquí es INVISIBLE (opacity-0) */}
           {/* Sirve solo para marcar el tamaño y la posición donde debe aterrizar el cuadro gris */}
           <div ref={searchImageRef} className="aspect-[3/4] w-full max-w-[420px] shrink-0 relative">
-            <img 
-              src="https://storage.googleapis.com/wisdom-images/search_services.png" 
-              alt="" 
+            <img
+              src="https://storage.googleapis.com/wisdom-images/search_services.png"
+              alt=""
               className="w-full h-full object-cover opacity-0" // <--- IMPORTANTE: Invisible
             />
           </div>
-          
+
           <div ref={searchTextRef} className="max-w-2xl">
-              <p className="text-4xl md:text-6xl font-semibold leading-tight text-center md:text-left">
-                Looking for help used to be a leap of faith.
-              </p>
+            <p className="text-4xl md:text-6xl font-semibold leading-tight text-center md:text-left">
+              Looking for help used to be a leap of faith.
+            </p>
           </div>
         </section>
-        
+
         {/* 3. Search 2 */}
         <section className="fade-section min-h-screen mx-auto flex min-w-screen justify-center items-center px-6 py-24">
           <p className="mx-auto max-w-[820px] text-center text-[42px] leading-[1.3] font-semibold leading-relaxed text-[#050505]">
@@ -912,63 +959,63 @@ function App() {
         {/* 6. Unified */}
         <section className="fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center gap-12 overflow-hidden pt-20">
 
-            <div className="relative flex flex-1 w-full items-center justify-center">
-            
-              {/* 1. MEDITACIÓN */}
-              <div className="absolute top-[2%] right-[35%] w-32 h-20 md:w-56 md:h-36 shadow-lg rotate-1">
-                <img 
-                  src="https://storage.googleapis.com/wisdom-images/53a50b05-32d7-4e90-86ce-62702bc97d65.jpeg" 
-                  alt="Meditation" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
+          <div className="relative flex flex-1 w-full items-center justify-center">
 
-              {/* 2. CATERING */}
-              <div className="absolute top-[14%] left-[20%] md:left-[21%] w-36 h-24 md:w-60 md:h-40 shadow-lg -rotate-2">
-                <img 
-                  src="https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184635.png" 
-                  alt="Catering" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* 3. ARQUITECTO */}
-              <div className="absolute bottom-[14%] left-[20%] md:left-[25%] w-32 h-24 md:w-56 md:h-40 shadow-lg rotate-2">
-                <img 
-                  src="https://storage.googleapis.com/wisdom-images/526bda5b-c0c2-4170-b552-12a17db69fa9.jpeg" 
-                  alt="Architect" 
-                  className="w-full h-full object-cover" 
-                />
-              </div>
-
-              {/* 4. FINANZAS */}
-              <div className="absolute top-[35%] right-[17%] md:right-[18%] w-36 h-24 md:w-60 md:h-40 shadow-lg rotate-1">
-                <img 
-                  src="https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20185810.png" 
-                  alt="Finances" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* 5. JARDINERO */}
-              <div className="absolute bottom-[5%] right-[26%] md:right-[28%] w-24 h-32 md:w-40 md:h-52 shadow-lg rotate-2">
-                <img 
-                  src="https://storage.googleapis.com/wisdom-images/393cd8b9-f908-4d5a-a67b-cf6850b287e9.jpg" 
-                  alt="Gardener" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* LOGO CENTRAL */}
-              <img 
-                src='https://storage.googleapis.com/wisdom-images/app_icon.png' 
-                alt="Wisdom Icon"
-                className="relative z-10 flex h-40 w-40 md:h-72 md:w-72 items-center justify-center"
+            {/* 1. MEDITACIÓN */}
+            <div className="absolute top-[2%] right-[35%] w-32 h-20 md:w-56 md:h-36 shadow-lg rotate-1">
+              <img
+                src="https://storage.googleapis.com/wisdom-images/53a50b05-32d7-4e90-86ce-62702bc97d65.jpeg"
+                alt="Meditation"
+                className="w-full h-full object-cover"
               />
             </div>
 
-            {/* Texto inferior (le añadí un py-10 para darle aire abajo) */}
-            {/* <div className="flex flex-col items-center gap-4 text-center z-20 pb-10 px-6">
+            {/* 2. CATERING */}
+            <div className="absolute top-[14%] left-[20%] md:left-[21%] w-36 h-24 md:w-60 md:h-40 shadow-lg -rotate-2">
+              <img
+                src="https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184635.png"
+                alt="Catering"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* 3. ARQUITECTO */}
+            <div className="absolute bottom-[14%] left-[20%] md:left-[25%] w-32 h-24 md:w-56 md:h-40 shadow-lg rotate-2">
+              <img
+                src="https://storage.googleapis.com/wisdom-images/526bda5b-c0c2-4170-b552-12a17db69fa9.jpeg"
+                alt="Architect"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* 4. FINANZAS */}
+            <div className="absolute top-[35%] right-[17%] md:right-[18%] w-36 h-24 md:w-60 md:h-40 shadow-lg rotate-1">
+              <img
+                src="https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20185810.png"
+                alt="Finances"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* 5. JARDINERO */}
+            <div className="absolute bottom-[5%] right-[26%] md:right-[28%] w-24 h-32 md:w-40 md:h-52 shadow-lg rotate-2">
+              <img
+                src="https://storage.googleapis.com/wisdom-images/393cd8b9-f908-4d5a-a67b-cf6850b287e9.jpg"
+                alt="Gardener"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* LOGO CENTRAL */}
+            <img
+              src='https://storage.googleapis.com/wisdom-images/app_icon.png'
+              alt="Wisdom Icon"
+              className="relative z-10 flex h-40 w-40 md:h-72 md:w-72 items-center justify-center"
+            />
+          </div>
+
+          {/* Texto inferior (le añadí un py-10 para darle aire abajo) */}
+          {/* <div className="flex flex-col items-center gap-4 text-center z-20 pb-10 px-6">
               <p className="text-[32px] md:text-[42px] font-semibold">Wisdom unifies the chaos.</p>
             </div> */}
 
@@ -984,12 +1031,12 @@ function App() {
         {/* 8. Dual experience */}
         <InteractiveToggleSection />
 
-        <CosmosSpiral serviceFamilies={serviceFamilies} />   
+        <CosmosSpiral serviceFamilies={serviceFamilies} />
 
         {/* 9. Carrousel */}
-        <section className="justify-center space-y-10">
+        <section className="justify-center mt-30 space-y-10">
           <SectionHeading title="How Wisdom works" />
-          
+
           {/* Contenedor del Selector Centrado */}
           <div className="flex justify-center">
             <div className="rounded-full bg-[#F3F4F6] p-1 flex relative">
@@ -997,9 +1044,8 @@ function App() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`relative z-10 px-6 py-2 text-sm font-semibold transition-colors duration-200 ${
-                    activeTab === tab ? 'text-[#050505]' : 'text-[#6B7280]'
-                  }`}
+                  className={`relative z-10 px-6 py-2 text-sm font-semibold transition-colors duration-200 ${activeTab === tab ? 'text-[#050505]' : 'text-[#6B7280]'
+                    }`}
                 >
                   {/* Fondo Blanco Animado */}
                   {activeTab === tab && (
@@ -1009,7 +1055,7 @@ function App() {
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
                   )}
-                  
+
                   {/* Texto (con z-10 para estar encima del fondo blanco) */}
                   <span className="relative z-10 capitalize">
                     {tab === 'customers' ? 'For customers' : 'For professionals'}
@@ -1024,7 +1070,7 @@ function App() {
 
         {/* 10. Secure & Trust */}
         <section className="fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24">
-          
+
           {/* Título Serif estilo imagen */}
           <div className="mb-20 text-center">
             <h2 className="text-4xl md:text-5xl font-semibold  text-[#050505]">
