@@ -242,6 +242,10 @@ const VISIBLE_RANGE = 4;
 const ANGLE_PER_ITEM = 15.5;
 const RADIUS = 340;
 const SEARCH_PIN_DISTANCE = 400;
+const INITIAL_ANIMATED_BOX_COLOR = '#F9F8F8';
+// Ajuste fino para alinear opticamente la imagen con el bloque de texto.
+// (negativo = sube la imagen)
+const SEARCH_IMAGE_VERTICAL_OFFSET = -68;
 
 const HowItWorks3D = ({ activeTab, flows }) => {
   const containerRef = React.useRef(null);
@@ -707,12 +711,32 @@ function App() {
     });
 
     // 3. Parallax del ratón (Igual que antes)
-    const parallaxItems = document.querySelectorAll('.parallax-item');
+    const parallaxItems = Array.from(document.querySelectorAll('.parallax-item'));
+    const heroOnlyParallaxItems = parallaxItems.filter(
+      (item) => item.getAttribute('data-hero-parallax-only') === 'true'
+    );
+    let isHeroTopZone = window.scrollY <= 2;
+
+    const syncHeroTopZone = () => {
+      const nextIsHeroTopZone = window.scrollY <= 2;
+      if (nextIsHeroTopZone === isHeroTopZone) return;
+
+      isHeroTopZone = nextIsHeroTopZone;
+      if (!isHeroTopZone) {
+        heroOnlyParallaxItems.forEach((item) => {
+          gsap.set(item, { x: 0, y: 0 });
+        });
+      }
+    };
+
     const handleMouseMove = (e) => {
       const x = (e.clientX / window.innerWidth) - 0.5;
       const y = (e.clientY / window.innerHeight) - 0.5;
 
       parallaxItems.forEach((item) => {
+        const heroOnly = item.getAttribute('data-hero-parallax-only') === 'true';
+        if (heroOnly && !isHeroTopZone) return;
+
         const speed = parseFloat(item.getAttribute('data-speed')) || 20;
         gsap.to(item, {
           x: -x * speed,
@@ -727,9 +751,11 @@ function App() {
     if (window.matchMedia("(hover: hover)").matches) {
       window.addEventListener('mousemove', handleMouseMove);
     }
+    window.addEventListener('scroll', syncHeroTopZone, { passive: true });
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', syncHeroTopZone);
       cancelAnimationFrame(rafId);
       lenis.destroy();
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
@@ -753,10 +779,51 @@ function App() {
       });
 
       // 2. Animación ESPECÍFICA: Cuadro Gris -> Imagen Final
-      if (animadaBoxRef.current && searchImageRef.current && searchSectionRef.current) {
+      if (animadaBoxRef.current && searchImageRef.current && searchSectionRef.current && searchTextRef.current) {
 
         // Seleccionamos la imagen que está DENTRO del cuadro gris
-        const innerImage = animadaBoxRef.current.querySelector('img');
+        const animatedBox = animadaBoxRef.current;
+        const innerImage = animatedBox.querySelector('img');
+        const moveMetrics = { x: 0, y: 0, width: 0, height: 0 };
+
+        const lockAnimatedBoxToPixels = () => {
+          const parent = animatedBox.offsetParent;
+          if (!parent) return;
+
+          const parentRect = parent.getBoundingClientRect();
+          const boxRect = animatedBox.getBoundingClientRect();
+
+          gsap.set(animatedBox, {
+            top: boxRect.top - parentRect.top,
+            left: boxRect.left - parentRect.left,
+            bottom: 'auto',
+            right: 'auto',
+            width: boxRect.width,
+            height: boxRect.height,
+          });
+        };
+
+        const refreshMoveMetrics = () => {
+          const source = animatedBox.getBoundingClientRect();
+          const target = searchImageRef.current.getBoundingClientRect();
+          const text = searchTextRef.current.getBoundingClientRect();
+          const textCenterY = text.top + (text.height / 2);
+
+          moveMetrics.x = target.left - source.left;
+          moveMetrics.y = textCenterY - (source.top + (target.height / 2)) + SEARCH_IMAGE_VERTICAL_OFFSET;
+          moveMetrics.width = target.width;
+          moveMetrics.height = target.height;
+        };
+
+        lockAnimatedBoxToPixels();
+        refreshMoveMetrics();
+        gsap.set(animatedBox, {
+          willChange: 'transform,width,height,background-color',
+          backgroundColor: INITIAL_ANIMATED_BOX_COLOR,
+        });
+        if (innerImage) {
+          gsap.set(innerImage, { autoAlpha: 0, willChange: 'opacity' });
+        }
 
         // TIMELINE PRINCIPAL (Movimiento + Transformación visual)
         const tlMove = gsap.timeline({
@@ -765,34 +832,43 @@ function App() {
             start: "top top",
             endTrigger: searchSectionRef.current,
             end: "center center",
-            scrub: 1,
+            scrub: true,
             invalidateOnRefresh: true,
+            onRefresh: () => {
+              lockAnimatedBoxToPixels();
+              refreshMoveMetrics();
+            },
+            onLeaveBack: () => {
+              gsap.set(animatedBox, { backgroundColor: INITIAL_ANIMATED_BOX_COLOR });
+              if (innerImage) {
+                gsap.set(innerImage, { autoAlpha: 0 });
+              }
+            },
           }
         });
 
         tlMove
           // a) Movimiento físico hacia la posición de destino
-          .to(animadaBoxRef.current, {
-            x: () => {
-              const box = animadaBoxRef.current.getBoundingClientRect();
-              const target = searchImageRef.current.getBoundingClientRect();
-              return target.left - box.left;
-            },
-            y: () => {
-              const box = animadaBoxRef.current.getBoundingClientRect();
-              const target = searchImageRef.current.getBoundingClientRect();
-              return target.top - box.top;
-            },
-            width: () => searchImageRef.current.getBoundingClientRect().width,
-            height: () => searchImageRef.current.getBoundingClientRect().height,
-            rotation: 0, // Aseguramos que termine recto si tenía rotación
-            borderRadius: "0px", // Si quieres que pierda bordes redondeados al llegar
-            ease: "power1.inOut" // Un movimiento un poco más natural
+          .to(animatedBox, {
+            x: () => moveMetrics.x,
+            y: () => moveMetrics.y,
+            width: () => moveMetrics.width,
+            height: () => moveMetrics.height,
+            borderRadius: "0px",
+            ease: "none",
+            duration: 1,
           })
           // b) Transformación visual: El gris desaparece y la imagen aparece
-          // Ocurre DURANTE el viaje ("<" significa al inicio de la anterior)
-          .to(animadaBoxRef.current, { backgroundColor: 'transparent' }, "<+=10%") // Empieza un pelín después de moverse
-          .to(innerImage, { opacity: 1 }, "<") // La imagen aparece a la vez que se va el gris
+          // Ocurre DURANTE el viaje para evitar el "parpadeo" al final
+          .to(animatedBox, { backgroundColor: 'transparent', duration: 0.2 }, 0.1)
+          .to(innerImage, { autoAlpha: 1, duration: 0.2 }, 0.1);
+
+        tlMove.eventCallback('onReverseComplete', () => {
+          gsap.set(animatedBox, { backgroundColor: INITIAL_ANIMATED_BOX_COLOR });
+          if (innerImage) {
+            gsap.set(innerImage, { autoAlpha: 0 });
+          }
+        });
 
         // Mantener la imagen alineada mientras la sección está pineada
         const tlHold = gsap.timeline({
@@ -805,12 +881,8 @@ function App() {
           }
         });
 
-        tlHold.to(animadaBoxRef.current, {
-          y: () => {
-            const box = animadaBoxRef.current.getBoundingClientRect();
-            const target = searchImageRef.current.getBoundingClientRect();
-            return (target.top - box.top) + SEARCH_PIN_DISTANCE;
-          },
+        tlHold.to(animatedBox, {
+          y: `+=${SEARCH_PIN_DISTANCE}`,
           ease: "none",
         });
 
@@ -869,9 +941,10 @@ function App() {
                   key={`shape-${index}`}
                   ref={isAnimatedBox ? animadaBoxRef : null}
                   // AÑADIDO: 'overflow-hidden' al propio cuadro para que recorte la imagen interna
-                  className={`absolute bg-[#F9F8F8] ${shape.size} ${isAnimatedBox ? 'z-50 overflow-hidden' : 'parallax-item'}`}
+                  className={`absolute bg-[#F9F8F8] ${shape.size} ${isAnimatedBox ? 'z-50 overflow-hidden parallax-item' : 'parallax-item'}`}
                   style={shape.style}
                   data-speed="40"
+                  data-hero-parallax-only={isAnimatedBox ? 'true' : undefined}
                 >
                   {/* SI ES EL CUADRO ANIMADO, RENDERIZAMOS LA IMAGEN DENTRO (OCULTA AL PRINCIPIO) */}
                   {isAnimatedBox && (
@@ -930,14 +1003,14 @@ function App() {
         </section>
 
         {/* 3. Search 2 */}
-        <section className="fade-section min-h-screen mx-auto flex min-w-screen justify-center items-center px-6 py-24">
+        <section className="fade-section min-h-screen mx-auto flex w-full justify-center items-center px-6 py-24">
           <p className="mx-auto max-w-[820px] text-center text-[42px] leading-[1.3] font-semibold leading-relaxed text-[#050505]">
             Endless searches. Reliance on word-of-mouth. Zero guarantees. The service world was fragmented, forcing you to guess instead of choose.
           </p>
         </section>
 
         {/* 4. Pro alone */}
-        <section className="fade-section relative overflow-hidden min-h-screen mx-auto flex min-w-screen justify-center items-center bg-gradient-to-br from-[#e8ecf0] via-white to-[#e8ecf0] px-6 py-28">
+        <section className="fade-section relative overflow-hidden min-h-screen mx-auto flex w-full justify-center items-center bg-gradient-to-br from-[#e8ecf0] via-white to-[#e8ecf0] px-6 py-28">
           <div className="absolute inset-0 opacity-100">
             <img src='https://storage.googleapis.com/wisdom-images/pro_alone.png' className="absolute inset-0" />
           </div>
@@ -952,7 +1025,7 @@ function App() {
         </section>
 
         {/* 5. Until now */}
-        <section className="fade-section min-h-screen mx-auto flex min-w-screen justify-center items-center px-6 py-24">
+        <section className="fade-section min-h-screen mx-auto flex w-full justify-center items-center px-6 py-24">
           <p className="text-center text-8xl font-semibold">Until now.</p>
         </section>
 
@@ -1022,7 +1095,7 @@ function App() {
         </section>
 
         {/* 7. Chaos */}
-        <section className="fade-section min-h-screen mx-auto flex min-w-screen justify-center items-center px-6 py-20">
+        <section className="fade-section min-h-screen mx-auto flex w-full justify-center items-center px-6 py-20">
           <p className="mx-auto max-w-[1000px] text-center text-[42px] leading-[1.3] font-semibold leading-relaxed text-[#050505]">
             We replaced word-of-mouth with verified data. We replaced uncertainty with transparent profiles. A single ecosystem where quality is visible, and trust is the default.
           </p>
