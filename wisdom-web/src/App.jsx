@@ -4,6 +4,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from '@studio-freight/lenis';
 
+gsap.registerPlugin(ScrollTrigger);
+
 const navLinks = ['Use cases', 'Services', 'Features', 'Testimonials', 'Pricing'];
 
 const heroTiles = [
@@ -669,8 +671,6 @@ function App() {
 
   useEffect(() => {
     // 1. Configuración de Lenis (Scroll Suave)
-    gsap.registerPlugin(ScrollTrigger);
-
     const lenis = new Lenis({
       lerp: 0.08, // Un poco más alto para que se sienta fluido con los pins
       smoothWheel: true,
