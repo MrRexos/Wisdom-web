@@ -243,6 +243,7 @@ const ANGLE_PER_ITEM = 15.5;
 const RADIUS = 340;
 const SEARCH_PIN_DISTANCE = 400;
 const INITIAL_ANIMATED_BOX_COLOR = '#F9F8F8';
+const HERO_PARALLAX_MAX_SCROLL_Y = 0.5;
 // Ajuste fino para alinear opticamente la imagen con el bloque de texto.
 // (negativo = sube la imagen)
 const SEARCH_IMAGE_VERTICAL_OFFSET = -68;
@@ -715,10 +716,10 @@ function App() {
     const heroOnlyParallaxItems = parallaxItems.filter(
       (item) => item.getAttribute('data-hero-parallax-only') === 'true'
     );
-    let isHeroTopZone = window.scrollY <= 2;
+    let isHeroTopZone = window.scrollY <= HERO_PARALLAX_MAX_SCROLL_Y;
 
     const syncHeroTopZone = () => {
-      const nextIsHeroTopZone = window.scrollY <= 2;
+      const nextIsHeroTopZone = window.scrollY <= HERO_PARALLAX_MAX_SCROLL_Y;
       if (nextIsHeroTopZone === isHeroTopZone) return;
 
       isHeroTopZone = nextIsHeroTopZone;
@@ -735,7 +736,10 @@ function App() {
 
       parallaxItems.forEach((item) => {
         const heroOnly = item.getAttribute('data-hero-parallax-only') === 'true';
-        if (heroOnly && !isHeroTopZone) return;
+        if (heroOnly && !isHeroTopZone) {
+          gsap.set(item, { x: 0, y: 0 });
+          return;
+        }
 
         const speed = parseFloat(item.getAttribute('data-speed')) || 20;
         gsap.to(item, {
@@ -752,6 +756,7 @@ function App() {
       window.addEventListener('mousemove', handleMouseMove);
     }
     window.addEventListener('scroll', syncHeroTopZone, { passive: true });
+    syncHeroTopZone();
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
