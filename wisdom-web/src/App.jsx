@@ -249,6 +249,16 @@ const ENDLESS_TEXT_START_SCALE = 0.95;
 const ENDLESS_TEXT_END_SCALE = 1.08;
 const INITIAL_ANIMATED_BOX_COLOR = '#F9F8F8';
 const HERO_PARALLAX_MAX_SCROLL_Y = 0;
+const PRO_STORY_SQUARE_VIEWPORT_FACTOR = 0.25;
+const PRO_STORY_SQUARE_MIN_SIZE = 130;
+const PRO_STORY_SQUARE_MAX_SIZE = 520;
+const PRO_STORY_SCALE_DISTANCE = 260;
+const PRO_STORY_PIN_HOLD_DISTANCE = 400;
+const PRO_STORY_TEXT_FADE_DISTANCE = 120;
+const PRO_STORY_TEXT_HOLD_DISTANCE = 420;
+const PRO_STORY_ENTER_EXIT_EXTRA_OFFSET = 48;
+const PRO_STORY_REVERSE_HOLD_DISTANCE = 240;
+const PRO_STORY_REVERSE_SLIDE_DISTANCE = 280;
 // Ajuste fino para alinear opticamente la imagen con el bloque de texto.
 // (negativo = sube la imagen)
 const SEARCH_IMAGE_VERTICAL_OFFSET = -68;
@@ -674,6 +684,10 @@ function App() {
   const searchTextRef = useRef(null);    // El texto destino
   const endlessSearchSectionRef = useRef(null); // Sección "Endless searches..."
   const endlessSearchTextRef = useRef(null);    // Texto de la sección "Endless searches..."
+  const proStorySectionRef = useRef(null);
+  const proStoryPinRef = useRef(null);
+  const proStoryImageRef = useRef(null);
+  const proStoryTextsRef = useRef(null);
 
   useEffect(() => {
     // 1. Configuración de Lenis (Scroll Suave)
@@ -932,6 +946,137 @@ function App() {
         );
       }
 
+      if (proStorySectionRef.current && proStoryPinRef.current && proStoryImageRef.current && proStoryTextsRef.current) {
+        const proSection = proStorySectionRef.current;
+        const proPin = proStoryPinRef.current;
+        const proImage = proStoryImageRef.current;
+        const proTextBlocks = gsap.utils.toArray('[data-pro-story-text]', proStoryTextsRef.current);
+        const getSquareSize = () => Math.round(
+          gsap.utils.clamp(
+            PRO_STORY_SQUARE_MIN_SIZE,
+            PRO_STORY_SQUARE_MAX_SIZE,
+            window.innerWidth * PRO_STORY_SQUARE_VIEWPORT_FACTOR,
+          ),
+        );
+        const getOffscreenOffset = () => Math.round(
+          (window.innerHeight / 2)
+          + (getSquareSize() / 2)
+          + PRO_STORY_ENTER_EXIT_EXTRA_OFFSET,
+        );
+
+        const resetProStoryImage = () => {
+          const squareSize = getSquareSize();
+          gsap.set(proImage, {
+            width: squareSize,
+            height: squareSize,
+            borderRadius: 0,
+            y: getOffscreenOffset(),
+            autoAlpha: 1,
+            willChange: 'transform,width,height,opacity',
+          });
+        };
+
+        gsap.set(proTextBlocks, {
+          autoAlpha: 0,
+          y: 30,
+          willChange: 'transform,opacity',
+        });
+
+        resetProStoryImage();
+
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: proSection,
+            start: 'top bottom',
+            end: 'top top',
+            scrub: true,
+            invalidateOnRefresh: true,
+            onRefresh: resetProStoryImage,
+            onLeaveBack: () => {
+              resetProStoryImage();
+              gsap.set(proTextBlocks, { autoAlpha: 0, y: 30 });
+            },
+          },
+        }).to(proImage, {
+          y: 0,
+          ease: 'none',
+          duration: 1,
+        });
+
+        const fullStoryDistance = PRO_STORY_PIN_HOLD_DISTANCE
+          + PRO_STORY_SCALE_DISTANCE
+          + (proTextBlocks.length * ((PRO_STORY_TEXT_FADE_DISTANCE * 2) + PRO_STORY_TEXT_HOLD_DISTANCE))
+          + PRO_STORY_SCALE_DISTANCE
+          + PRO_STORY_REVERSE_HOLD_DISTANCE
+          + PRO_STORY_REVERSE_SLIDE_DISTANCE;
+
+        const proStoryTimeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: proPin,
+            start: 'center center',
+            end: () => `+=${fullStoryDistance}`,
+            pin: true,
+            pinSpacing: true,
+            scrub: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onRefresh: () => {
+              const squareSize = getSquareSize();
+              gsap.set(proImage, {
+                width: squareSize,
+                height: squareSize,
+                borderRadius: 0,
+              });
+            },
+          },
+        });
+
+        proStoryTimeline.to({}, {
+          duration: PRO_STORY_PIN_HOLD_DISTANCE,
+        });
+
+        proStoryTimeline.to(proImage, {
+          width: () => window.innerWidth + 2,
+          height: () => window.innerHeight,
+          autoAlpha: 1,
+          borderRadius: 0,
+          ease: 'none',
+          duration: PRO_STORY_SCALE_DISTANCE,
+        });
+
+        proTextBlocks.forEach((textBlock) => {
+          proStoryTimeline
+            .fromTo(
+              textBlock,
+              { autoAlpha: 0, y: 30 },
+              { autoAlpha: 1, y: 0, ease: 'none', duration: PRO_STORY_TEXT_FADE_DISTANCE },
+            )
+            .to(textBlock, { autoAlpha: 1, y: 0, ease: 'none', duration: PRO_STORY_TEXT_HOLD_DISTANCE })
+            .to(textBlock, { autoAlpha: 0, y: -30, ease: 'none', duration: PRO_STORY_TEXT_FADE_DISTANCE });
+        });
+
+        proStoryTimeline.to(proImage, {
+          width: () => getSquareSize(),
+          height: () => getSquareSize(),
+          y: 0,
+          autoAlpha: 1,
+          borderRadius: 0,
+          ease: 'none',
+          duration: PRO_STORY_SCALE_DISTANCE,
+        });
+
+        proStoryTimeline.to({}, {
+          duration: PRO_STORY_REVERSE_HOLD_DISTANCE,
+        });
+
+        proStoryTimeline.to(proImage, {
+          y: () => -getOffscreenOffset(),
+          autoAlpha: 1,
+          ease: 'none',
+          duration: PRO_STORY_REVERSE_SLIDE_DISTANCE,
+        });
+      }
+
       if (endlessSearchSectionRef.current && endlessSearchTextRef.current) {
         const endlessText = endlessSearchTextRef.current;
 
@@ -1139,17 +1284,30 @@ function App() {
         </section>
 
         {/* 4. Pro alone */}
-        <section className="fade-section relative overflow-hidden min-h-screen mx-auto flex w-full justify-center items-center bg-gradient-to-br from-[#e8ecf0] via-white to-[#e8ecf0] px-6 py-28">
-          <div className="absolute inset-0 opacity-100">
-            <img src='https://storage.googleapis.com/wisdom-images/pro_alone.png' className="absolute inset-0" />
-          </div>
-          <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-12 text-white md:flex-row md:items-center md:gap-16">
-            <p className="max-w-sm text-xl font-semibold leading-snug drop-shadow-lg">
-              Looking for help used to be a leap of faith.
-            </p>
-            <p className="max-w-sm text-xl font-semibold leading-snug drop-shadow-lg">
-              Great skills got lost in noise. Managing bookings was manual, trust was hard to build, and credibility took years to establish.
-            </p>
+        <section ref={proStorySectionRef} className="relative min-h-[200vh] w-screen overflow-hidden">
+          <div ref={proStoryPinRef} className="relative flex h-screen w-screen items-center justify-center">
+            <div ref={proStoryImageRef} className="relative overflow-hidden">
+              <img
+                src="https://storage.googleapis.com/wisdom-images/pro_alone.png"
+                alt="People collaborating in a group"
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-black/35" aria-hidden />
+              <div ref={proStoryTextsRef} className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-6">
+                <p
+                  data-pro-story-text
+                  className="absolute mx-auto max-w-[min(900px,92vw)] text-center text-2xl font-semibold leading-tight text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)] md:text-5xl"
+                >
+                  Looking for help used to be a leap of faith.
+                </p>
+                <p
+                  data-pro-story-text
+                  className="absolute mx-auto max-w-[min(980px,92vw)] text-center text-lg font-semibold leading-tight text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)] md:text-4xl"
+                >
+                  Great skills got lost in noise. Managing bookings was manual, trust was hard to build, and credibility took years to establish.
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
