@@ -244,6 +244,9 @@ const VISIBLE_RANGE = 4;
 const ANGLE_PER_ITEM = 15.5;
 const RADIUS = 340;
 const SEARCH_PIN_DISTANCE = 400;
+const ENDLESS_PIN_DISTANCE = 750;
+const ENDLESS_TEXT_START_SCALE = 0.95;
+const ENDLESS_TEXT_END_SCALE = 1.08;
 const INITIAL_ANIMATED_BOX_COLOR = '#F9F8F8';
 const HERO_PARALLAX_MAX_SCROLL_Y = 0;
 // Ajuste fino para alinear opticamente la imagen con el bloque de texto.
@@ -663,11 +666,14 @@ function App() {
   const [activeTab, setActiveTab] = useState('customers');
 
   // --- AÑADIR ESTO ---
+  const lenisRef = useRef(null);
   const appRef = useRef(null);
   const animadaBoxRef = useRef(null);    // El cuadro gris
   const searchSectionRef = useRef(null); // La sección destino
   const searchImageRef = useRef(null);   // La imagen destino
   const searchTextRef = useRef(null);    // El texto destino
+  const endlessSearchSectionRef = useRef(null); // Sección "Endless searches..."
+  const endlessSearchTextRef = useRef(null);    // Texto de la sección "Endless searches..."
 
   useEffect(() => {
     // 1. Configuración de Lenis (Scroll Suave)
@@ -676,6 +682,7 @@ function App() {
       smoothWheel: true,
       wheelMultiplier: 1,
     });
+    lenisRef.current = lenis;
 
     lenis.on('scroll', ScrollTrigger.update);
 
@@ -773,6 +780,7 @@ function App() {
     syncHeroTopZone();
 
     return () => {
+      lenisRef.current = null;
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('scroll', syncHeroTopZone);
       cancelAnimationFrame(rafId);
@@ -787,7 +795,7 @@ function App() {
       // 1. Configuración general (Igual que antes)
       const sections = gsap.utils.toArray('.fade-section');
       sections.forEach((section) => {
-        if (section !== searchSectionRef.current) {
+        if (section !== endlessSearchSectionRef.current) {
           gsap.timeline({
             scrollTrigger: {
               trigger: section, start: "center center", end: "+=1200",
@@ -923,6 +931,106 @@ function App() {
           { y: 0, opacity: 1, duration: 1 }
         );
       }
+
+      if (endlessSearchSectionRef.current && endlessSearchTextRef.current) {
+        const endlessText = endlessSearchTextRef.current;
+
+        const getSectionCenteredScrollY = (sectionEl) => {
+          if (!sectionEl) return Number.NaN;
+          const sectionRect = sectionEl.getBoundingClientRect();
+          const sectionTop = window.scrollY + sectionRect.top;
+          const sectionCenter = sectionTop + (sectionRect.height / 2);
+          return sectionCenter - (window.innerHeight / 2);
+        };
+
+        const softlySnapToSectionCenter = (sectionEl) => {
+          const targetY = getSectionCenteredScrollY(sectionEl);
+          if (!Number.isFinite(targetY)) return;
+
+          const delta = Math.abs(targetY - window.scrollY);
+          if (delta < 18 || delta > 700) return;
+
+          if (lenisRef.current) {
+            lenisRef.current.scrollTo(targetY, {
+              duration: 0.5,
+              easing: (t) => 1 - ((1 - t) * (1 - t)),
+            });
+            return;
+          }
+
+          window.scrollTo({ top: targetY, behavior: 'smooth' });
+        };
+
+        const softlySnapToEndlessCenter = () => softlySnapToSectionCenter(endlessSearchSectionRef.current);
+        const softlySnapToSearchCenter = () => softlySnapToSectionCenter(searchSectionRef.current);
+
+        const playEndlessIntro = () => {
+          gsap.killTweensOf(endlessText);
+          gsap.set(endlessText, {
+            opacity: 0,
+            scale: ENDLESS_TEXT_START_SCALE,
+            transformOrigin: '50% 50%',
+          });
+
+          gsap.timeline()
+            .to(endlessText, {
+              opacity: 1,
+              duration: 1,
+              ease: 'power1.out',
+            }, 0)
+            .to(endlessText, {
+              scale: ENDLESS_TEXT_END_SCALE,
+              duration: 2,
+              ease: 'power1.out',
+            }, 0);
+        };
+
+        gsap.set(endlessText, {
+          opacity: 0,
+          scale: ENDLESS_TEXT_START_SCALE,
+          transformOrigin: '50% 50%',
+        });
+
+        ScrollTrigger.create({
+          trigger: endlessSearchSectionRef.current,
+          start: "top bottom",
+          end: "center center",
+          onEnter: softlySnapToEndlessCenter,
+          onEnterBack: softlySnapToEndlessCenter,
+          onLeaveBack: softlySnapToSearchCenter,
+        });
+
+        ScrollTrigger.create({
+          trigger: endlessSearchSectionRef.current,
+          start: "center center",
+          end: `+=${ENDLESS_PIN_DISTANCE}`,
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onEnter: playEndlessIntro,
+          onEnterBack: playEndlessIntro,
+          onLeave: () => {
+            gsap.killTweensOf(endlessText);
+            gsap.to(endlessText, {
+              opacity: 0,
+              duration: 0.5,
+              ease: 'power1.out',
+            });
+          },
+          onLeaveBack: () => {
+            gsap.killTweensOf(endlessText);
+            gsap.to(endlessText, {
+              opacity: 0,
+              duration: 0.5,
+              ease: 'power1.out',
+              onComplete: () => {
+                gsap.set(endlessText, { scale: ENDLESS_TEXT_START_SCALE });
+              },
+            });
+          },
+        });
+      }
     }, appRef);
 
     return () => ctx.revert();
@@ -1022,8 +1130,8 @@ function App() {
         </section>
 
         {/* 3. Search 2 */}
-        <section className="fade-section min-h-screen mx-auto flex w-full justify-center items-center px-6 py-24">
-          <p className="mx-auto max-w-[820px] text-center text-[42px] leading-[1.3] font-semibold leading-relaxed text-[#050505]">
+        <section ref={endlessSearchSectionRef} className="fade-section min-h-screen mx-auto flex w-full justify-center items-center px-6 py-24">
+          <p ref={endlessSearchTextRef} className="mx-auto max-w-[820px] text-center text-[42px] leading-[1.3] font-semibold leading-relaxed text-[#050505]">
             Endless searches. Reliance on word-of-mouth. Zero guarantees. The service world was fragmented, forcing you to guess instead of choose.
           </p>
         </section>
