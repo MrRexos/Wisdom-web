@@ -948,11 +948,11 @@ function App() {
           if (!Number.isFinite(targetY)) return;
 
           const delta = Math.abs(targetY - window.scrollY);
-          if (delta < 18 || delta > 700) return;
+          if (delta < 8 || delta > 1400) return;
 
           if (lenisRef.current) {
             lenisRef.current.scrollTo(targetY, {
-              duration: 0.5,
+              duration: 0.42,
               easing: (t) => 1 - ((1 - t) * (1 - t)),
             });
             return;
@@ -991,14 +991,15 @@ function App() {
           transformOrigin: '50% 50%',
         });
 
-        ScrollTrigger.create({
-          trigger: endlessSearchSectionRef.current,
-          start: "top bottom",
-          end: "center center",
-          onEnter: softlySnapToEndlessCenter,
-          onEnterBack: softlySnapToEndlessCenter,
-          onLeaveBack: softlySnapToSearchCenter,
-        });
+        if (searchSectionRef.current) {
+          ScrollTrigger.create({
+            trigger: searchSectionRef.current,
+            start: "center center",
+            end: `+=${SEARCH_PIN_DISTANCE}`,
+            onLeave: softlySnapToEndlessCenter,
+            onEnterBack: softlySnapToSearchCenter,
+          });
+        }
 
         ScrollTrigger.create({
           trigger: endlessSearchSectionRef.current,
@@ -1028,6 +1029,7 @@ function App() {
                 gsap.set(endlessText, { scale: ENDLESS_TEXT_START_SCALE });
               },
             });
+            softlySnapToSearchCenter();
           },
         });
       }
