@@ -245,7 +245,7 @@ const ANGLE_PER_ITEM = 15.5;
 const RADIUS = 340;
 const SEARCH_PIN_DISTANCE = 400;
 const INITIAL_ANIMATED_BOX_COLOR = '#F9F8F8';
-const HERO_PARALLAX_MAX_SCROLL_Y = 0.5;
+const HERO_PARALLAX_MAX_SCROLL_Y = 0;
 // Ajuste fino para alinear opticamente la imagen con el bloque de texto.
 // (negativo = sube la imagen)
 const SEARCH_IMAGE_VERTICAL_OFFSET = -68;
@@ -717,6 +717,7 @@ function App() {
       (item) => item.getAttribute('data-hero-parallax-only') === 'true'
     );
     let isHeroTopZone = window.scrollY <= HERO_PARALLAX_MAX_SCROLL_Y;
+    const mouseTweens = new WeakMap();
 
     const syncHeroTopZone = () => {
       const nextIsHeroTopZone = window.scrollY <= HERO_PARALLAX_MAX_SCROLL_Y;
@@ -725,6 +726,11 @@ function App() {
       isHeroTopZone = nextIsHeroTopZone;
       if (!isHeroTopZone) {
         heroOnlyParallaxItems.forEach((item) => {
+          const activeTween = mouseTweens.get(item);
+          if (activeTween) {
+            activeTween.kill();
+            mouseTweens.delete(item);
+          }
           gsap.set(item, { x: 0, y: 0 });
         });
       }
@@ -737,18 +743,26 @@ function App() {
       parallaxItems.forEach((item) => {
         const heroOnly = item.getAttribute('data-hero-parallax-only') === 'true';
         if (heroOnly && !isHeroTopZone) {
-          gsap.set(item, { x: 0, y: 0 });
+          const activeTween = mouseTweens.get(item);
+          if (activeTween) {
+            activeTween.kill();
+            mouseTweens.delete(item);
+          }
           return;
         }
 
         const speed = parseFloat(item.getAttribute('data-speed')) || 20;
-        gsap.to(item, {
+        const tween = gsap.to(item, {
           x: -x * speed,
           y: -y * speed,
           duration: 1,
           ease: 'power2.out',
           overwrite: 'auto'
         });
+
+        if (heroOnly) {
+          mouseTweens.set(item, tween);
+        }
       });
     };
 
