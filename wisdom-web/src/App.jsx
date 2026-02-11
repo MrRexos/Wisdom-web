@@ -252,13 +252,18 @@ const HERO_PARALLAX_MAX_SCROLL_Y = 0;
 const PRO_STORY_SQUARE_VIEWPORT_FACTOR = 0.25;
 const PRO_STORY_SQUARE_MIN_SIZE = 130;
 const PRO_STORY_SQUARE_MAX_SIZE = 520;
-const PRO_STORY_SCALE_DISTANCE = 260;
+const PRO_STORY_SCALE_DISTANCE = 460;
 const PRO_STORY_PIN_HOLD_DISTANCE = 800;
 const PRO_STORY_TEXT_FADE_DISTANCE = 120;
 const PRO_STORY_TEXT_HOLD_DISTANCE = 420;
 const PRO_STORY_REVERSE_HOLD_DISTANCE = 440;
-const PRO_STORY_REVERSE_SLIDE_DISTANCE = 280;
+const PRO_STORY_REVERSE_SLIDE_DISTANCE = 480;
 const PRO_STORY_POST_EXIT_HOLD_DISTANCE = 140;
+const PRO_STORY_FULLSCREEN_MEDIA_SCALE = 2;
+const PRO_STORY_FULLSCREEN_PAN_LIMIT_FACTOR = 0.96;
+const PRO_STORY_TEXT_ENTRY_OFFSET = 52;
+const PRO_STORY_TEXT_DRIFT_DISTANCE = 100;
+const PRO_STORY_TEXT_EXIT_EXTRA_DISTANCE = 36;
 // Ajuste fino para alinear opticamente la imagen con el bloque de texto.
 // (negativo = sube la imagen)
 const SEARCH_IMAGE_VERTICAL_OFFSET = -68;
@@ -950,6 +955,7 @@ function App() {
         const proSection = proStorySectionRef.current;
         const proPin = proStoryPinRef.current;
         const proImage = proStoryImageRef.current;
+        const proImageMedia = proImage.querySelector('img');
         const proTextBlocks = gsap.utils.toArray('[data-pro-story-text]', proStoryTextsRef.current);
         const getSquareSize = () => Math.round(
           gsap.utils.clamp(
@@ -962,11 +968,14 @@ function App() {
         const getOffscreenOffset = () => {
           const squareSize = getSquareSize();
           return Math.round(
-            (window.innerHeight) 
-            + (squareSize) 
-            + window.innerHeight 
+            (window.innerHeight)
+            + (squareSize)
+            + window.innerHeight
           );
         };
+        const getFullscreenMediaPan = () => -Math.round(
+          (window.innerHeight * (PRO_STORY_FULLSCREEN_MEDIA_SCALE - 1) * 0.5) * PRO_STORY_FULLSCREEN_PAN_LIMIT_FACTOR,
+        );
 
         const resetProStoryImage = () => {
           const squareSize = getSquareSize();
@@ -978,11 +987,19 @@ function App() {
             autoAlpha: 1,
             willChange: 'transform,width,height,opacity',
           });
+          if (proImageMedia) {
+            gsap.set(proImageMedia, {
+              y: 0,
+              scale: 1,
+              transformOrigin: '50% 50%',
+              willChange: 'transform',
+            });
+          }
         };
 
         gsap.set(proTextBlocks, {
           autoAlpha: 0,
-          y: 30,
+          y: PRO_STORY_TEXT_ENTRY_OFFSET,
           willChange: 'transform,opacity',
         });
 
@@ -998,7 +1015,7 @@ function App() {
             onRefresh: resetProStoryImage,
             onLeaveBack: () => {
               resetProStoryImage();
-              gsap.set(proTextBlocks, { autoAlpha: 0, y: 30 });
+              gsap.set(proTextBlocks, { autoAlpha: 0, y: PRO_STORY_TEXT_ENTRY_OFFSET });
             },
           },
         }).fromTo(
@@ -1018,6 +1035,7 @@ function App() {
           + PRO_STORY_REVERSE_HOLD_DISTANCE
           + PRO_STORY_REVERSE_SLIDE_DISTANCE
           + PRO_STORY_POST_EXIT_HOLD_DISTANCE;
+        const textSequenceDistance = proTextBlocks.length * ((PRO_STORY_TEXT_FADE_DISTANCE * 2) + PRO_STORY_TEXT_HOLD_DISTANCE);
 
         const proStoryTimeline = gsap.timeline({
           scrollTrigger: {
@@ -1036,11 +1054,20 @@ function App() {
                 height: squareSize,
                 borderRadius: 0,
               });
+              if (proImageMedia) {
+                gsap.set(proImageMedia, {
+                  y: 0,
+                  scale: 1,
+                });
+              }
             },
           },
         });
+        const holdState = { progress: 0 };
 
-        proStoryTimeline.to({}, {
+        proStoryTimeline.to(holdState, {
+          progress: 1,
+          ease: 'none',
           duration: PRO_STORY_PIN_HOLD_DISTANCE,
         });
 
@@ -1053,15 +1080,38 @@ function App() {
           duration: PRO_STORY_SCALE_DISTANCE,
         });
 
-        proTextBlocks.forEach((textBlock) => {
+        if (proImageMedia) {
+          proStoryTimeline.to(proImageMedia, {
+            scale: PRO_STORY_FULLSCREEN_MEDIA_SCALE,
+            ease: 'none',
+            duration: PRO_STORY_SCALE_DISTANCE,
+          }, '<');
+        }
+
+        proStoryTimeline.add('proStoryTextSequenceStart');
+        if (proImageMedia) {
+          proStoryTimeline.to(proImageMedia, {
+            y: () => getFullscreenMediaPan(),
+            ease: 'none',
+            duration: textSequenceDistance,
+          }, 'proStoryTextSequenceStart');
+        }
+
+        proTextBlocks.forEach((textBlock, index) => {
           proStoryTimeline
             .fromTo(
               textBlock,
-              { autoAlpha: 0, y: 30 },
+              { autoAlpha: 0, y: PRO_STORY_TEXT_ENTRY_OFFSET },
               { autoAlpha: 1, y: 0, ease: 'none', duration: PRO_STORY_TEXT_FADE_DISTANCE },
+              index === 0 ? 'proStoryTextSequenceStart' : '>',
             )
-            .to(textBlock, { autoAlpha: 1, y: 0, ease: 'none', duration: PRO_STORY_TEXT_HOLD_DISTANCE })
-            .to(textBlock, { autoAlpha: 0, y: -30, ease: 'none', duration: PRO_STORY_TEXT_FADE_DISTANCE });
+            .to(textBlock, { autoAlpha: 1, y: -PRO_STORY_TEXT_DRIFT_DISTANCE, ease: 'none', duration: PRO_STORY_TEXT_HOLD_DISTANCE })
+            .to(textBlock, {
+              autoAlpha: 0,
+              y: -(PRO_STORY_TEXT_DRIFT_DISTANCE + PRO_STORY_TEXT_EXIT_EXTRA_DISTANCE),
+              ease: 'none',
+              duration: PRO_STORY_TEXT_FADE_DISTANCE,
+            });
         });
 
         proStoryTimeline.to(proImage, {
@@ -1073,19 +1123,30 @@ function App() {
           ease: 'none',
           duration: PRO_STORY_SCALE_DISTANCE,
         });
+        if (proImageMedia) {
+          proStoryTimeline.to(proImageMedia, {
+            y: 0,
+            scale: 1,
+            ease: 'none',
+            duration: PRO_STORY_SCALE_DISTANCE,
+          }, '<');
+        }
 
-        proStoryTimeline.to({}, {
+        proStoryTimeline.to(holdState, {
+          progress: 2,
+          ease: 'none',
           duration: PRO_STORY_REVERSE_HOLD_DISTANCE,
         });
 
         proStoryTimeline.to(proImage, {
           y: () => -getOffscreenOffset(),
-          autoAlpha: 0,
           ease: 'none',
           duration: PRO_STORY_REVERSE_SLIDE_DISTANCE,
         });
 
-        proStoryTimeline.to({}, {
+        proStoryTimeline.to(holdState, {
+          progress: 3,
+          ease: 'none',
           duration: PRO_STORY_POST_EXIT_HOLD_DISTANCE,
         });
       }
@@ -1306,16 +1367,16 @@ function App() {
                 className="h-full w-full object-cover"
               />
               <div className="absolute inset-0 bg-black/35" aria-hidden />
-              <div ref={proStoryTextsRef} className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-6">
+              <div ref={proStoryTextsRef} className="pointer-events-none absolute inset-0 z-10 flex items-end justify-start pb-10 md:pb-16">
                 <p
                   data-pro-story-text
-                  className="absolute mx-auto max-w-[min(900px,92vw)] text-center text-2xl font-semibold leading-tight text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)] md:text-5xl"
+                  className="absolute bottom-0 left-10 max-w-[min(500px,82vw)] text-left text-base font-semibold leading-snug text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)] md:left-28 md:text-xl"
                 >
                   Looking for help used to be a leap of faith.
                 </p>
                 <p
                   data-pro-story-text
-                  className="absolute mx-auto max-w-[min(980px,92vw)] text-center text-lg font-semibold leading-tight text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)] md:text-4xl"
+                  className="absolute bottom-0 left-10 max-w-[min(560px,84vw)] text-left text-sm font-semibold leading-snug text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)] md:left-28 md:text-lg"
                 >
                   Great skills got lost in noise. Managing bookings was manual, trust was hard to build, and credibility took years to establish.
                 </p>
