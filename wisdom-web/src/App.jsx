@@ -256,7 +256,6 @@ const PRO_STORY_SCALE_DISTANCE = 260;
 const PRO_STORY_PIN_HOLD_DISTANCE = 400;
 const PRO_STORY_TEXT_FADE_DISTANCE = 120;
 const PRO_STORY_TEXT_HOLD_DISTANCE = 420;
-const PRO_STORY_ENTER_EXIT_EXTRA_OFFSET = 140;
 const PRO_STORY_REVERSE_HOLD_DISTANCE = 240;
 const PRO_STORY_REVERSE_SLIDE_DISTANCE = 280;
 const PRO_STORY_POST_EXIT_HOLD_DISTANCE = 140;
@@ -959,11 +958,15 @@ function App() {
             window.innerWidth * PRO_STORY_SQUARE_VIEWPORT_FACTOR,
           ),
         );
-        const getOffscreenOffset = () => Math.round(
-          (window.innerHeight / 2)
-          + (getSquareSize() / 2)
-          + PRO_STORY_ENTER_EXIT_EXTRA_OFFSET,
-        );
+        
+        const getOffscreenOffset = () => {
+          const squareSize = getSquareSize();
+          return Math.round(
+            (window.innerHeight) 
+            + (squareSize) 
+            + window.innerHeight 
+          );
+        };
 
         const resetProStoryImage = () => {
           const squareSize = getSquareSize();
