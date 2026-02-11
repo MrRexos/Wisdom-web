@@ -256,9 +256,10 @@ const PRO_STORY_SCALE_DISTANCE = 260;
 const PRO_STORY_PIN_HOLD_DISTANCE = 400;
 const PRO_STORY_TEXT_FADE_DISTANCE = 120;
 const PRO_STORY_TEXT_HOLD_DISTANCE = 420;
-const PRO_STORY_ENTER_EXIT_EXTRA_OFFSET = 48;
+const PRO_STORY_ENTER_EXIT_EXTRA_OFFSET = 140;
 const PRO_STORY_REVERSE_HOLD_DISTANCE = 240;
 const PRO_STORY_REVERSE_SLIDE_DISTANCE = 280;
+const PRO_STORY_POST_EXIT_HOLD_DISTANCE = 140;
 // Ajuste fino para alinear opticamente la imagen con el bloque de texto.
 // (negativo = sube la imagen)
 const SEARCH_IMAGE_VERTICAL_OFFSET = -68;
@@ -988,7 +989,7 @@ function App() {
           scrollTrigger: {
             trigger: proSection,
             start: 'top bottom',
-            end: 'top top',
+            end: 'center center',
             scrub: true,
             invalidateOnRefresh: true,
             onRefresh: resetProStoryImage,
@@ -997,18 +998,23 @@ function App() {
               gsap.set(proTextBlocks, { autoAlpha: 0, y: 30 });
             },
           },
-        }).to(proImage, {
-          y: 0,
-          ease: 'none',
-          duration: 1,
-        });
+        }).fromTo(
+          proImage,
+          { y: () => getOffscreenOffset() },
+          {
+            y: 0,
+            ease: 'none',
+            duration: 1,
+          },
+        );
 
         const fullStoryDistance = PRO_STORY_PIN_HOLD_DISTANCE
           + PRO_STORY_SCALE_DISTANCE
           + (proTextBlocks.length * ((PRO_STORY_TEXT_FADE_DISTANCE * 2) + PRO_STORY_TEXT_HOLD_DISTANCE))
           + PRO_STORY_SCALE_DISTANCE
           + PRO_STORY_REVERSE_HOLD_DISTANCE
-          + PRO_STORY_REVERSE_SLIDE_DISTANCE;
+          + PRO_STORY_REVERSE_SLIDE_DISTANCE
+          + PRO_STORY_POST_EXIT_HOLD_DISTANCE;
 
         const proStoryTimeline = gsap.timeline({
           scrollTrigger: {
@@ -1071,9 +1077,13 @@ function App() {
 
         proStoryTimeline.to(proImage, {
           y: () => -getOffscreenOffset(),
-          autoAlpha: 1,
+          autoAlpha: 0,
           ease: 'none',
           duration: PRO_STORY_REVERSE_SLIDE_DISTANCE,
+        });
+
+        proStoryTimeline.to({}, {
+          duration: PRO_STORY_POST_EXIT_HOLD_DISTANCE,
         });
       }
 
