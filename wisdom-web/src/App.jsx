@@ -258,7 +258,7 @@ const PRO_STORY_TEXT_FADE_DISTANCE = 120;
 const PRO_STORY_TEXT_HOLD_DISTANCE = 420;
 const PRO_STORY_REVERSE_HOLD_DISTANCE = 440;
 const PRO_STORY_REVERSE_SLIDE_DISTANCE = 480;
-const PRO_STORY_POST_EXIT_HOLD_DISTANCE = 140;
+const PRO_STORY_POST_EXIT_HOLD_DISTANCE = 40;
 const PRO_STORY_TEXT_ENTRY_OFFSET = 52;
 const PRO_STORY_TEXT_RISE_RATIO = 0.22;
 const PRO_STORY_TEXT_EXIT_EXTRA_DISTANCE = 36;
@@ -692,6 +692,8 @@ function App() {
   const proStoryPinRef = useRef(null);
   const proStoryImageRef = useRef(null);
   const proStoryTextsRef = useRef(null);
+  const untilNowSectionRef = useRef(null);
+  const untilNowTextRef = useRef(null);
 
   useEffect(() => {
     // 1. Configuración de Lenis (Scroll Suave)
@@ -985,6 +987,27 @@ function App() {
             getFullscreenOverflowY() * PRO_STORY_TEXT_RISE_RATIO,
           ),
         );
+        const softlySnapToUntilNowCenter = () => {
+          if (!untilNowSectionRef.current) return;
+          const sectionRect = untilNowSectionRef.current.getBoundingClientRect();
+          const sectionTop = window.scrollY + sectionRect.top;
+          const sectionCenter = sectionTop + (sectionRect.height / 2);
+          const targetY = sectionCenter - (window.innerHeight / 2);
+          if (!Number.isFinite(targetY)) return;
+
+          const delta = Math.abs(targetY - window.scrollY);
+          if (delta < 8 || delta > 1400) return;
+
+          if (lenisRef.current) {
+            lenisRef.current.scrollTo(targetY, {
+              duration: 0.42,
+              easing: (t) => 1 - ((1 - t) * (1 - t)),
+            });
+            return;
+          }
+
+          window.scrollTo({ top: targetY, behavior: 'smooth' });
+        };
 
         const resetProStoryImage = () => {
           const squareSize = getSquareSize();
@@ -1059,6 +1082,7 @@ function App() {
             scrub: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
+            onLeave: softlySnapToUntilNowCenter,
             onRefresh: () => {
               const squareSize = getSquareSize();
               gsap.set(proImage, {
@@ -1255,6 +1279,97 @@ function App() {
           },
         });
       }
+
+      if (untilNowSectionRef.current && untilNowTextRef.current) {
+        const untilNowText = untilNowTextRef.current;
+
+        const getSectionCenteredScrollY = (sectionEl) => {
+          if (!sectionEl) return Number.NaN;
+          const sectionRect = sectionEl.getBoundingClientRect();
+          const sectionTop = window.scrollY + sectionRect.top;
+          const sectionCenter = sectionTop + (sectionRect.height / 2);
+          return sectionCenter - (window.innerHeight / 2);
+        };
+
+        const softlySnapToSectionCenter = (sectionEl) => {
+          const targetY = getSectionCenteredScrollY(sectionEl);
+          if (!Number.isFinite(targetY)) return;
+
+          const delta = Math.abs(targetY - window.scrollY);
+          if (delta < 8 || delta > 1400) return;
+
+          if (lenisRef.current) {
+            lenisRef.current.scrollTo(targetY, {
+              duration: 0.42,
+              easing: (t) => 1 - ((1 - t) * (1 - t)),
+            });
+            return;
+          }
+
+          window.scrollTo({ top: targetY, behavior: 'smooth' });
+        };
+
+        const softlySnapToEndlessCenter = () => softlySnapToSectionCenter(endlessSearchSectionRef.current);
+
+        const playUntilNowIntro = () => {
+          gsap.killTweensOf(untilNowText);
+          gsap.set(untilNowText, {
+            opacity: 0,
+            scale: ENDLESS_TEXT_START_SCALE,
+            transformOrigin: '50% 50%',
+          });
+
+          gsap.timeline()
+            .to(untilNowText, {
+              opacity: 1,
+              duration: 1,
+              ease: 'power1.out',
+            }, 0)
+            .to(untilNowText, {
+              scale: ENDLESS_TEXT_END_SCALE,
+              duration: 2,
+              ease: 'power1.out',
+            }, 0);
+        };
+
+        gsap.set(untilNowText, {
+          opacity: 0,
+          scale: ENDLESS_TEXT_START_SCALE,
+          transformOrigin: '50% 50%',
+        });
+
+        ScrollTrigger.create({
+          trigger: untilNowSectionRef.current,
+          start: "center center",
+          end: `+=${ENDLESS_PIN_DISTANCE}`,
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onEnter: playUntilNowIntro,
+          onEnterBack: playUntilNowIntro,
+          onLeave: () => {
+            gsap.killTweensOf(untilNowText);
+            gsap.to(untilNowText, {
+              opacity: 0,
+              duration: 0.5,
+              ease: 'power1.out',
+            });
+          },
+          onLeaveBack: () => {
+            gsap.killTweensOf(untilNowText);
+            gsap.to(untilNowText, {
+              opacity: 0,
+              duration: 0.5,
+              ease: 'power1.out',
+              onComplete: () => {
+                gsap.set(untilNowText, { scale: ENDLESS_TEXT_START_SCALE });
+              },
+            });
+            softlySnapToEndlessCenter();
+          },
+        });
+      }
     }, appRef);
 
     return () => ctx.revert();
@@ -1389,8 +1504,8 @@ function App() {
         </section>
 
         {/* 5. Until now */}
-        <section className="fade-section min-h-screen mx-auto flex w-full justify-center items-center px-6 py-24">
-          <p className="text-center text-8xl font-semibold">Until now.</p>
+        <section ref={untilNowSectionRef} className="fade-section min-h-screen mx-auto flex w-full justify-center items-center px-6 py-24">
+          <p ref={untilNowTextRef} className="text-center text-8xl font-semibold">Until now.</p>
         </section>
 
         {/* 6. Unified */}
