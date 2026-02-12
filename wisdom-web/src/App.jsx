@@ -260,7 +260,7 @@ const PRO_STORY_REVERSE_HOLD_DISTANCE = 440;
 const PRO_STORY_REVERSE_SLIDE_DISTANCE = 480;
 const PRO_STORY_POST_EXIT_HOLD_DISTANCE = 140;
 const PRO_STORY_TEXT_ENTRY_OFFSET = 52;
-const PRO_STORY_TEXTS_PAN_RATIO = 0.42;
+const PRO_STORY_TEXT_RISE_RATIO = 0.22;
 const PRO_STORY_TEXT_EXIT_EXTRA_DISTANCE = 36;
 const PRO_STORY_IMAGE_HEIGHT_RATIO = 1248 / 832;
 // Ajuste fino para alinear opticamente la imagen con el bloque de texto.
@@ -978,7 +978,13 @@ function App() {
         const getFullscreenOverflowY = () => Math.max(0, getFullscreenHeight() - window.innerHeight);
         const getFullscreenTopAlignY = () => Math.round(getFullscreenOverflowY() * 0.5);
         const getFullscreenBottomAlignY = () => -Math.round(getFullscreenOverflowY() * 0.5);
-        const getFullscreenTextsPan = () => -Math.round(getFullscreenOverflowY() * PRO_STORY_TEXTS_PAN_RATIO);
+        const getTextRiseDistance = () => Math.round(
+          gsap.utils.clamp(
+            90,
+            window.innerHeight * 0.32,
+            getFullscreenOverflowY() * PRO_STORY_TEXT_RISE_RATIO,
+          ),
+        );
 
         const resetProStoryImage = () => {
           const squareSize = getSquareSize();
@@ -1095,30 +1101,29 @@ function App() {
           ease: 'none',
           duration: textSequenceDistance,
         }, 'proStoryTextSequenceStart');
-        if (proTextsLayer) {
-          proStoryTimeline.to(proTextsLayer, {
-            y: () => getFullscreenTextsPan(),
-            ease: 'none',
-            duration: textSequenceDistance,
-          }, 'proStoryTextSequenceStart');
-        }
 
-        proTextBlocks.forEach((textBlock, index) => {
-          proStoryTimeline
+        const proStoryTextsTimeline = gsap.timeline();
+        proTextBlocks.forEach((textBlock) => {
+          proStoryTextsTimeline
             .fromTo(
               textBlock,
               { autoAlpha: 0, y: PRO_STORY_TEXT_ENTRY_OFFSET },
               { autoAlpha: 1, y: 0, ease: 'none', duration: PRO_STORY_TEXT_FADE_DISTANCE },
-              index === 0 ? 'proStoryTextSequenceStart' : '>',
             )
-            .to(textBlock, { autoAlpha: 1, y: 0, ease: 'none', duration: PRO_STORY_TEXT_HOLD_DISTANCE })
+            .to(textBlock, {
+              autoAlpha: 1,
+              y: () => -getTextRiseDistance(),
+              ease: 'none',
+              duration: PRO_STORY_TEXT_HOLD_DISTANCE,
+            })
             .to(textBlock, {
               autoAlpha: 0,
-              y: -PRO_STORY_TEXT_EXIT_EXTRA_DISTANCE,
+              y: () => -(getTextRiseDistance() + PRO_STORY_TEXT_EXIT_EXTRA_DISTANCE),
               ease: 'none',
               duration: PRO_STORY_TEXT_FADE_DISTANCE,
             });
         });
+        proStoryTimeline.add(proStoryTextsTimeline, 'proStoryTextSequenceStart');
 
         proStoryTimeline.to(proImage, {
           width: () => getSquareSize(),
@@ -1129,13 +1134,6 @@ function App() {
           ease: 'none',
           duration: PRO_STORY_SCALE_DISTANCE,
         });
-        if (proTextsLayer) {
-          proStoryTimeline.to(proTextsLayer, {
-            y: 0,
-            ease: 'none',
-            duration: PRO_STORY_SCALE_DISTANCE,
-          }, '<');
-        }
 
         proStoryTimeline.to(holdState, {
           progress: 2,
@@ -1373,16 +1371,16 @@ function App() {
               />
               <div className="absolute inset-0 bg-black/35" aria-hidden />
             </div>
-            <div ref={proStoryTextsRef} className="pointer-events-none absolute inset-0 z-10 flex items-end justify-start pb-28 md:pb-44">
+            <div ref={proStoryTextsRef} className="pointer-events-none absolute inset-0 z-10">
               <p
                 data-pro-story-text
-                className="absolute bottom-0 left-14 max-w-[min(500px,78vw)] text-left text-base font-semibold leading-snug text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)] md:left-44 md:text-xl"
+                className="absolute bottom-40 left-14 max-w-[min(500px,78vw)] text-left text-base font-semibold leading-snug text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)] md:bottom-56 md:left-44 md:text-xl"
               >
                 Looking for help used to be a leap of faith.
               </p>
               <p
                 data-pro-story-text
-                className="absolute bottom-0 left-14 max-w-[min(560px,80vw)] text-left text-sm font-semibold leading-snug text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)] md:left-44 md:text-lg"
+                className="absolute bottom-40 left-14 max-w-[min(560px,80vw)] text-left text-sm font-semibold leading-snug text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)] md:bottom-56 md:left-44 md:text-lg"
               >
                 Great skills got lost in noise. Managing bookings was manual, trust was hard to build, and credibility took years to establish.
               </p>
