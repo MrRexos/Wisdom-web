@@ -259,11 +259,10 @@ const PRO_STORY_TEXT_HOLD_DISTANCE = 420;
 const PRO_STORY_REVERSE_HOLD_DISTANCE = 440;
 const PRO_STORY_REVERSE_SLIDE_DISTANCE = 480;
 const PRO_STORY_POST_EXIT_HOLD_DISTANCE = 140;
-const PRO_STORY_FULLSCREEN_MEDIA_SCALE = 2;
-const PRO_STORY_FULLSCREEN_PAN_LIMIT_FACTOR = 0.96;
 const PRO_STORY_TEXT_ENTRY_OFFSET = 52;
-const PRO_STORY_TEXT_DRIFT_DISTANCE = 100;
+const PRO_STORY_TEXTS_PAN_RATIO = 0.42;
 const PRO_STORY_TEXT_EXIT_EXTRA_DISTANCE = 36;
+const PRO_STORY_IMAGE_HEIGHT_RATIO = 1248 / 832;
 // Ajuste fino para alinear opticamente la imagen con el bloque de texto.
 // (negativo = sube la imagen)
 const SEARCH_IMAGE_VERTICAL_OFFSET = -68;
@@ -956,6 +955,7 @@ function App() {
         const proPin = proStoryPinRef.current;
         const proImage = proStoryImageRef.current;
         const proImageMedia = proImage.querySelector('img');
+        const proTextsLayer = proStoryTextsRef.current;
         const proTextBlocks = gsap.utils.toArray('[data-pro-story-text]', proStoryTextsRef.current);
         const getSquareSize = () => Math.round(
           gsap.utils.clamp(
@@ -973,9 +973,12 @@ function App() {
             + window.innerHeight
           );
         };
-        const getFullscreenMediaPan = () => -Math.round(
-          (window.innerHeight * (PRO_STORY_FULLSCREEN_MEDIA_SCALE - 1) * 0.5) * PRO_STORY_FULLSCREEN_PAN_LIMIT_FACTOR,
-        );
+        const getFullscreenWidth = () => window.innerWidth;
+        const getFullscreenHeight = () => Math.round(getFullscreenWidth() * PRO_STORY_IMAGE_HEIGHT_RATIO);
+        const getFullscreenOverflowY = () => Math.max(0, getFullscreenHeight() - window.innerHeight);
+        const getFullscreenTopAlignY = () => Math.round(getFullscreenOverflowY() * 0.5);
+        const getFullscreenBottomAlignY = () => -Math.round(getFullscreenOverflowY() * 0.5);
+        const getFullscreenTextsPan = () => -Math.round(getFullscreenOverflowY() * PRO_STORY_TEXTS_PAN_RATIO);
 
         const resetProStoryImage = () => {
           const squareSize = getSquareSize();
@@ -989,9 +992,12 @@ function App() {
           });
           if (proImageMedia) {
             gsap.set(proImageMedia, {
+              objectPosition: '50% 50%',
+            });
+          }
+          if (proTextsLayer) {
+            gsap.set(proTextsLayer, {
               y: 0,
-              scale: 1,
-              transformOrigin: '50% 50%',
               willChange: 'transform',
             });
           }
@@ -1056,9 +1062,11 @@ function App() {
               });
               if (proImageMedia) {
                 gsap.set(proImageMedia, {
-                  y: 0,
-                  scale: 1,
+                  objectPosition: '50% 50%',
                 });
+              }
+              if (proTextsLayer) {
+                gsap.set(proTextsLayer, { y: 0 });
               }
             },
           },
@@ -1072,26 +1080,24 @@ function App() {
         });
 
         proStoryTimeline.to(proImage, {
-          width: () => window.innerWidth + 2,
-          height: () => window.innerHeight,
+          width: () => getFullscreenWidth(),
+          height: () => getFullscreenHeight(),
+          y: () => getFullscreenTopAlignY(),
           autoAlpha: 1,
           borderRadius: 0,
           ease: 'none',
           duration: PRO_STORY_SCALE_DISTANCE,
         });
 
-        if (proImageMedia) {
-          proStoryTimeline.to(proImageMedia, {
-            scale: PRO_STORY_FULLSCREEN_MEDIA_SCALE,
-            ease: 'none',
-            duration: PRO_STORY_SCALE_DISTANCE,
-          }, '<');
-        }
-
         proStoryTimeline.add('proStoryTextSequenceStart');
-        if (proImageMedia) {
-          proStoryTimeline.to(proImageMedia, {
-            y: () => getFullscreenMediaPan(),
+        proStoryTimeline.to(proImage, {
+          y: () => getFullscreenBottomAlignY(),
+          ease: 'none',
+          duration: textSequenceDistance,
+        }, 'proStoryTextSequenceStart');
+        if (proTextsLayer) {
+          proStoryTimeline.to(proTextsLayer, {
+            y: () => getFullscreenTextsPan(),
             ease: 'none',
             duration: textSequenceDistance,
           }, 'proStoryTextSequenceStart');
@@ -1105,10 +1111,10 @@ function App() {
               { autoAlpha: 1, y: 0, ease: 'none', duration: PRO_STORY_TEXT_FADE_DISTANCE },
               index === 0 ? 'proStoryTextSequenceStart' : '>',
             )
-            .to(textBlock, { autoAlpha: 1, y: -PRO_STORY_TEXT_DRIFT_DISTANCE, ease: 'none', duration: PRO_STORY_TEXT_HOLD_DISTANCE })
+            .to(textBlock, { autoAlpha: 1, y: 0, ease: 'none', duration: PRO_STORY_TEXT_HOLD_DISTANCE })
             .to(textBlock, {
               autoAlpha: 0,
-              y: -(PRO_STORY_TEXT_DRIFT_DISTANCE + PRO_STORY_TEXT_EXIT_EXTRA_DISTANCE),
+              y: -PRO_STORY_TEXT_EXIT_EXTRA_DISTANCE,
               ease: 'none',
               duration: PRO_STORY_TEXT_FADE_DISTANCE,
             });
@@ -1123,10 +1129,9 @@ function App() {
           ease: 'none',
           duration: PRO_STORY_SCALE_DISTANCE,
         });
-        if (proImageMedia) {
-          proStoryTimeline.to(proImageMedia, {
+        if (proTextsLayer) {
+          proStoryTimeline.to(proTextsLayer, {
             y: 0,
-            scale: 1,
             ease: 'none',
             duration: PRO_STORY_SCALE_DISTANCE,
           }, '<');
@@ -1362,25 +1367,25 @@ function App() {
           <div ref={proStoryPinRef} className="relative flex h-screen w-screen items-center justify-center">
             <div ref={proStoryImageRef} className="relative overflow-hidden">
               <img
-                src="https://storage.googleapis.com/wisdom-images/pro_alone.png"
+                src="/images/pro_alone4.png"
                 alt="People collaborating in a group"
                 className="h-full w-full object-cover"
               />
               <div className="absolute inset-0 bg-black/35" aria-hidden />
-              <div ref={proStoryTextsRef} className="pointer-events-none absolute inset-0 z-10 flex items-end justify-start pb-10 md:pb-16">
-                <p
-                  data-pro-story-text
-                  className="absolute bottom-0 left-10 max-w-[min(500px,82vw)] text-left text-base font-semibold leading-snug text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)] md:left-28 md:text-xl"
-                >
-                  Looking for help used to be a leap of faith.
-                </p>
-                <p
-                  data-pro-story-text
-                  className="absolute bottom-0 left-10 max-w-[min(560px,84vw)] text-left text-sm font-semibold leading-snug text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)] md:left-28 md:text-lg"
-                >
-                  Great skills got lost in noise. Managing bookings was manual, trust was hard to build, and credibility took years to establish.
-                </p>
-              </div>
+            </div>
+            <div ref={proStoryTextsRef} className="pointer-events-none absolute inset-0 z-10 flex items-end justify-start pb-28 md:pb-44">
+              <p
+                data-pro-story-text
+                className="absolute bottom-0 left-14 max-w-[min(500px,78vw)] text-left text-base font-semibold leading-snug text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)] md:left-44 md:text-xl"
+              >
+                Looking for help used to be a leap of faith.
+              </p>
+              <p
+                data-pro-story-text
+                className="absolute bottom-0 left-14 max-w-[min(560px,80vw)] text-left text-sm font-semibold leading-snug text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)] md:left-44 md:text-lg"
+              >
+                Great skills got lost in noise. Managing bookings was manual, trust was hard to build, and credibility took years to establish.
+              </p>
             </div>
           </div>
         </section>
