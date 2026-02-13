@@ -259,6 +259,7 @@ const PRO_STORY_TEXT_HOLD_DISTANCE = 420;
 const PRO_STORY_REVERSE_HOLD_DISTANCE = 440;
 const PRO_STORY_REVERSE_SLIDE_DISTANCE = 480;
 const PRO_STORY_POST_EXIT_HOLD_DISTANCE = 40;
+const PRO_STORY_SCROLL_DISTANCE_MULTIPLIER = 1.7;
 const PRO_STORY_TEXT_ENTRY_OFFSET = 52;
 const PRO_STORY_TEXT_RISE_RATIO = 0.22;
 const PRO_STORY_TEXT_EXIT_EXTRA_DISTANCE = 36;
@@ -1070,13 +1071,14 @@ function App() {
           + PRO_STORY_REVERSE_HOLD_DISTANCE
           + PRO_STORY_REVERSE_SLIDE_DISTANCE
           + PRO_STORY_POST_EXIT_HOLD_DISTANCE;
+        const scaledFullStoryDistance = Math.round(fullStoryDistance * PRO_STORY_SCROLL_DISTANCE_MULTIPLIER);
         const textSequenceDistance = proTextBlocks.length * ((PRO_STORY_TEXT_FADE_DISTANCE * 2) + PRO_STORY_TEXT_HOLD_DISTANCE);
 
         const proStoryTimeline = gsap.timeline({
           scrollTrigger: {
             trigger: proPin,
             start: 'center center',
-            end: () => `+=${fullStoryDistance}`,
+            end: () => `+=${scaledFullStoryDistance}`,
             pin: true,
             pinSpacing: true,
             scrub: true,
