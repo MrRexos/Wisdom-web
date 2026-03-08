@@ -695,6 +695,11 @@ function App() {
   const proStoryTextsRef = useRef(null);
   const untilNowSectionRef = useRef(null);
   const untilNowTextRef = useRef(null);
+  const unifiedSectionRef = useRef(null);
+  const chaosSectionRef = useRef(null);
+  const secureSectionRef = useRef(null);
+  const ctaSectionRef = useRef(null);
+  const howWorksRef = useRef(null);
 
   useEffect(() => {
     // 1. Configuración de Lenis (Scroll Suave)
@@ -967,7 +972,7 @@ function App() {
             window.innerWidth * PRO_STORY_SQUARE_VIEWPORT_FACTOR,
           ),
         );
-        
+
         const getOffscreenOffset = () => {
           const squareSize = getSquareSize();
           return Math.round(
@@ -1183,6 +1188,9 @@ function App() {
       if (endlessSearchSectionRef.current && endlessSearchTextRef.current) {
         const endlessText = endlessSearchTextRef.current;
 
+        let lastSnapTimestamp = 0;
+        const SNAP_COOLDOWN_MS = 900;
+
         const getSectionCenteredScrollY = (sectionEl) => {
           if (!sectionEl) return Number.NaN;
           const sectionRect = sectionEl.getBoundingClientRect();
@@ -1192,16 +1200,21 @@ function App() {
         };
 
         const softlySnapToSectionCenter = (sectionEl) => {
+          const now = Date.now();
+          if (now - lastSnapTimestamp < SNAP_COOLDOWN_MS) return;
+
           const targetY = getSectionCenteredScrollY(sectionEl);
           if (!Number.isFinite(targetY)) return;
 
           const delta = Math.abs(targetY - window.scrollY);
-          if (delta < 8 || delta > 1400) return;
+          if (delta < 8 || delta > 600) return;
+
+          lastSnapTimestamp = now;
 
           if (lenisRef.current) {
             lenisRef.current.scrollTo(targetY, {
-              duration: 0.42,
-              easing: (t) => 1 - ((1 - t) * (1 - t)),
+              duration: 0.55,
+              easing: (t) => 1 - ((1 - t) * (1 - t) * (1 - t)),
             });
             return;
           }
@@ -1245,7 +1258,6 @@ function App() {
             start: "center center",
             end: `+=${SEARCH_PIN_DISTANCE}`,
             onLeave: softlySnapToEndlessCenter,
-            onEnterBack: softlySnapToSearchCenter,
           });
         }
 
@@ -1372,6 +1384,20 @@ function App() {
           },
         });
       }
+
+      [unifiedSectionRef, chaosSectionRef, secureSectionRef, ctaSectionRef].forEach((ref) => {
+        if (ref.current) {
+          ScrollTrigger.create({
+            trigger: ref.current,
+            start: 'center center',
+            end: `+=${ENDLESS_PIN_DISTANCE}`,
+            pin: true,
+            pinSpacing: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          });
+        }
+      });
     }, appRef);
 
     return () => ctx.revert();
@@ -1506,12 +1532,12 @@ function App() {
         </section>
 
         {/* 5. Until now */}
-        <section ref={untilNowSectionRef} className="fade-section min-h-screen mx-auto flex w-full justify-center items-center px-6 py-24">
+        <section ref={untilNowSectionRef} className="fade-section min-h-[50vh] mx-auto flex w-full justify-center items-center px-6 py-24 -mt-[75vh] bg-white relative">
           <p ref={untilNowTextRef} className="text-center text-8xl font-semibold">Until now.</p>
         </section>
 
         {/* 6. Unified */}
-        <section className="fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center gap-12 overflow-hidden pt-20">
+        <section ref={unifiedSectionRef} className="fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center gap-12 overflow-hidden pt-20">
 
           <div className="relative flex flex-1 w-full items-center justify-center">
 
@@ -1576,7 +1602,7 @@ function App() {
         </section>
 
         {/* 7. Chaos */}
-        <section className="fade-section min-h-screen mx-auto flex w-full justify-center items-center px-6 py-20">
+        <section ref={chaosSectionRef} className="fade-section min-h-screen mx-auto flex w-full justify-center items-center px-6 py-20">
           <p className="mx-auto max-w-[1000px] text-center text-[42px] leading-[1.3] font-semibold leading-relaxed text-[#050505]">
             We replaced word-of-mouth with verified data. We replaced uncertainty with transparent profiles. A single ecosystem where quality is visible, and trust is the default.
           </p>
@@ -1623,7 +1649,7 @@ function App() {
         </section>
 
         {/* 10. Secure & Trust */}
-        <section className="fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24">
+        <section ref={secureSectionRef} className="fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24">
 
           {/* Título Serif estilo imagen */}
           <div className="mb-20 text-center">
@@ -1663,7 +1689,7 @@ function App() {
         </section>
 
         {/* 11. CTA Final */}
-        <section className="fade-section w-full min-h-screen w-full py-32 px-6 flex flex-col items-center justify-center text-center">
+        <section ref={ctaSectionRef} className="fade-section w-full min-h-screen w-full py-32 px-6 flex flex-col items-center justify-center text-center">
           <h2 className="text-4xl md:text-[42px] font-bold tracking-tight text-[#050505]">
             Ready to simplify your life?
           </h2>
