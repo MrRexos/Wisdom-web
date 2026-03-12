@@ -244,21 +244,32 @@ const VISIBLE_RANGE = 4;
 const ANGLE_PER_ITEM = 15.5;
 const RADIUS = 340;
 const SEARCH_PIN_DISTANCE = 400;
-const ENDLESS_PIN_DISTANCE = 750;
+const ENDLESS_PIN_DISTANCE = 600;
 const ENDLESS_TEXT_START_SCALE = 0.95;
 const ENDLESS_TEXT_END_SCALE = 1.08;
+const DEFAULT_LENIS_LERP = 0.08;
+const DEFAULT_LENIS_WHEEL_MULTIPLIER = 1;
+const SOFT_PIN_START_VIEWPORT_RATIO = 0.92;
+const SOFT_PIN_ENTRY_CRUISE_DISTANCE = 400;
+const SOFT_PIN_ENTRY_DECEL_DISTANCE = 500;
+const SOFT_PIN_ENTRY_CRUISE_PROGRESS = 0.58;
+const SOFT_PIN_CENTER_HOLD_DISTANCE = 240;
+const SOFT_PIN_EXIT_RELEASE_DISTANCE = 500;
+const SOFT_PIN_EXIT_OFFSCREEN_DISTANCE = 860;
+const SOFT_PIN_EXIT_RELEASE_PROGRESS = 0.18;
+const SOFT_PIN_EXIT_OFFSCREEN_EXTRA_FACTOR = 1.04;
 const INITIAL_ANIMATED_BOX_COLOR = '#F9F8F8';
 const HERO_PARALLAX_MAX_SCROLL_Y = 0;
 const PRO_STORY_SQUARE_VIEWPORT_FACTOR = 0.25;
 const PRO_STORY_SQUARE_MIN_SIZE = 130;
 const PRO_STORY_SQUARE_MAX_SIZE = 520;
 const PRO_STORY_SCALE_DISTANCE = 460;
-const PRO_STORY_PIN_HOLD_DISTANCE = 520;
+const PRO_STORY_PIN_HOLD_DISTANCE = 500;
 const PRO_STORY_TEXT_FADE_DISTANCE = 120;
 const PRO_STORY_TEXT_HOLD_DISTANCE = 420;
 const PRO_STORY_REVERSE_HOLD_DISTANCE = 260;
-const PRO_STORY_REVERSE_SLIDE_DISTANCE = 480;
-const PRO_STORY_POST_EXIT_HOLD_DISTANCE = 40;
+const PRO_STORY_REVERSE_SLIDE_DISTANCE = 560;
+const PRO_STORY_POST_EXIT_HOLD_DISTANCE = 150;
 const PRO_STORY_SCROLL_DISTANCE_MULTIPLIER = 2;
 const PRO_STORY_TEXT_ENTRY_OFFSET = 52;
 const PRO_STORY_TEXT_RISE_RATIO = 0.22;
@@ -378,7 +389,7 @@ const FanItem = ({ item, index, activeIndex }) => {
   );
 };
 
-const InteractiveToggleSection = () => {
+const InteractiveToggleSection = ({ sectionRef }) => {
   const [activeMode, setActiveMode] = useState('Client');
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
@@ -410,7 +421,7 @@ const InteractiveToggleSection = () => {
   const contentItems = allContent[activeMode];
 
   return (
-    <section className="fade-section min-h-[80vh] w-full mx-auto flex flex-col justify-center items-center py-24">
+    <section ref={sectionRef} className="fade-section -mt-[190vh] min-h-[42vh] w-full mx-auto flex flex-col justify-center items-center py-4">
 
       {/* Selector Superior */}
       {/* <SectionHeading title="The dual experience" /> */}
@@ -525,7 +536,7 @@ const CosmosSpiral = ({ serviceFamilies }) => {
 
   return (
     // CAMBIO 1: Se cambió bg-[#F3F3F3] por bg-white
-    <section className="relative h-screen w-full overflow-hidden bg-white flex items-center justify-center" style={{
+    <section className="relative -mt-[130vh] h-[88vh] w-full overflow-hidden bg-white flex items-center justify-center" style={{
       maskImage: 'linear-gradient(to bottom, transparent 0%, black 40%, black 70%, transparent 100%)',
       WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 40%, black 70%, transparent 100%)',
     }}>
@@ -697,6 +708,7 @@ function App() {
   const untilNowTextRef = useRef(null);
   const unifiedSectionRef = useRef(null);
   const chaosSectionRef = useRef(null);
+  const dualExperienceSectionRef = useRef(null);
   const secureSectionRef = useRef(null);
   const ctaSectionRef = useRef(null);
   const howWorksRef = useRef(null);
@@ -704,9 +716,9 @@ function App() {
   useEffect(() => {
     // 1. Configuración de Lenis (Scroll Suave)
     const lenis = new Lenis({
-      lerp: 0.08, // Un poco más alto para que se sienta fluido con los pins
+      lerp: DEFAULT_LENIS_LERP, // Un poco más alto para que se sienta fluido con los pins
       smoothWheel: true,
-      wheelMultiplier: 1,
+      wheelMultiplier: DEFAULT_LENIS_WHEEL_MULTIPLIER,
     });
     lenisRef.current = lenis;
 
@@ -759,6 +771,7 @@ function App() {
       isHeroTopZone = nextIsHeroTopZone;
       if (!isHeroTopZone) {
         heroOnlyParallaxItems.forEach((item) => {
+          if (item.getAttribute('data-disable-mouse-parallax') === 'true') return;
           const activeTween = mouseTweens.get(item);
           if (activeTween) {
             activeTween.kill();
@@ -774,6 +787,7 @@ function App() {
       const y = (e.clientY / window.innerHeight) - 0.5;
 
       parallaxItems.forEach((item) => {
+        if (item.getAttribute('data-disable-mouse-parallax') === 'true') return;
         const heroOnly = item.getAttribute('data-hero-parallax-only') === 'true';
         if (heroOnly && !isHeroTopZone) {
           const activeTween = mouseTweens.get(item);
@@ -845,10 +859,14 @@ function App() {
 
           const parentRect = parent.getBoundingClientRect();
           const boxRect = animatedBox.getBoundingClientRect();
+          const currentX = Number(gsap.getProperty(animatedBox, 'x')) || 0;
+          const currentY = Number(gsap.getProperty(animatedBox, 'y')) || 0;
+          const boxTopWithoutTransform = boxRect.top - currentY;
+          const boxLeftWithoutTransform = boxRect.left - currentX;
 
           gsap.set(animatedBox, {
-            top: boxRect.top - parentRect.top,
-            left: boxRect.left - parentRect.left,
+            top: boxTopWithoutTransform - parentRect.top,
+            left: boxLeftWithoutTransform - parentRect.left,
             bottom: 'auto',
             right: 'auto',
             width: boxRect.width,
@@ -858,16 +876,22 @@ function App() {
 
         const refreshMoveMetrics = () => {
           const source = animatedBox.getBoundingClientRect();
+          const currentX = Number(gsap.getProperty(animatedBox, 'x')) || 0;
+          const currentY = Number(gsap.getProperty(animatedBox, 'y')) || 0;
+          const sourceLeft = source.left - currentX;
+          const sourceTop = source.top - currentY;
           const target = searchImageRef.current.getBoundingClientRect();
           const text = searchTextRef.current.getBoundingClientRect();
           const textCenterY = text.top + (text.height / 2);
 
-          moveMetrics.x = target.left - source.left;
-          moveMetrics.y = textCenterY - (source.top + (target.height / 2)) + SEARCH_IMAGE_VERTICAL_OFFSET;
+          moveMetrics.x = target.left - sourceLeft;
+          moveMetrics.y = textCenterY - (sourceTop + (target.height / 2)) + SEARCH_IMAGE_VERTICAL_OFFSET;
           moveMetrics.width = target.width;
           moveMetrics.height = target.height;
         };
 
+        // Evita que el parallax del mouse contamine la medición inicial.
+        gsap.set(animatedBox, { x: 0, y: 0 });
         lockAnimatedBoxToPixels();
         refreshMoveMetrics();
         gsap.set(animatedBox, {
@@ -1002,11 +1026,11 @@ function App() {
           if (!Number.isFinite(targetY)) return;
 
           const delta = Math.abs(targetY - window.scrollY);
-          if (delta < 8 || delta > 1400) return;
+          if (delta < 12 || delta > 180) return;
 
           if (lenisRef.current) {
             lenisRef.current.scrollTo(targetY, {
-              duration: 0.42,
+              duration: 0.2,
               easing: (t) => 1 - ((1 - t) * (1 - t)),
             });
             return;
@@ -1051,7 +1075,7 @@ function App() {
             trigger: proSection,
             start: 'top bottom',
             end: 'center center',
-            scrub: true,
+            scrub: 0.2,
             invalidateOnRefresh: true,
             onRefresh: resetProStoryImage,
             onLeaveBack: () => {
@@ -1082,7 +1106,7 @@ function App() {
         const proStoryTimeline = gsap.timeline({
           scrollTrigger: {
             trigger: proPin,
-            start: 'center center',
+            start: 'center center+=1',
             end: () => `+=${scaledFullStoryDistance}`,
             pin: true,
             pinSpacing: true,
@@ -1310,11 +1334,11 @@ function App() {
           if (!Number.isFinite(targetY)) return;
 
           const delta = Math.abs(targetY - window.scrollY);
-          if (delta < 8 || delta > 1400) return;
+          if (delta < 12 || delta > 180) return;
 
           if (lenisRef.current) {
             lenisRef.current.scrollTo(targetY, {
-              duration: 0.42,
+              duration: 0.2,
               easing: (t) => 1 - ((1 - t) * (1 - t)),
             });
             return;
@@ -1385,22 +1409,96 @@ function App() {
         });
       }
 
-      [unifiedSectionRef, chaosSectionRef, secureSectionRef, ctaSectionRef].forEach((ref) => {
+      [unifiedSectionRef, chaosSectionRef, dualExperienceSectionRef, secureSectionRef, ctaSectionRef].forEach((ref) => {
         if (ref.current) {
-          ScrollTrigger.create({
-            trigger: ref.current,
-            start: 'center center',
-            end: `+=${ENDLESS_PIN_DISTANCE}`,
-            pin: true,
-            pinSpacing: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
+          const sectionEl = ref.current;
+          const getSoftPinStartTop = () => Math.round(window.innerHeight * SOFT_PIN_START_VIEWPORT_RATIO);
+          const getSoftPinCenterOffset = () => {
+            const sectionHeight = sectionEl.offsetHeight;
+            const centeredTop = (window.innerHeight - sectionHeight) / 2;
+            return Math.round(centeredTop - getSoftPinStartTop());
+          };
+          const getSoftPinEntryCruiseOffset = () => (
+            Math.round(getSoftPinCenterOffset() * SOFT_PIN_ENTRY_CRUISE_PROGRESS)
+          );
+          const getSoftPinExitOffset = () => {
+            const centerOffset = getSoftPinCenterOffset();
+            const offscreenDistance = Math.max(window.innerHeight, sectionEl.offsetHeight);
+            return Math.round(centerOffset - (offscreenDistance * SOFT_PIN_EXIT_OFFSCREEN_EXTRA_FACTOR));
+          };
+          const getSoftPinExitReleaseOffset = () => {
+            const centerOffset = getSoftPinCenterOffset();
+            const exitOffset = getSoftPinExitOffset();
+            return Math.round(
+              centerOffset + ((exitOffset - centerOffset) * SOFT_PIN_EXIT_RELEASE_PROGRESS)
+            );
+          };
+          const softPinTotalDistance =
+            SOFT_PIN_ENTRY_CRUISE_DISTANCE
+            + SOFT_PIN_ENTRY_DECEL_DISTANCE
+            + SOFT_PIN_CENTER_HOLD_DISTANCE
+            + SOFT_PIN_EXIT_RELEASE_DISTANCE
+            + SOFT_PIN_EXIT_OFFSCREEN_DISTANCE;
+
+          gsap.set(sectionEl, {
+            y: 0,
+            willChange: 'transform',
           });
+
+          const softPinTimeline = gsap.timeline({
+            scrollTrigger: {
+              trigger: sectionEl,
+              start: `top ${Math.round(SOFT_PIN_START_VIEWPORT_RATIO * 100)}%`,
+              end: `+=${softPinTotalDistance}`,
+              pin: true,
+              pinSpacing: true,
+              scrub: 1,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+              onRefresh: () => {
+                gsap.set(sectionEl, { y: 0 });
+              },
+              onLeaveBack: () => {
+                gsap.set(sectionEl, { y: 0 });
+              },
+            },
+          });
+
+          softPinTimeline
+            .to(sectionEl, {
+              y: () => getSoftPinEntryCruiseOffset(),
+              ease: 'none',
+              duration: SOFT_PIN_ENTRY_CRUISE_DISTANCE,
+            })
+            .to(sectionEl, {
+              y: () => getSoftPinCenterOffset(),
+              ease: 'none',
+              duration: SOFT_PIN_ENTRY_DECEL_DISTANCE,
+            })
+            .to({}, {
+              duration: SOFT_PIN_CENTER_HOLD_DISTANCE,
+            })
+            .to(sectionEl, {
+              y: () => getSoftPinExitReleaseOffset(),
+              ease: 'none',
+              duration: SOFT_PIN_EXIT_RELEASE_DISTANCE,
+            })
+            .to(sectionEl, {
+              y: () => getSoftPinExitOffset(),
+              ease: 'none',
+              duration: SOFT_PIN_EXIT_OFFSCREEN_DISTANCE,
+            });
         }
       });
     }, appRef);
 
-    return () => ctx.revert();
+    return () => {
+      if (lenisRef.current?.options) {
+        lenisRef.current.options.lerp = DEFAULT_LENIS_LERP;
+        lenisRef.current.options.wheelMultiplier = DEFAULT_LENIS_WHEEL_MULTIPLIER;
+      }
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -1439,6 +1537,7 @@ function App() {
                   style={shape.style}
                   data-speed="40"
                   data-hero-parallax-only={isAnimatedBox ? 'true' : undefined}
+                  data-disable-mouse-parallax={isAnimatedBox ? 'true' : undefined}
                 >
                   {/* SI ES EL CUADRO ANIMADO, RENDERIZAMOS LA IMAGEN DENTRO (OCULTA AL PRINCIPIO) */}
                   {isAnimatedBox && (
@@ -1532,12 +1631,12 @@ function App() {
         </section>
 
         {/* 5. Until now */}
-        <section ref={untilNowSectionRef} className="fade-section min-h-[50vh] mx-auto flex w-full justify-center items-center px-6 py-24 -mt-[75vh] bg-white relative">
+        <section ref={untilNowSectionRef} className="fade-section min-h-[50vh] mx-auto flex w-full justify-center items-center px-6 py-24 -mt-[230vh] bg-white relative">
           <p ref={untilNowTextRef} className="text-center text-8xl font-semibold">Until now.</p>
         </section>
 
         {/* 6. Unified */}
-        <section ref={unifiedSectionRef} className="fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center gap-12 overflow-hidden pt-20">
+        <section ref={unifiedSectionRef} className="fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24 -mt-[-20vh] gap-40 overflow-hidden pt-20">
 
           <div className="relative flex flex-1 w-full items-center justify-center">
 
@@ -1602,19 +1701,19 @@ function App() {
         </section>
 
         {/* 7. Chaos */}
-        <section ref={chaosSectionRef} className="fade-section min-h-screen mx-auto flex w-full justify-center items-center px-6 py-20">
+        <section ref={chaosSectionRef} className="fade-section -mt-[165vh] min-h-screen mx-auto flex w-full justify-center items-center px-6 py-20">
           <p className="mx-auto max-w-[1000px] text-center text-[42px] leading-[1.3] font-semibold leading-relaxed text-[#050505]">
             We replaced word-of-mouth with verified data. We replaced uncertainty with transparent profiles. A single ecosystem where quality is visible, and trust is the default.
           </p>
         </section>
 
         {/* 8. Dual experience */}
-        <InteractiveToggleSection />
+        <InteractiveToggleSection sectionRef={dualExperienceSectionRef} />
 
         <CosmosSpiral serviceFamilies={serviceFamilies} />
 
         {/* 9. Carrousel */}
-        <section className="justify-center mt-30 space-y-10">
+        <section className="justify-center -mt-[12vh] space-y-10">
           <SectionHeading title="How Wisdom works" />
 
           {/* Contenedor del Selector Centrado */}
@@ -1649,7 +1748,7 @@ function App() {
         </section>
 
         {/* 10. Secure & Trust */}
-        <section ref={secureSectionRef} className="fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24">
+        <section ref={secureSectionRef} className="fade-section -mt-[8vh] min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24">
 
           {/* Título Serif estilo imagen */}
           <div className="mb-20 text-center">
@@ -1689,7 +1788,7 @@ function App() {
         </section>
 
         {/* 11. CTA Final */}
-        <section ref={ctaSectionRef} className="fade-section w-full min-h-screen w-full py-32 px-6 flex flex-col items-center justify-center text-center">
+        <section ref={ctaSectionRef} className="fade-section -mt-[8vh] w-full min-h-screen w-full py-32 px-6 flex flex-col items-center justify-center text-center">
           <h2 className="text-4xl md:text-[42px] font-bold tracking-tight text-[#050505]">
             Ready to simplify your life?
           </h2>
