@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { motion, useScroll, useMotionValueEvent, AnimatePresence, useSpring, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from '@studio-freight/lenis';
@@ -279,78 +279,126 @@ const PRO_STORY_IMAGE_HEIGHT_RATIO = 1248 / 832;
 // (negativo = sube la imagen)
 const SEARCH_IMAGE_VERTICAL_OFFSET = -68;
 
-const HowItWorks3D = ({ activeTab, flows }) => {
-  const containerRef = React.useRef(null);
-  const steps = flows[activeTab] || flows.customers;
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
-  });
-
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    const stepLength = 1 / (steps.length - 1);
-    const newIndex = Math.round(latest / stepLength);
-    const clampedIndex = Math.min(Math.max(newIndex, 0), steps.length - 1);
-
-    if (clampedIndex !== activeIndex) {
-      setActiveIndex(clampedIndex);
-    }
-  });
-
-  return (
-    <div ref={containerRef} className="relative h-[250vh] w-full">
-      <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden">
-        <div className="relative mx-auto flex h-full w-full flex-col items-center justify-center gap-10 px-4 md:flex-row md:gap-16">
-          <div className="order-2 flex h-[500px] w-full flex-1 items-center justify-center md:order-1 md:h-[700px] md:justify-start">
-            <div className="relative flex h-full w-full flex-col items-center justify-center md:items-start">
-              <div
-                className="relative h-[700px] w-full max-w-5xl"
-                style={{
-                  maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
-                  WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
-                }}
-              >
-                {/* Aumenté left-8 a left-12 y md:left-24 a md:left-40 para moverlo a la derecha */}
-                <div className="relative h-full w-full left-12 md:left-40">
-                  {steps.map((step, index) => (
-                    <FanItem key={step.id} item={step} index={index} activeIndex={activeIndex} />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="order-1 flex h-[45vh] w-full flex-1 items-center justify-center md:order-2 md:h-auto">
-            <div className="relative flex h-auto w-[220px] items-center justify-center md:w-[300px]">
-              <img
-                src="/images/phone.png"
-                alt="Phone frame"
-                className="relative z-20 h-auto w-full pointer-events-none drop-shadow-2xl"
-              />
-              <div className="absolute left-1/2 top-1/2 z-10 h-[94%] w-[85%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[30px] bg-black md:rounded-[46px]">
-                {steps.map((step, index) => (
-                  <motion.img
-                    key={step.id}
-                    src={step.screen}
-                    alt={step.label}
-                    initial={{ opacity: 0 }}
-                    animate={{
-                      opacity: activeIndex === index ? 1 : 0,
-                      scale: activeIndex === index ? 1 : 1.02,
-                    }}
-                    transition={{ duration: 0.4, ease: 'easeInOut' }}
-                    className="absolute inset-0 h-full w-full object-fill"
-                  />
-                ))}
-              </div>
-            </div>
+const HowItWorks3D = ({ steps, activeIndex }) => (
+  <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center justify-center gap-10 px-4 md:flex-row md:gap-16">
+    <div className="order-2 flex h-[500px] w-full flex-1 items-center justify-center md:order-1 md:h-[700px] md:justify-start">
+      <div className="relative flex h-full w-full flex-col items-center justify-center md:items-start">
+        <div
+          className="relative h-[700px] w-full max-w-5xl"
+          style={{
+            maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+          }}
+        >
+          <div className="relative h-full w-full left-12 md:left-40">
+            {steps.map((step, index) => (
+              <FanItem key={step.id} item={step} index={index} activeIndex={activeIndex} />
+            ))}
           </div>
         </div>
       </div>
     </div>
+
+    <div className="order-1 flex h-[45vh] w-full flex-1 items-center justify-center md:order-2 md:h-auto">
+      <div className="relative flex h-auto w-[220px] items-center justify-center md:w-[300px]">
+        <img
+          src="/images/phone.png"
+          alt="Phone frame"
+          className="pointer-events-none relative z-20 h-auto w-full drop-shadow-2xl"
+        />
+        <div className="absolute left-1/2 top-1/2 z-10 h-[94%] w-[85%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[30px] bg-black md:rounded-[46px]">
+          {steps.map((step, index) => (
+            <motion.img
+              key={step.id}
+              src={step.screen}
+              alt={step.label}
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: activeIndex === index ? 1 : 0,
+                scale: activeIndex === index ? 1 : 1.02,
+              }}
+              transition={{ duration: 0.4, ease: 'easeInOut' }}
+              className="absolute inset-0 h-full w-full object-fill"
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const HowItWorksSection = ({ sectionRef, flows }) => {
+  const [activeTab, setActiveTab] = useState('customers');
+  const steps = flows[activeTab] || flows.customers;
+  const [activeIndex, setActiveIndex] = useState(0);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const st = ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "center center",
+      end: "+=1800", // Define la distancia del scroll para los 4 pasos
+      pin: true,
+      pinSpacing: true,
+      onUpdate: (self) => {
+        const progress = self.progress;
+        const index = Math.min(
+          steps.length - 1,
+          Math.floor(progress * steps.length)
+        );
+        setActiveIndex(index);
+      }
+    });
+
+    return () => {
+      st.kill();
+    };
+  }, [steps.length]);
+
+  return (
+    <section ref={sectionRef} className="relative mt-[20vh] w-full overflow-visible z-0">
+      <div ref={containerRef} className="flex h-screen w-full items-center justify-center overflow-hidden">
+        <div className="mx-auto flex h-full w-full max-w-[1450px] origin-center scale-[0.9] flex-col justify-center gap-8 px-6 pt-28 pb-10 md:scale-[0.94] md:gap-9 md:pt-32 md:pb-14">
+          <div className="flex flex-col items-center gap-6">
+            <SectionHeading title="How Wisdom works" />
+
+            <div className="flex justify-center">
+              <div className="pointer-events-auto relative flex rounded-full bg-[#F3F4F6] p-1">
+                {['customers', 'professionals'].map((tab) => (
+                  <button
+                    key={tab}
+                    type="button"
+                    onClick={() => setActiveTab(tab)}
+                    className={`relative z-10 px-6 py-2 text-sm font-semibold transition-colors duration-200 ${activeTab === tab ? 'text-[#050505]' : 'text-[#6B7280]'
+                      }`}
+                  >
+                    {activeTab === tab && (
+                      <motion.div
+                        layoutId="works-toggle-bg"
+                        className="absolute inset-0 rounded-full bg-white shadow-sm"
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      />
+                    )}
+
+                    <span className="relative z-10 capitalize">
+                      {tab === 'customers' ? 'For customers' : 'For professionals'}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <HowItWorks3D steps={steps} activeIndex={activeIndex} />
+        </div>
+      </div>
+    </section>
   );
 };
 
@@ -527,7 +575,7 @@ const CosmosSpiral = ({ serviceFamilies }) => {
     if (contentPool.length === 0) return;
     const interval = setInterval(() => {
       setTextIndex((prev) => (prev + 1) % contentPool.length);
-    }, 2000); // Cambia cada 2 segundos
+    }, 3600); // Cambia más lento
     return () => clearInterval(interval);
   }, [contentPool]);
 
@@ -536,7 +584,7 @@ const CosmosSpiral = ({ serviceFamilies }) => {
 
   return (
     // CAMBIO 1: Se cambió bg-[#F3F3F3] por bg-white
-    <section className="relative -mt-[130vh] h-[88vh] w-full overflow-hidden bg-white flex items-center justify-center" style={{
+    <section className="relative z-10 -mt-[130vh] h-[120vh] w-full overflow-hidden bg-white flex items-center justify-center" style={{
       maskImage: 'linear-gradient(to bottom, transparent 0%, black 40%, black 70%, transparent 100%)',
       WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 40%, black 70%, transparent 100%)',
     }}>
@@ -629,7 +677,7 @@ const FloatingImage = ({ index, total, images }) => {
   const randomParams = useMemo(() => {
     const angle = Math.random() * 360; // Ángulo aleatorio
     const radius = 80 + Math.random() * 40; // Distancia del centro (en vw/vh relativos)
-    const duration = 10 + Math.random() * 10; // Duración lenta (10-20s)
+    const duration = 18 + Math.random() * 14; // Duración aún más lenta (18-32s)
     const delay = (index / total) * 15; // Delay escalonado para que no salgan todas a la vez
     const size = 100 + Math.random() * 150; // Tamaño aleatorio entre 100px y 250px
     const rotation = Math.random() * 360; // Rotación inicial de la foto
@@ -689,8 +737,6 @@ const FloatingImage = ({ index, total, images }) => {
 
 
 function App() {
-  const [activeTab, setActiveTab] = useState('customers');
-
   // --- AÑADIR ESTO ---
   const lenisRef = useRef(null);
   const appRef = useRef(null);
@@ -734,6 +780,7 @@ function App() {
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
+    window.scrollTo(0, 0);
 
     // 2. Lógica de "Pinning" (1200px por sección)
     // Seleccionamos solo las secciones de texto/imagen que queremos congelar
@@ -1456,11 +1503,17 @@ function App() {
               anticipatePin: 1,
               invalidateOnRefresh: true,
               onRefresh: () => {
-                gsap.set(sectionEl, { y: 0 });
+                gsap.set(sectionEl, { y: 0, opacity: 1 });
               },
               onLeaveBack: () => {
-                gsap.set(sectionEl, { y: 0 });
+                gsap.set(sectionEl, { y: 0, opacity: 1 });
               },
+              onLeave: () => {
+                gsap.set(sectionEl, { opacity: 0 });
+              },
+              onEnterBack: () => {
+                gsap.set(sectionEl, { opacity: 1 });
+              }
             },
           });
 
@@ -1631,7 +1684,7 @@ function App() {
         </section>
 
         {/* 5. Until now */}
-        <section ref={untilNowSectionRef} className="fade-section min-h-[50vh] mx-auto flex w-full justify-center items-center px-6 py-24 -mt-[230vh] bg-white relative">
+        <section ref={untilNowSectionRef} className="fade-section min-h-[50vh] mx-auto flex w-full justify-center items-center px-6 py-24 -mt-[210vh] bg-white relative">
           <p ref={untilNowTextRef} className="text-center text-8xl font-semibold">Until now.</p>
         </section>
 
@@ -1712,43 +1765,14 @@ function App() {
 
         <CosmosSpiral serviceFamilies={serviceFamilies} />
 
-        {/* 9. Carrousel */}
-        <section className="justify-center -mt-[12vh] space-y-10">
-          <SectionHeading title="How Wisdom works" />
-
-          {/* Contenedor del Selector Centrado */}
-          <div className="flex justify-center">
-            <div className="rounded-full bg-[#F3F4F6] p-1 flex relative">
-              {['customers', 'professionals'].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`relative z-10 px-6 py-2 text-sm font-semibold transition-colors duration-200 ${activeTab === tab ? 'text-[#050505]' : 'text-[#6B7280]'
-                    }`}
-                >
-                  {/* Fondo Blanco Animado */}
-                  {activeTab === tab && (
-                    <motion.div
-                      layoutId="works-toggle-bg" // ID único para esta sección
-                      className="absolute inset-0 rounded-full bg-white shadow-sm"
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    />
-                  )}
-
-                  {/* Texto (con z-10 para estar encima del fondo blanco) */}
-                  <span className="relative z-10 capitalize">
-                    {tab === 'customers' ? 'For customers' : 'For professionals'}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <HowItWorks3D activeTab={activeTab} flows={howItWorksFlows} />
-        </section>
+        {/* 9. How Wisdom works */}
+        <HowItWorksSection
+          sectionRef={howWorksRef}
+          flows={howItWorksFlows}
+        />
 
         {/* 10. Secure & Trust */}
-        <section ref={secureSectionRef} className="fade-section -mt-[8vh] min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24">
+        <section ref={secureSectionRef} className="fade-section mt-[200vh] min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24">
 
           {/* Título Serif estilo imagen */}
           <div className="mb-20 text-center">
@@ -1788,7 +1812,7 @@ function App() {
         </section>
 
         {/* 11. CTA Final */}
-        <section ref={ctaSectionRef} className="fade-section -mt-[8vh] w-full min-h-screen w-full py-32 px-6 flex flex-col items-center justify-center text-center">
+        <section ref={ctaSectionRef} className="fade-section -mt-[180vh] w-full min-h-screen py-24 px-6 flex flex-col items-center justify-center text-center">
           <h2 className="text-4xl md:text-[42px] font-bold tracking-tight text-[#050505]">
             Ready to simplify your life?
           </h2>
@@ -1802,7 +1826,7 @@ function App() {
 
       </main>
 
-      <footer className="bg-[#050505] py-16 text-white">
+      <footer className="-mt-[310vh] bg-[#050505] py-16 text-white relative z-20">
         <div className="mx-auto max-w-6xl px-4">
           <div className="grid gap-10 md:grid-cols-4">
             <div>

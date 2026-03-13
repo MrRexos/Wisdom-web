@@ -17,6 +17,7 @@ body {
   min-height: 100vh;
   background-color: #ffffff;
   color: #050505;
+  overflow: hidden;
 }
 
 html,
@@ -24,6 +25,11 @@ body {
   overflow-x: hidden;
 }
 
+html {
+  overflow-y: auto;
+}
+
 #root {
   min-height: 100vh;
+  overflow: visible;
 }
