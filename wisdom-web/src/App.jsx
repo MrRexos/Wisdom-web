@@ -217,16 +217,16 @@ const serviceFamilies = [
 
 const howItWorksFlows = {
   customers: [
-    { id: 'search', label: 'Search', description: 'Search by service, category or location to see trusted professionals around you.', screen: sharedScreens[0] },
-    { id: 'compare', label: 'Compare', description: 'Compare prices, reviews, photos, availability and distance in one clean view.', screen: sharedScreens[1] },
-    { id: 'book', label: 'Book', description: 'Pick a time that works for you, confirm instantly and keep every detail in one place.', screen: sharedScreens[2] },
-    { id: 'pay', label: 'Pay', description: 'Pay securely in the app and save your favourites for one-tap rebooking next time.', screen: sharedScreens[3] },
+    { id: 'search', label: 'Search', screen: sharedScreens[0] },
+    { id: 'choose', label: 'Choose',  screen: sharedScreens[1] },
+    { id: 'reserve', label: 'Reserve',  screen: sharedScreens[2] },
+    { id: 'relax', label: 'Relax',  screen: sharedScreens[3] },
   ],
   professionals: [
-    { id: 'create', label: 'Create', description: 'Create a professional profile with your services, prices, locations, photos and availability.', screen: sharedScreens[0] },
-    { id: 'decide', label: 'Decide', description: 'Receive clear booking requests and decide which ones to accept or reschedule.', screen: sharedScreens[1] },
-    { id: 'work', label: 'Work', description: 'Deliver your services while Wisdom keeps bookings, messages and details organised.', screen: sharedScreens[2] },
-    { id: 'charge', label: 'Charge', description: 'Get paid securely through Wisdom, with invoices and payouts handled for you.', screen: sharedScreens[3] },
+    { id: 'publish', label: 'Publish',  screen: sharedScreens[0] },
+    { id: 'manage', label: 'Manage',  screen: sharedScreens[1] },
+    { id: 'deliver', label: 'Deliver',  screen: sharedScreens[2] },
+    { id: 'earn', label: 'Earn',  screen: sharedScreens[3] },
   ],
 };
 
