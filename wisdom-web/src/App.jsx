@@ -6,7 +6,7 @@ import Lenis from '@studio-freight/lenis';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const navLinks = ['Use cases', 'Services', 'Features', 'Testimonials', 'Pricing'];
+const navLinks = ['Vision', 'How it works', 'For professionals', 'Safety'];
 
 const heroTiles = [
   // Arriba Izquierda
@@ -93,32 +93,27 @@ const sharedScreens = [
 
 const securityFeatures = [
   {
-    title: 'Transparent and local',
-    description: 'See total prices, fees and policies before you book. No hidden surprises when you confirm.',
+    title: 'Proven Reputation',
+    description: 'Talent is open to everyone, but trust is earned. Reviews are locked to actual bookings, ensuring every star reflects a real job completed. You hire based on performance, not promises.',
     icon: (
-      // strokeWidth cambiado a "2"
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+      // Icono de estrella/reputación
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
     ),
   },
   {
-    title: 'Wisdom Guarantee',
-    description: 'If something does not go as expected, our Wisdom Guarantee and clear booking policies help you get support.',
+    title: 'Protected Payments',
+    description: 'No hidden fees. You pay a small deposit to book, and the rest is secured. If plans change, our Wisdom Guarantee has you covered.',
     icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="m9 12 2 2 4-4" /></svg>
+      // Icono de candado/escudo
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
     ),
   },
   {
-    title: 'Verified professionals',
-    description: 'Professionals are required to provide key information and are rated after every booking, helping you choose with confidence.',
+    title: 'Privacy by Design',
+    description: 'Your phone number and payment details never leave the app. Chat, share photos, and pay securely inside our encrypted bubble.',
     icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
-    ),
-  },
-  {
-    title: 'Control over your data',
-    description: 'You decide what to share with professionals. Your messages, photos and payment details stay inside Wisdom.',
-    icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+      // Icono de privacidad/escudo con check
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="m9 12 2 2 4-4" /></svg>
     ),
   },
 ];
@@ -1564,9 +1559,9 @@ function App() {
   return (
     <div ref={appRef} className="min-h-screen bg-white text-[#050505]">
 
-      <header className="fixed backdrop-blur-xl top-4 left-1/2 z-20 flex w-[min(1100px,calc(100%-2rem))] -translate-x-1/2 items-center rounded-full bg-white/70 px-4 py-3 font-semibold">
+      <header className="fixed backdrop-blur-xl top-4 left-1/2 z-20 flex w-[min(1100px,calc(100%-2rem))] -translate-x-1/2 items-center rounded-full  px-4 py-3 font-semibold">
         <div className="flex flex-1 justify-start text-lg">Wisdom</div>
-        <nav className="hidden flex-none flex-wrap items-center justify-center gap-4 md:flex">
+        <nav className="hidden flex-none flex-wrap items-center justify-center gap-8 md:flex">
           {navLinks.map((link) => (
             <a key={link} href="#" className="text-sm font-semibold text-[#4c5563] hover:text-[#050505]">
               {link}
@@ -1578,7 +1573,7 @@ function App() {
         </div>
       </header>
 
-      <main className=" pb-20">
+      <main className="">
 
         {/* 1. PORTADA - IMPORTANTE: Quitamos 'overflow-hidden' para que el cuadro pueda salir */}
         <section className="relative flex min-h-screen items-center justify-center px-6 fade-section z-10">
@@ -1625,13 +1620,39 @@ function App() {
           </div>
 
           {/* Contenido Texto Hero - Sin cambios */}
-          <div className="relative z-10 mx-auto max-w-xl text-center justify-center items-center">
-            <h1 className="text-[44px] sm:text-[48px] font-semibold text-[#464545] leading-tight">
-              Wisdom is where you find a{" "}
-              <span className="text-[55px] sm:text-[55px] text-[#050505] font-bold">Professional.</span>
+          <div className="relative z-10 mx-auto max-w-4xl text-center flex flex-col items-center justify-center px-4">
+            
+            {/* Título Principal */}
+            <h1 className="text-[43px] sm:text-[54px] md:text-[65px] font-bold text-[#111111] leading-[1.1] tracking-tight">
+              Hire any professional.<br />Book with confidence.
             </h1>
-            <p className="text-2xl font-medium text-[#9F9F9F] mt-7">The first unified marketplace for every service. Simple. Secure. One app.</p>
-            <button className="rounded-full bg-[#050505] mt-12 px-8 py-3 text-base font-semibold text-white hover:bg-black">Download for free</button>
+            
+            {/* Subtítulo */}
+            <p className="mt-6 text-2xl md:text-[25px] font-medium text-[#9F9F9F] leading-relaxed max-w-2xl">
+              The first marketplace where trust is the default.<br className="hidden md:block" />
+              Simple. Secure payments. Verified reviews. One app.
+            </p>
+            
+            {/* Contenedor de Botones */}
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+              
+              {/* Botón App Store */}
+              <button className="flex items-center justify-center gap-2.5 rounded-[24px] bg-[#111111] px-8 py-3.5 text-[15px] font-semibold text-white transition-all hover:scale-105 hover:bg-black">
+                <svg viewBox="0 0 384 512" width="18" height="18" fill="currentColor">
+                  <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+                </svg>
+                App Store
+              </button>
+              
+              {/* Botón Play Store */}
+              <button className="flex items-center justify-center gap-2.5 rounded-[24px] bg-[#111111] px-8 py-3.5 text-[15px] font-semibold text-white transition-all hover:scale-105 hover:bg-black">
+                <svg viewBox="0 0 512 512" width="18" height="18" fill="currentColor">
+                  <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/>
+                </svg>
+                Play Store
+              </button>
+              
+            </div>
           </div>
         </section>
 
@@ -1781,35 +1802,35 @@ function App() {
         {/* 10. Secure & Trust */}
         <section ref={secureSectionRef} className="fade-section mt-[200vh] min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24">
 
-          {/* Título Serif estilo imagen */}
+          {/* Título de la sección */}
           <div className="mb-20 text-center">
-            <h2 className="text-4xl md:text-5xl font-semibold  text-[#050505]">
+            <h2 className="text-4xl md:text-5xl font-semibold text-[#050505]">
               Wisdom is security
             </h2>
           </div>
 
-          {/* Grid de tarjetas */}
-          <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {/* Grid de tarjetas: Cambiado a lg:grid-cols-3 */}
+          <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-3">
             {securityFeatures.map((feature, index) => (
               <motion.div
                 key={feature.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -8 }} // Animación suave al pasar el ratón (subir)
-                className="group flex flex-col rounded-3xl bg-[#F9FAFB] p-6 transition-shadow duration-300 "
+                whileHover={{ y: -8 }} // Animación suave al pasar el ratón
+                className="group flex flex-col rounded-[32px] bg-[#F9FAFB] p-8 md:p-10 transition-transform duration-300"
               >
-                {/* Contenedor del Icono (Caja blanca dentro de la tarjeta gris) */}
-                <div className="mb-6 flex h-24 w-full items-center justify-center rounded-2xl bg-white transition-transform duration-300 group-hover:scale-105">
-                  <div className="text-[#050505]">
+                {/* Contenedor del Icono: Ahora es un círculo pequeño a la izquierda */}
+                <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm border border-gray-100">
+                  <div className="text-[#3b82f6]"> {/* Puedes cambiar este color si lo prefieres negro como text-[#050505] */}
                     {feature.icon}
                   </div>
                 </div>
 
-                {/* Textos */}
-                <div className="flex flex-col flex-grow">
-                  <h3 className="mb-3 text-lg font-bold text-[#050505]">{feature.title}</h3>
-                  <p className="text-sm font-medium leading-relaxed text-[#6B7280]">
+                {/* Textos alineados a la izquierda */}
+                <div className="flex flex-col flex-grow text-left">
+                  <h3 className="mb-4 text-xl font-bold text-[#050505]">{feature.title}</h3>
+                  <p className="text-base font-medium leading-relaxed text-[#6B7280]">
                     {feature.description}
                   </p>
                 </div>
@@ -1818,63 +1839,60 @@ function App() {
           </div>
         </section>
 
-        {/* 11. CTA Final */}
-        <section ref={ctaSectionRef} className="fade-section -mt-[180vh] w-full min-h-screen py-24 px-6 flex flex-col items-center justify-center text-center">
-          <h2 className="text-4xl md:text-[42px] font-bold tracking-tight text-[#050505]">
-            Ready to simplify your life?
-          </h2>
-          <p className="mt-5 text-lg md:text-xl text-[#9ca3af] font-medium max-w-md leading-relaxed">
-            Join the new standard for services today on Apple and Android.
-          </p>
-          <button className="mt-10 rounded-full bg-[#0F0F0F] px-8 py-3 text-sm font-bold text-white transition-transform hover:">
-            Give Wisdom a try
-          </button>
+        {/* 11. CTA Final & Footer */}
+        <section ref={ctaSectionRef} className="fade-section -mt-[180vh] w-full min-h-screen relative flex flex-col items-center justify-center bg-white">
+          
+          {/* Contenido del CTA (Centrado en la pantalla) */}
+          <div className="flex flex-col items-center justify-center text-center px-6">
+            <h2 className="text-4xl md:text-[42px] font-bold tracking-tight text-[#050505]">
+              Ready to simplify your life?
+            </h2>
+            <p className="mt-5 text-lg md:text-xl text-[#9ca3af] font-medium max-w-md leading-relaxed">
+              Join the new standard for services today on Apple and Android.
+            </p>
+            <button className="mt-10 rounded-full bg-[#0F0F0F] px-8 py-3 text-sm font-bold text-white transition-transform hover:scale-105">
+              Give Wisdom a try
+            </button>
+          </div>
+
+          {/* FOOTER (Fijado en la parte inferior de esta sección) */}
+          <div className="absolute bottom-0 w-full px-6 py-8 md:px-12 flex flex-col xl:flex-row justify-between items-center text-[15px] bg-white">
+            
+            {/* Izquierda: Marca y Copyright */}
+            <div className="flex items-center gap-3 mb-6 xl:mb-0">
+              <span className="font-medium text-[#050505]">WISDOM</span>
+              <span className="text-[#9ca3af]">© 2026</span>
+            </div>
+
+            {/* Derecha: Enlaces */}
+            <div className="flex flex-col md:flex-row items-center gap-8 md:gap-14">
+              
+              {/* Grupo Connect */}
+              <div className="flex items-center gap-4">
+                <span className="font-medium text-[#050505]">Connect</span>
+                <div className="flex flex-wrap items-center gap-4 text-[#9ca3af]">
+                  <a href="#" className="hover:text-[#050505] transition-colors">Instagram</a>
+                  <a href="#" className="hover:text-[#050505] transition-colors">TikTok</a>
+                  <a href="#" className="hover:text-[#050505] transition-colors">X</a>
+                </div>
+              </div>
+
+              {/* Grupo More */}
+              <div className="flex items-center gap-4">
+                <span className="font-medium text-[#050505]">More</span>
+                <div className="flex items-center gap-4 text-[#9ca3af]">
+                  <a href="#" className="hover:text-[#050505] transition-colors">Terms</a>
+                  <a href="#" className="hover:text-[#050505] transition-colors">Privacy</a>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </section>
 
       </main>
 
-      <footer className="-mt-[310vh] bg-[#050505] py-16 text-white relative z-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="grid gap-10 md:grid-cols-4">
-            <div>
-              <p className="text-lg font-semibold">Primary navigation</p>
-              <ul className="mt-4 space-y-2 text-sm text-white/80">
-                {footerNav.primary.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <p className="text-lg font-semibold">Secondary navigation</p>
-              <ul className="mt-4 space-y-2 text-sm text-white/80">
-                {footerNav.secondary.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <p className="text-lg font-semibold">Use Cases</p>
-              <ul className="mt-4 space-y-2 text-sm text-white/80">
-                {footerNav.useCases.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <p className="text-lg font-semibold">Legal</p>
-              <ul className="mt-4 space-y-2 text-sm text-white/80">
-                {footerNav.legal.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div className="mt-10 border-t border-white/20 pt-8 text-sm text-white/70">
-            <p>All rights reserved.</p>
-            <p>Built in Barcelona, Spain – made for people who value their time.</p>
-          </div>
-        </div>
-      </footer>
+      
     </div>
   );
 }
