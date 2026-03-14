@@ -5,6 +5,18 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from '@studio-freight/lenis';
 
 gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== 'undefined') {
+  if ('scrollRestoration' in window.history) {
+    window.history.scrollRestoration = 'manual';
+  }
+  // Evitar que ScrollTrigger restaure la posición del scroll
+  ScrollTrigger.clearScrollMemory && ScrollTrigger.clearScrollMemory("manual");
+  window.scrollTo(0, 0);
+  
+  window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+  };
+}
 
 const navLinks = ['Vision', 'How it works', 'For professionals', 'Safety'];
 const EXPERIENCE_TABS = ['customers', 'professionals'];
@@ -584,7 +596,7 @@ const CosmosSpiral = ({ serviceFamilies }) => {
 
   return (
     // CAMBIO 1: Se cambió bg-[#F3F3F3] por bg-white
-    <section className="relative z-10 -mt-[130vh] h-[120vh] w-full overflow-hidden bg-white flex items-center justify-center" style={{
+    <section className="relative z-10 -mt-[640vh] h-[120vh] w-full overflow-hidden bg-white flex items-center justify-center" style={{
       maskImage: 'linear-gradient(to bottom, transparent 0%, black 40%, black 70%, transparent 100%)',
       WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 40%, black 70%, transparent 100%)',
     }}>
@@ -778,10 +790,13 @@ function App() {
     };
     rafId = requestAnimationFrame(raf);
 
-    if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'manual';
-    }
-    window.scrollTo(0, 0);
+    // Mantenemos esto por si acaso, pero el forzado principal ya está arriba del todo
+    requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+      if (lenisRef.current) {
+        lenisRef.current.scrollTo(0, { immediate: true });
+      }
+    });
 
     // 2. Lógica de "Pinning" (1200px por sección)
     // Seleccionamos solo las secciones de texto/imagen que queremos congelar
@@ -1074,7 +1089,7 @@ function App() {
           if (!Number.isFinite(targetY)) return;
 
           const delta = Math.abs(targetY - window.scrollY);
-          if (delta < 12 || delta > 180) return;
+          if (delta < 12 || delta > 60) return;
 
           if (lenisRef.current) {
             lenisRef.current.scrollTo(targetY, {
@@ -1279,7 +1294,7 @@ function App() {
           if (!Number.isFinite(targetY)) return;
 
           const delta = Math.abs(targetY - window.scrollY);
-          if (delta < 8 || delta > 600) return;
+          if (delta < 8 || delta > 60) return;
 
           lastSnapTimestamp = now;
 
@@ -1382,7 +1397,7 @@ function App() {
           if (!Number.isFinite(targetY)) return;
 
           const delta = Math.abs(targetY - window.scrollY);
-          if (delta < 12 || delta > 180) return;
+          if (delta < 12 || delta > 60) return;
 
           if (lenisRef.current) {
             lenisRef.current.scrollTo(targetY, {
@@ -1457,9 +1472,19 @@ function App() {
         });
       }
 
-      [unifiedSectionRef, chaosSectionRef, dualExperienceSectionRef, secureSectionRef, ctaSectionRef].forEach((ref) => {
+      [chaosSectionRef, dualExperienceSectionRef, secureSectionRef].forEach((ref) => {
         if (ref.current) {
           const sectionEl = ref.current;
+          const isDual = ref === dualExperienceSectionRef;
+          const isSecure = ref === secureSectionRef;
+          let currentHoldDistance = SOFT_PIN_CENTER_HOLD_DISTANCE;
+          
+          if (isDual) {
+            currentHoldDistance = SOFT_PIN_CENTER_HOLD_DISTANCE * 3.5; // Reducido un poquito (antes era 4)
+          } else if (isSecure) {
+            currentHoldDistance = SOFT_PIN_CENTER_HOLD_DISTANCE * 3.3; // Un pelín menos que el dual
+          }
+          
           const getSoftPinStartTop = () => Math.round(window.innerHeight * SOFT_PIN_START_VIEWPORT_RATIO);
           const getSoftPinCenterOffset = () => {
             const sectionHeight = sectionEl.offsetHeight;
@@ -1481,12 +1506,8 @@ function App() {
               centerOffset + ((exitOffset - centerOffset) * SOFT_PIN_EXIT_RELEASE_PROGRESS)
             );
           };
-          const softPinTotalDistance =
-            SOFT_PIN_ENTRY_CRUISE_DISTANCE
-            + SOFT_PIN_ENTRY_DECEL_DISTANCE
-            + SOFT_PIN_CENTER_HOLD_DISTANCE
-            + SOFT_PIN_EXIT_RELEASE_DISTANCE
-            + SOFT_PIN_EXIT_OFFSCREEN_DISTANCE;
+          
+          const softPinTotalDistance = SOFT_PIN_ENTRY_CRUISE_DISTANCE + SOFT_PIN_ENTRY_DECEL_DISTANCE + currentHoldDistance + SOFT_PIN_EXIT_RELEASE_DISTANCE + SOFT_PIN_EXIT_OFFSCREEN_DISTANCE;
 
           gsap.set(sectionEl, {
             y: 0,
@@ -1530,7 +1551,7 @@ function App() {
               duration: SOFT_PIN_ENTRY_DECEL_DISTANCE,
             })
             .to({}, {
-              duration: SOFT_PIN_CENTER_HOLD_DISTANCE,
+              duration: currentHoldDistance,
             })
             .to(sectionEl, {
               y: () => getSoftPinExitReleaseOffset(),
@@ -1544,6 +1565,145 @@ function App() {
             });
         }
       });
+
+      // Animación de Unified Section (Fotos saliendo del logo + Soft Pin)
+      if (unifiedSectionRef.current) {
+        const sectionEl = unifiedSectionRef.current;
+        const photos = gsap.utils.toArray('.unified-photo', sectionEl);
+        const unifiedText = sectionEl.querySelector('.unified-text');
+        
+        gsap.set(photos, {
+          x: 0,
+          y: 0,
+          rotation: 0,
+          scale: 0.2,
+          opacity: 0,
+          zIndex: 1
+        });
+        
+        gsap.set(unifiedText, {
+          opacity: 0,
+          y: 20
+        });
+
+        gsap.set(sectionEl, {
+          y: 0,
+          willChange: 'transform',
+        });
+
+        const getSoftPinStartTop = () => Math.round(window.innerHeight * SOFT_PIN_START_VIEWPORT_RATIO);
+        const getSoftPinCenterOffset = () => {
+          const sectionHeight = sectionEl.offsetHeight;
+          const centeredTop = (window.innerHeight - sectionHeight) / 2;
+          return Math.round(centeredTop - getSoftPinStartTop());
+        };
+        const getSoftPinEntryCruiseOffset = () => (
+          Math.round(getSoftPinCenterOffset() * SOFT_PIN_ENTRY_CRUISE_PROGRESS)
+        );
+        const getSoftPinExitOffset = () => {
+          const centerOffset = getSoftPinCenterOffset();
+          const offscreenDistance = Math.max(window.innerHeight, sectionEl.offsetHeight);
+          return Math.round(centerOffset - (offscreenDistance * SOFT_PIN_EXIT_OFFSCREEN_EXTRA_FACTOR));
+        };
+        const getSoftPinExitReleaseOffset = () => {
+          const centerOffset = getSoftPinCenterOffset();
+          const exitOffset = getSoftPinExitOffset();
+          return Math.round(
+            centerOffset + ((exitOffset - centerOffset) * SOFT_PIN_EXIT_RELEASE_PROGRESS)
+          );
+        };
+        
+        const customHoldDistance = 2000; // Espacio para la animación de las fotos
+        const customEntryDistance = SOFT_PIN_ENTRY_DECEL_DISTANCE * 3; // Triplicamos la distancia de entrada para que suba mucho más lento
+        const softPinTotalDistance = SOFT_PIN_ENTRY_CRUISE_DISTANCE + customEntryDistance + customHoldDistance + SOFT_PIN_EXIT_RELEASE_DISTANCE + SOFT_PIN_EXIT_OFFSCREEN_DISTANCE;
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionEl,
+            start: `top ${Math.round(SOFT_PIN_START_VIEWPORT_RATIO * 100)}%`,
+            end: `+=${softPinTotalDistance}`,
+            pin: true,
+            pinSpacing: true,
+            scrub: 1,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onRefresh: () => {
+              gsap.set(sectionEl, { y: 0, opacity: 1 });
+            },
+            onLeaveBack: () => {
+              gsap.set(sectionEl, { y: 0, opacity: 1 });
+            },
+            onLeave: () => {
+              gsap.set(sectionEl, { opacity: 0 });
+            },
+            onEnterBack: () => {
+              gsap.set(sectionEl, { opacity: 1 });
+            }
+          }
+        });
+
+        // Fase 1: Subida de la sección (entrada suave)
+        tl.to(sectionEl, {
+          y: () => getSoftPinEntryCruiseOffset(),
+          ease: 'none',
+          duration: SOFT_PIN_ENTRY_CRUISE_DISTANCE,
+        }, 0)
+        .to(sectionEl, {
+          y: () => getSoftPinCenterOffset(),
+          ease: 'power2.out', // Un frenado suave para no hacer "teleport"
+          duration: customEntryDistance, // Hacemos que la entrada sea mucho más lenta
+        }, SOFT_PIN_ENTRY_CRUISE_DISTANCE);
+
+        // Expansión sincronizada con la subida
+        tl.to(photos, {
+          x: (i, el) => window.innerWidth < 768 ? el.dataset.mobileX : el.dataset.x,
+          y: (i, el) => window.innerWidth < 768 ? el.dataset.mobileY : el.dataset.y,
+          rotation: (i, el) => parseFloat(el.dataset.rotate),
+          scale: 1,
+          opacity: 1,
+          ease: "power2.out",
+          duration: SOFT_PIN_ENTRY_CRUISE_DISTANCE + customEntryDistance // Ajustamos la duración de las fotos para que coincida
+        }, 0);
+
+        // Fase 2: Mantenimiento (sección en el centro) y animación de fotos/texto
+        const holdStart = SOFT_PIN_ENTRY_CRUISE_DISTANCE + customEntryDistance;
+        
+        // Pausa para observar el caos
+        tl.to({}, { duration: customHoldDistance * 0.2 }, holdStart)
+        // Retracción
+        .to(photos, {
+          x: 0,
+          y: 0,
+          rotation: 0,
+          scale: 0.2,
+          opacity: 0,
+          duration: customHoldDistance * 0.4,
+          ease: "power1.inOut",
+        }, holdStart + customHoldDistance * 0.2)
+        // Aparición de texto
+        .to(unifiedText, {
+          opacity: 1,
+          y: 0,
+          duration: customHoldDistance * 0.3,
+          ease: "power2.out"
+        }, holdStart + customHoldDistance * 0.45)
+        // Pausa final con texto
+        .to({}, { duration: customHoldDistance * 0.15 }, holdStart + customHoldDistance * 0.85);
+
+        // Fase 3: Salida suave de la sección
+        const exitStart = holdStart + customHoldDistance;
+        tl.to(sectionEl, {
+          y: () => getSoftPinExitReleaseOffset(),
+          ease: 'none',
+          duration: SOFT_PIN_EXIT_RELEASE_DISTANCE,
+        }, exitStart)
+        .to(sectionEl, {
+          y: () => getSoftPinExitOffset(),
+          ease: 'none',
+          duration: SOFT_PIN_EXIT_OFFSCREEN_DISTANCE,
+        }, exitStart + SOFT_PIN_EXIT_RELEASE_DISTANCE);
+      }
+
     }, appRef);
 
     return () => {
@@ -1774,12 +1934,13 @@ function App() {
         </section>
 
         {/* 6. Unified */}
-        <section ref={unifiedSectionRef} className="fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24 -mt-[-20vh] gap-40 overflow-hidden pt-20">
+        <section ref={unifiedSectionRef} className="fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24 -mt-[-20vh] gap-40 overflow-hidden pt-20 bg-white relative z-10">
 
           <div className="relative flex flex-1 w-full items-center justify-center">
 
             {/* 1. MEDITACIÓN */}
-            <div className="absolute top-[2%] right-[35%] w-32 h-20 md:w-56 md:h-36 shadow-lg rotate-1">
+            <div className="unified-photo absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-20 md:w-56 md:h-36 shadow-lg" 
+                 data-x="18vw" data-y="-25vh" data-rotate="8" data-mobile-x="22vw" data-mobile-y="-20vh">
               <img
                 src="https://storage.googleapis.com/wisdom-images/53a50b05-32d7-4e90-86ce-62702bc97d65.jpeg"
                 alt="Meditation"
@@ -1788,7 +1949,8 @@ function App() {
             </div>
 
             {/* 2. CATERING */}
-            <div className="absolute top-[14%] left-[20%] md:left-[21%] w-36 h-24 md:w-60 md:h-40 shadow-lg -rotate-2">
+            <div className="unified-photo absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-24 md:w-60 md:h-40 shadow-lg"
+                 data-x="-24vw" data-y="-18vh" data-rotate="-6" data-mobile-x="-28vw" data-mobile-y="-18vh">
               <img
                 src="https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184635.png"
                 alt="Catering"
@@ -1797,7 +1959,8 @@ function App() {
             </div>
 
             {/* 3. ARQUITECTO */}
-            <div className="absolute bottom-[14%] left-[20%] md:left-[25%] w-32 h-24 md:w-56 md:h-40 shadow-lg rotate-2">
+            <div className="unified-photo absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-24 md:w-56 md:h-40 shadow-lg"
+                 data-x="-22vw" data-y="20vh" data-rotate="5" data-mobile-x="-25vw" data-mobile-y="20vh">
               <img
                 src="https://storage.googleapis.com/wisdom-images/526bda5b-c0c2-4170-b552-12a17db69fa9.jpeg"
                 alt="Architect"
@@ -1806,7 +1969,8 @@ function App() {
             </div>
 
             {/* 4. FINANZAS */}
-            <div className="absolute top-[35%] right-[17%] md:right-[18%] w-36 h-24 md:w-60 md:h-40 shadow-lg rotate-1">
+            <div className="unified-photo absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-24 md:w-60 md:h-40 shadow-lg"
+                 data-x="26vw" data-y="-4vh" data-rotate="3" data-mobile-x="30vw" data-mobile-y="-4vh">
               <img
                 src="https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20185810.png"
                 alt="Finances"
@@ -1815,7 +1979,8 @@ function App() {
             </div>
 
             {/* 5. JARDINERO */}
-            <div className="absolute bottom-[5%] right-[26%] md:right-[28%] w-24 h-32 md:w-40 md:h-52 shadow-lg rotate-2">
+            <div className="unified-photo absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-32 md:w-40 md:h-52 shadow-lg"
+                 data-x="18vw" data-y="28vh" data-rotate="-5" data-mobile-x="20vw" data-mobile-y="24vh">
               <img
                 src="https://storage.googleapis.com/wisdom-images/393cd8b9-f908-4d5a-a67b-cf6850b287e9.jpg"
                 alt="Gardener"
@@ -1829,17 +1994,17 @@ function App() {
               alt="Wisdom Icon"
               className="relative z-10 flex h-40 w-40 md:h-72 md:w-72 items-center justify-center"
             />
+            
+            {/* TEXTO DE DEBAJO QUE APARECERÁ */}
+            <div className="unified-text absolute top-1/2 left-1/2 -translate-x-1/2 mt-32 md:mt-48 w-full text-center z-20 pointer-events-none">
+              <p className="text-[32px] md:text-[42px] font-semibold text-[#050505]">Wisdom unifies the chaos.</p>
+            </div>
           </div>
-
-          {/* Texto inferior (le añadí un py-10 para darle aire abajo) */}
-          {/* <div className="flex flex-col items-center gap-4 text-center z-20 pb-10 px-6">
-              <p className="text-[32px] md:text-[42px] font-semibold">Wisdom unifies the chaos.</p>
-            </div> */}
 
         </section>
 
         {/* 7. Chaos */}
-        <section ref={chaosSectionRef} className="fade-section -mt-[165vh] min-h-screen mx-auto flex w-full justify-center items-center px-6 py-20">
+        <section ref={chaosSectionRef} className="fade-section -mt-[-350vh] min-h-screen mx-auto flex w-full justify-center items-center px-6 py-20">
           <p className="mx-auto max-w-[1000px] text-center text-[42px] leading-[1.3] font-semibold leading-relaxed text-[#050505]">
             We replaced word-of-mouth with verified data. We replaced uncertainty with transparent profiles. A single ecosystem where quality is visible, and trust is the default.
           </p>
@@ -1863,7 +2028,7 @@ function App() {
         />
 
         {/* 10. Secure & Trust */}
-        <section ref={secureSectionRef} className="fade-section mt-[200vh] min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24">
+        <section ref={secureSectionRef} className="fade-section mt-[730vh] min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24">
 
           {/* Título de la sección */}
           <div className="mb-20 text-center">
@@ -1880,8 +2045,8 @@ function App() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -8 }} // Animación suave al pasar el ratón
-                className="group flex flex-col rounded-[32px] bg-[#F9FAFB] p-8 md:p-10 transition-transform duration-300"
+                whileHover={{ y: -8, transition: { type: "spring", stiffness: 400, damping: 25 } }}
+                className="group flex flex-col rounded-[32px] bg-[#F9FAFB] p-8 md:p-10 shadow-sm hover:shadow-md transition-shadow duration-200"
               >
                 {/* Contenedor del Icono: Ahora es un círculo pequeño a la izquierda */}
                 <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm border border-gray-100">
@@ -1903,7 +2068,7 @@ function App() {
         </section>
 
         {/* 11. CTA Final & Footer */}
-        <section ref={ctaSectionRef} className="fade-section -mt-[180vh] w-full min-h-screen relative flex flex-col items-center justify-center bg-white">
+        <section ref={ctaSectionRef} className="fade-section -mt-[850vh] w-full min-h-screen relative flex flex-col items-center justify-center bg-white">
           
           {/* Contenido del CTA (Centrado en la pantalla) */}
           <div className="flex flex-col items-center justify-center text-center px-6">
