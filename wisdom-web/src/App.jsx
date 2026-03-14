@@ -7,6 +7,19 @@ import Lenis from '@studio-freight/lenis';
 gsap.registerPlugin(ScrollTrigger);
 
 const navLinks = ['Vision', 'How it works', 'For professionals', 'Safety'];
+const EXPERIENCE_TABS = ['customers', 'professionals'];
+const EXPERIENCE_CONTENT = {
+  customers: [
+    { title: "One search.", description: "From plumbers to piano teachers." },
+    { title: "Total clarity.", description: "See prices and reviews upfront." },
+    { title: "Secure.", description: "Your data and payments, protected." },
+  ],
+  professionals: [
+    { title: "Freedom.", description: "Offer any service you can imagine." },
+    { title: "Control.", description: "Set your rates, schedule, and rules." },
+    { title: "Growth.", description: "Automated tools to manage clients and payments." },
+  ],
+};
 
 const heroTiles = [
   // Arriba Izquierda
@@ -329,8 +342,7 @@ const HowItWorks3D = ({ steps, activeIndex }) => (
   </div>
 );
 
-const HowItWorksSection = ({ sectionRef, flows }) => {
-  const [activeTab, setActiveTab] = useState('customers');
+const HowItWorksSection = ({ sectionRef, flows, activeTab, onTabChange }) => {
   const steps = flows[activeTab] || flows.customers;
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef(null);
@@ -367,16 +379,16 @@ const HowItWorksSection = ({ sectionRef, flows }) => {
     <section ref={sectionRef} className="relative mt-[20vh] w-full overflow-visible z-0">
       <div ref={containerRef} className="flex h-screen w-full items-center justify-center overflow-hidden">
         <div className="mx-auto flex h-full w-full max-w-[1800px] origin-center scale-[0.9] flex-col justify-center gap-8 px-6 pt-28 pb-10 md:scale-[0.94] md:gap-9 md:pt-32 md:pb-14">
-          <div className="flex flex-col items-center gap-6">
+          <div className="flex flex-col items-center gap-6 mt-14">
             <SectionHeading title="How Wisdom works" />
 
             <div className="flex justify-center">
               <div className="pointer-events-auto relative flex rounded-full bg-[#F3F4F6] p-1">
-                {['customers', 'professionals'].map((tab) => (
+                {EXPERIENCE_TABS.map((tab) => (
                   <button
                     key={tab}
                     type="button"
-                    onClick={() => setActiveTab(tab)}
+                    onClick={() => onTabChange(tab)}
                     className={`relative z-10 px-6 py-2 text-sm font-semibold transition-colors duration-200 ${activeTab === tab ? 'text-[#050505]' : 'text-[#6B7280]'
                       }`}
                   >
@@ -439,8 +451,7 @@ const FanItem = ({ item, index, activeIndex }) => {
   );
 };
 
-const InteractiveToggleSection = ({ sectionRef }) => {
-  const [activeMode, setActiveMode] = useState('Client');
+const InteractiveToggleSection = ({ sectionRef, activeMode, onModeChange }) => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   // Reiniciar el hover cuando cambiamos de pestaña para evitar bugs visuales
@@ -449,26 +460,12 @@ const InteractiveToggleSection = ({ sectionRef }) => {
   }, [activeMode]);
 
   const toggleItems = [
-    { label: 'Client' },
-    { label: 'Profesional' }
+    { label: 'Client', value: 'customers' },
+    { label: 'Profesional', value: 'professionals' }
   ];
 
-  // Definimos el contenido para ambos modos
-  const allContent = {
-    'Client': [
-      { title: "One search.", description: "From plumbers to piano teachers." },
-      { title: "Total clarity.", description: "See prices and reviews upfront." },
-      { title: "Secure.", description: "Your data and payments, protected." },
-    ],
-    'Profesional': [
-      { title: "Freedom.", description: "Offer any service you can imagine." },
-      { title: "Control.", description: "Set your rates, schedule, and rules." },
-      { title: "Growth.", description: "Automated tools to manage clients and payments." },
-    ]
-  };
-
   // Seleccionamos el contenido según el modo activo
-  const contentItems = allContent[activeMode];
+  const contentItems = EXPERIENCE_CONTENT[activeMode] || EXPERIENCE_CONTENT.customers;
 
   return (
     <section ref={sectionRef} className="fade-section -mt-[190vh] min-h-[42vh] w-full mx-auto flex flex-col justify-center items-center py-4">
@@ -479,12 +476,13 @@ const InteractiveToggleSection = ({ sectionRef }) => {
         {toggleItems.map((item) => (
           <button
             key={item.label}
-            onClick={() => setActiveMode(item.label)}
-            className={`relative z-10 flex items-center gap-2 px-6 py-2 text-sm font-semibold transition-colors duration-200 ${activeMode === item.label ? 'text-[#050505]' : 'text-[#6B7280]'
+            type="button"
+            onClick={() => onModeChange(item.value)}
+            className={`relative z-10 flex items-center gap-2 px-6 py-2 text-sm font-semibold transition-colors duration-200 ${activeMode === item.value ? 'text-[#050505]' : 'text-[#6B7280]'
               }`}
           >
             {/* Fondo Blanco Animado (Motion) */}
-            {activeMode === item.label && (
+            {activeMode === item.value && (
               <motion.div
                 layoutId="toggle-bg"
                 className="absolute inset-0 rounded-full bg-white shadow-sm"
@@ -760,6 +758,7 @@ function App() {
   const secureSectionRef = useRef(null);
   const ctaSectionRef = useRef(null);
   const howWorksRef = useRef(null);
+  const [experienceMode, setExperienceMode] = useState('customers');
 
   useEffect(() => {
     // 1. Configuración de Lenis (Scroll Suave)
@@ -1556,6 +1555,44 @@ function App() {
     };
   }, []);
 
+  const scrollToSection = (sectionRef) => {
+    if (!sectionRef?.current) return;
+
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(sectionRef.current, {
+        offset: -110,
+        duration: 1.15,
+      });
+      return;
+    }
+
+    const targetY = window.scrollY + sectionRef.current.getBoundingClientRect().top - 110;
+    window.scrollTo({ top: targetY, behavior: 'smooth' });
+  };
+
+  const handleNavClick = (link) => {
+    if (link === 'How it works') {
+      setExperienceMode('customers');
+      scrollToSection(howWorksRef);
+      return;
+    }
+
+    if (link === 'For professionals') {
+      setExperienceMode('professionals');
+      scrollToSection(dualExperienceSectionRef);
+      return;
+    }
+
+    if (link === 'Vision') {
+      scrollToSection(searchSectionRef);
+      return;
+    }
+
+    if (link === 'Safety') {
+      scrollToSection(secureSectionRef);
+    }
+  };
+
   return (
     <div ref={appRef} className="min-h-screen bg-white text-[#050505]">
 
@@ -1574,9 +1611,14 @@ function App() {
         {/* CENTRO: Nav (al tener flex-1 a los lados, se centra matemáticamente) */}
         <nav className="hidden flex-none flex-wrap items-center justify-center gap-8 md:flex">
           {navLinks.map((link) => (
-            <a key={link} href="#" className="text-sm font-semibold text-[#4c5563] hover:text-[#050505] transition-colors">
+            <button
+              key={link}
+              type="button"
+              onClick={() => handleNavClick(link)}
+              className="text-sm font-semibold text-[#4c5563] hover:text-[#050505] transition-colors"
+            >
               {link}
-            </a>
+            </button>
           ))}
         </nav>
 
@@ -1804,7 +1846,11 @@ function App() {
         </section>
 
         {/* 8. Dual experience */}
-        <InteractiveToggleSection sectionRef={dualExperienceSectionRef} />
+        <InteractiveToggleSection
+          sectionRef={dualExperienceSectionRef}
+          activeMode={experienceMode}
+          onModeChange={setExperienceMode}
+        />
 
         <CosmosSpiral serviceFamilies={serviceFamilies} />
 
@@ -1812,6 +1858,8 @@ function App() {
         <HowItWorksSection
           sectionRef={howWorksRef}
           flows={howItWorksFlows}
+          activeTab={experienceMode}
+          onTabChange={setExperienceMode}
         />
 
         {/* 10. Secure & Trust */}
