@@ -280,7 +280,10 @@ const PRO_STORY_IMAGE_HEIGHT_RATIO = 1248 / 832;
 const SEARCH_IMAGE_VERTICAL_OFFSET = -68;
 
 const HowItWorks3D = ({ steps, activeIndex }) => (
-  <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center justify-center gap-10 px-4 md:flex-row md:gap-16">
+  // 1. ELIMINADO max-w-7xl: Ahora es "w-full" para que se expanda hasta los bordes.
+  <div className="relative mx-auto flex w-full flex-col items-center justify-between gap-10 md:flex-row md:px-0">
+    
+    {/* COLUMNA IZQUIERDA (TEXTO) */}
     <div className="order-2 flex h-[500px] w-full flex-1 items-center justify-center md:order-1 md:h-[700px] md:justify-start">
       <div className="relative flex h-full w-full flex-col items-center justify-center md:items-start">
         <div
@@ -290,7 +293,9 @@ const HowItWorks3D = ({ steps, activeIndex }) => (
             WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
           }}
         >
-          <div className="relative h-full w-full left-12 md:left-40">
+          {/* 2. RESTAURADO EL LEFT: Ponemos md:left-24 o lg:left-32. 
+              Esto evita que la "S" de Search se corte al girar. */}
+          <div className="relative h-full w-full left-12 md:left-24 lg:left-32">
             {steps.map((step, index) => (
               <FanItem key={step.id} item={step} index={index} activeIndex={activeIndex} />
             ))}
@@ -299,7 +304,9 @@ const HowItWorks3D = ({ steps, activeIndex }) => (
       </div>
     </div>
 
-    <div className="order-1 flex h-[45vh] w-full flex-1 items-center justify-center md:order-2 md:h-auto">
+    {/* COLUMNA DERECHA (MÓVIL) */}
+    {/* 3. MÓVIL A LA DERECHA: Aseguramos md:justify-end y damos un padding derecho opcional */}
+    <div className="order-1 flex h-[45vh] w-full flex-1 items-center justify-center md:order-2 md:h-auto md:justify-end md:pr-12 lg:pr-24">
       <div className="relative flex h-auto w-[220px] items-center justify-center md:w-[300px]">
         <img
           src="/images/phone.png"
@@ -364,7 +371,7 @@ const HowItWorksSection = ({ sectionRef, flows }) => {
   return (
     <section ref={sectionRef} className="relative mt-[20vh] w-full overflow-visible z-0">
       <div ref={containerRef} className="flex h-screen w-full items-center justify-center overflow-hidden">
-        <div className="mx-auto flex h-full w-full max-w-[1450px] origin-center scale-[0.9] flex-col justify-center gap-8 px-6 pt-28 pb-10 md:scale-[0.94] md:gap-9 md:pt-32 md:pb-14">
+        <div className="mx-auto flex h-full w-full max-w-[1800px] origin-center scale-[0.9] flex-col justify-center gap-8 px-6 pt-28 pb-10 md:scale-[0.94] md:gap-9 md:pt-32 md:pb-14">
           <div className="flex flex-col items-center gap-6">
             <SectionHeading title="How Wisdom works" />
 
