@@ -627,50 +627,40 @@ const CosmosSpiral = ({ serviceFamilies }) => {
         </p>
 
         {/* 3. ELEMENTO DINÁMICO (CÁPSULA) */}
-        <div className="flex w-full justify-center"> {/* Contenedor para centrar el grupo completo */}
+        <div className="flex w-full items-center justify-center -translate-x-4 md:-translate-x-8">
 
-          {/* Agrupamos con motion.div y layout para que el movimiento sea fluido */}
-          <motion.div
-            layout
-            className="flex items-center gap-3"
-            transition={{ layout: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
-          >
-
-            {/* Pequeño texto conector */}
-            <motion.span
-              layout
-              transition={{ layout: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
-              className="text-md font-semibold uppercase tracking-widest text-[#9F9F9F]"
-            >
+          {/* Contenedor izquierdo: Fijo, ocupa el 50% y alinea a la derecha */}
+          <div className="flex flex-1 justify-end pr-3">
+            <span className="text-md font-semibold uppercase tracking-widest text-[#9F9F9F] mt-1">
               Like
-            </motion.span>
+            </span>
+          </div>
 
-            {/* Cápsula animada */}
+          {/* Contenedor derecho: Ocupa el 50% y alinea a la izquierda */}
+          <div className="flex flex-1 justify-start">
             <motion.div
               layout
-              className="relative h-12 overflow-hidden rounded-full bg-white/80 backdrop-blur-sm px-2 "
+              className="relative h-12 overflow-hidden rounded-full bg-white/80 backdrop-blur-sm px-4"
               transition={{ layout: { duration: 0.7, type: "spring", stiffness: 300, damping: 30 } }}
             >
               <AnimatePresence mode="wait">
                 <motion.div
                   layout
                   key={textIndex}
-                  // Quitamos 'absolute inset-0' para que el div tenga el ancho del texto
                   initial={{ y: 0, opacity: 0, filter: 'blur(1px)' }}
                   animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
                   exit={{ y: 0, opacity: 0, filter: 'blur(1px)' }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
                   className="flex items-center justify-center h-full"
                 >
-                  {/* whitespace-nowrap es vital para que no se parta la linea */}
                   <span className="text-[#1a1a1a] font-bold text-xl whitespace-nowrap">
                     {contentPool[textIndex]?.label || "Magic"}
                   </span>
                 </motion.div>
               </AnimatePresence>
             </motion.div>
+          </div>
 
-          </motion.div>
         </div>
 
       </div>
@@ -1854,12 +1844,17 @@ function App() {
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               
               {/* Botón App Store */}
-              <button className="flex items-center justify-center gap-2.5 rounded-[28px] bg-[#111111] px-7 py-3 text-[15px] font-semibold text-white transition-all hover:scale-105 hover:bg-black">
+              <a 
+                href="https://apps.apple.com/es/app/wisdom-contrata-servicios/id6737240739"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2.5 rounded-[28px] bg-[#111111] px-7 py-3 text-[15px] font-semibold text-white transition-all hover:scale-105 hover:bg-black"
+              >
                 <svg viewBox="0 0 384 512" width="20" height="20" fill="currentColor">
                   <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
                 </svg>
                 App Store
-              </button>
+              </a>
               
               {/* Botón Play Store */}
               <button className="flex items-center justify-center gap-2.5 rounded-[28px] bg-[#111111] px-7 py-3 text-[15px] font-semibold text-white transition-all hover:scale-105 hover:bg-black">
@@ -1901,8 +1896,8 @@ function App() {
         </section>
 
         {/* 4. Pro alone */}
-        <section ref={proStorySectionRef} className="relative min-h-[200vh] w-screen overflow-hidden">
-          <div ref={proStoryPinRef} className="relative flex h-screen w-screen items-center justify-center">
+        <section ref={proStorySectionRef} className="relative min-h-[200vh] w-full overflow-hidden">
+          <div ref={proStoryPinRef} className="relative flex h-screen w-full items-center justify-center">
             <div ref={proStoryImageRef} className="relative overflow-hidden">
               <img
                 src="/images/pro_alone4.png"
@@ -2028,7 +2023,7 @@ function App() {
         />
 
         {/* 10. Secure & Trust */}
-        <section ref={secureSectionRef} className="fade-section mt-[730vh] min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24">
+        <section ref={secureSectionRef} className="fade-section mt-[780vh] min-h-screen w-full mx-auto flex flex-col justify-center items-center px-6 py-24">
 
           {/* Título de la sección */}
           <div className="mb-20 text-center">
@@ -2099,7 +2094,7 @@ function App() {
               <div className="flex items-center gap-4">
                 <span className="font-medium text-[#050505]">Connect</span>
                 <div className="flex flex-wrap items-center gap-4 text-[#9ca3af]">
-                  <a href="#" className="hover:text-[#050505] transition-colors">Instagram</a>
+                  <a href="https://www.instagram.com/wisdom__app?igsh=MWttN3dhc3FjajluNA==" target="_blank" rel="noopener noreferrer" className="hover:text-[#050505] transition-colors">Instagram</a>
                   <a href="#" className="hover:text-[#050505] transition-colors">TikTok</a>
                   <a href="#" className="hover:text-[#050505] transition-colors">X</a>
                 </div>
