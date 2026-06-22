@@ -1797,57 +1797,63 @@ function App() {
     };
   }, []);
 
-  const scrollToSection = (sectionRef) => {
+  const scrollToSection = (sectionRef, options = {}) => {
     if (!sectionRef?.current) return;
+
+    const { offset = -110 } = options;
 
     if (lenisRef.current) {
       lenisRef.current.scrollTo(sectionRef.current, {
-        offset: -110,
+        offset,
         duration: 1.15,
       });
       return;
     }
 
-    const targetY = window.scrollY + sectionRef.current.getBoundingClientRect().top - 110;
+    const targetY = window.scrollY + sectionRef.current.getBoundingClientRect().top + offset;
     window.scrollTo({ top: targetY, behavior: 'smooth' });
+  };
+
+  const scrollToHowItWorks = (mode) => {
+    setExperienceMode(mode);
+    window.setTimeout(() => scrollToSection(howWorksRef), 50);
   };
 
   const handleNavClick = (link) => {
     if (link === 'How it works') {
-      setExperienceMode('customers');
-      scrollToSection(howWorksRef);
+      scrollToHowItWorks('customers');
       return;
     }
 
     if (link === 'For professionals') {
-      setExperienceMode('professionals');
-      scrollToSection(dualExperienceSectionRef);
+      scrollToHowItWorks('professionals');
       return;
     }
 
     if (link === 'Vision') {
-      scrollToSection(searchSectionRef);
+      scrollToSection(searchSectionRef, { offset: +150 });
       return;
     }
 
     if (link === 'Safety') {
-      scrollToSection(secureSectionRef);
+      scrollToSection(secureSectionRef, { offset: -7000 });
     }
   };
 
   return (
     <div ref={appRef} data-layout={isVertical ? 'vertical' : 'horizontal'} className="min-h-screen bg-white text-[#050505]">
 
-      <header className={`fixed backdrop-blur-xl top-4 left-1/2 z-20 flex -translate-x-1/2 items-center rounded-full font-semibold bg-white/50 ${isVertical ? 'w-[calc(100%-1.5rem)] px-3 py-2' : 'w-[min(1100px,calc(100%-2rem))] px-4 py-3'}`}>
+      <header className={`site-header fixed top-4 left-1/2 z-20 flex -translate-x-1/2 items-center rounded-full border border-black/[0.05] font-semibold shadow-[0_4px_24px_rgba(0,0,0,0.05)] bg-[rgba(255,255,255,0.94)] ${isVertical ? 'w-[calc(100%-1.5rem)] px-3 py-2' : 'w-[min(1100px,calc(100%-2rem))] px-4 py-3'}`}>
         
         {/* IZQUIERDA: Agrupamos logo y texto en un solo flex-1 */}
-        <div className="flex flex-1 items-center justify-start gap-2 ml-1 md:ml-2">
+        <div className="flex flex-1 items-center justify-start gap-2.5 ml-1 md:ml-2">
           <img
             src='https://storage.googleapis.com/wisdom-images/app_icon.png'
             alt="Wisdom Icon"
-            className={`relative flex items-center justify-center ${isVertical ? 'h-8 w-8' : 'h-10 w-10 md:h-8 md:w-8'}`}
+            draggable={false}
+            className="h-9 w-9 shrink-0 select-none rounded-[10px] object-cover"
           />
-          <div className={isVertical ? 'text-base' : 'text-lg'}>Wisdom</div>
+          <div className={`text-[#111111] ${isVertical ? 'text-base' : 'text-lg'}`}>Wisdom</div>
         </div>
 
         {/* CENTRO: Nav (al tener flex-1 a los lados, se centra matemáticamente) */}
@@ -2088,7 +2094,7 @@ function App() {
         </section>
 
         {/* 7. Chaos */}
-        <section ref={chaosSectionRef} className={`fade-section -mt-[-350vh] min-h-screen mx-auto flex w-full justify-center items-center py-20 ${isVertical ? 'px-4' : 'px-6'}`}>
+        <section ref={chaosSectionRef} className={`fade-section -mt-[-390vh] min-h-screen mx-auto flex w-full justify-center items-center py-20 ${isVertical ? 'px-4' : 'px-6'}`}>
           <p className={`readable-section-text mx-auto max-w-[1000px] text-center font-semibold text-[#050505] ${isVertical ? 'text-2xl leading-snug' : 'text-[42px] leading-[1.3] leading-relaxed'}`}>
             We replaced word-of-mouth with verified data. We replaced uncertainty with transparent profiles. A single ecosystem where quality is visible, and trust is the default.
           </p>

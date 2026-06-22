@@ -46,3 +46,9 @@ html {
 [data-layout='vertical'] .hero-decor-layer {
   transform-origin: center center;
 }
+
+.site-header {
+  isolation: isolate;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
