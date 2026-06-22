@@ -33,3 +33,16 @@ html {
   min-height: 100vh;
   overflow: visible;
 }
+
+[data-layout='vertical'] .section-heading {
+  font-size: clamp(1.5rem, 6vw, 2rem);
+  line-height: 1.15;
+}
+
+[data-layout='vertical'] .readable-section-text {
+  max-width: 92vw;
+}
+
+[data-layout='vertical'] .hero-decor-layer {
+  transform-origin: center center;
+}
