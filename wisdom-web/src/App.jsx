@@ -294,6 +294,7 @@ const useVerticalLayout = () => {
 };
 
 const ENDLESS_PIN_DISTANCE = 600;
+const UNTIL_NOW_PIN_DISTANCE = 640;
 const ENDLESS_TEXT_START_SCALE = 0.95;
 const ENDLESS_TEXT_END_SCALE = 1.08;
 const DEFAULT_LENIS_LERP = 0.08;
@@ -1148,27 +1149,6 @@ function App() {
             getFullscreenOverflowY() * PRO_STORY_TEXT_RISE_RATIO,
           ),
         );
-        const softlySnapToUntilNowCenter = () => {
-          if (!untilNowSectionRef.current) return;
-          const sectionRect = untilNowSectionRef.current.getBoundingClientRect();
-          const sectionTop = window.scrollY + sectionRect.top;
-          const sectionCenter = sectionTop + (sectionRect.height / 2);
-          const targetY = sectionCenter - (window.innerHeight / 2);
-          if (!Number.isFinite(targetY)) return;
-
-          const delta = Math.abs(targetY - window.scrollY);
-          if (delta < 12 || delta > 60) return;
-
-          if (lenisRef.current) {
-            lenisRef.current.scrollTo(targetY, {
-              duration: 0.2,
-              easing: (t) => 1 - ((1 - t) * (1 - t)),
-            });
-            return;
-          }
-
-          window.scrollTo({ top: targetY, behavior: 'smooth' });
-        };
 
         const resetProStoryImage = () => {
           const squareSize = getSquareSize();
@@ -1244,7 +1224,6 @@ function App() {
             scrub: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            onLeave: softlySnapToUntilNowCenter,
             onRefresh: () => {
               const squareSize = getSquareSize();
               gsap.set(proImage, {
@@ -1465,12 +1444,12 @@ function App() {
           if (!Number.isFinite(targetY)) return;
 
           const delta = Math.abs(targetY - window.scrollY);
-          if (delta < 12 || delta > 60) return;
+          if (delta < 8 || delta > 48) return;
 
           if (lenisRef.current) {
             lenisRef.current.scrollTo(targetY, {
-              duration: 0.2,
-              easing: (t) => 1 - ((1 - t) * (1 - t)),
+              duration: 0.45,
+              easing: (t) => 1 - ((1 - t) * (1 - t) * (1 - t)),
             });
             return;
           }
@@ -1509,11 +1488,11 @@ function App() {
 
         ScrollTrigger.create({
           trigger: untilNowSectionRef.current,
-          start: "center center",
-          end: `+=${ENDLESS_PIN_DISTANCE}`,
+          start: 'center center',
+          end: `+=${UNTIL_NOW_PIN_DISTANCE}`,
           pin: true,
           pinSpacing: true,
-          anticipatePin: 1,
+          anticipatePin: 0,
           invalidateOnRefresh: true,
           onEnter: playUntilNowIntro,
           onEnterBack: playUntilNowIntro,
@@ -1843,17 +1822,16 @@ function App() {
   return (
     <div ref={appRef} data-layout={isVertical ? 'vertical' : 'horizontal'} className="min-h-screen bg-white text-[#050505]">
 
-      <header className={`site-header fixed top-4 left-1/2 z-20 flex -translate-x-1/2 items-center rounded-full border border-black/[0.05] font-semibold shadow-[0_4px_24px_rgba(0,0,0,0.05)] bg-[rgba(255,255,255,0.94)] ${isVertical ? 'w-[calc(100%-1.5rem)] px-3 py-2' : 'w-[min(1100px,calc(100%-2rem))] px-4 py-3'}`}>
+      <header className={`fixed backdrop-blur-xl top-4 left-1/2 z-20 flex -translate-x-1/2 items-center rounded-full font-semibold bg-white/50 ${isVertical ? 'w-[calc(100%-1.5rem)] px-3 py-2' : 'w-[min(1100px,calc(100%-2rem))] px-4 py-3'}`}>
         
         {/* IZQUIERDA: Agrupamos logo y texto en un solo flex-1 */}
-        <div className="flex flex-1 items-center justify-start gap-2.5 ml-1 md:ml-2">
+        <div className="flex flex-1 items-center justify-start gap-2 ml-1 md:ml-2">
           <img
             src='https://storage.googleapis.com/wisdom-images/app_icon.png'
             alt="Wisdom Icon"
-            draggable={false}
-            className="h-9 w-9 shrink-0 select-none rounded-[10px] object-cover"
+            className={`relative flex items-center justify-center ${isVertical ? 'h-8 w-8' : 'h-10 w-10 md:h-8 md:w-8'}`}
           />
-          <div className={`text-[#111111] ${isVertical ? 'text-base' : 'text-lg'}`}>Wisdom</div>
+          <div className={isVertical ? 'text-base' : 'text-lg'}>Wisdom</div>
         </div>
 
         {/* CENTRO: Nav (al tener flex-1 a los lados, se centra matemáticamente) */}
@@ -2019,7 +1997,7 @@ function App() {
         </section>
 
         {/* 5. Until now */}
-        <section ref={untilNowSectionRef} className={`fade-section mx-auto flex w-full justify-center items-center bg-white relative ${isVertical ? 'min-h-[40vh] px-4 py-16 -mt-[210vh]' : 'min-h-[50vh] px-6 py-24 -mt-[210vh]'}`}>
+        <section ref={untilNowSectionRef} className={`fade-section mx-auto flex min-h-screen w-full justify-center items-center bg-white relative ${isVertical ? 'px-4 py-16 -mt-[210vh]' : 'px-6 py-24 -mt-[210vh]'}`}>
           <p ref={untilNowTextRef} className={`text-center font-semibold ${isVertical ? 'text-5xl' : 'text-8xl'}`}>Until now.</p>
         </section>
 
@@ -2094,7 +2072,7 @@ function App() {
         </section>
 
         {/* 7. Chaos */}
-        <section ref={chaosSectionRef} className={`fade-section -mt-[-390vh] min-h-screen mx-auto flex w-full justify-center items-center py-20 ${isVertical ? 'px-4' : 'px-6'}`}>
+        <section ref={chaosSectionRef} className={`fade-section -mt-[-350vh] min-h-screen mx-auto flex w-full justify-center items-center py-20 ${isVertical ? 'px-4' : 'px-6'}`}>
           <p className={`readable-section-text mx-auto max-w-[1000px] text-center font-semibold text-[#050505] ${isVertical ? 'text-2xl leading-snug' : 'text-[42px] leading-[1.3] leading-relaxed'}`}>
             We replaced word-of-mouth with verified data. We replaced uncertainty with transparent profiles. A single ecosystem where quality is visible, and trust is the default.
           </p>
@@ -2157,7 +2135,7 @@ function App() {
         </section>
 
         {/* 11. CTA Final & Footer */}
-        <section ref={ctaSectionRef} className="fade-section -mt-[850vh] w-full min-h-screen relative flex flex-col items-center justify-center bg-white">
+        <section ref={ctaSectionRef} className="fade-section -mt-[875vh] w-full min-h-screen relative flex flex-col items-center justify-center bg-white">
           
           {/* Contenido del CTA (Centrado en la pantalla) */}
           <div className={`flex flex-col items-center justify-center text-center ${isVertical ? 'px-4' : 'px-6'}`}>

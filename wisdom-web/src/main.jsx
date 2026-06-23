@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import DataDeletion from './DataDeletion.jsx';
+import { LocaleProvider } from './i18n/LocaleContext.jsx';
 import './index.css';
 
 const normalizePathname = (pathname) => {
@@ -14,6 +15,8 @@ const currentPath = normalizePathname(window.location.pathname);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {currentPath === '/data-deletion' ? <DataDeletion /> : <App />}
+    <LocaleProvider>
+      {currentPath === '/data-deletion' ? <DataDeletion /> : <App />}
+    </LocaleProvider>
   </StrictMode>,
 );
