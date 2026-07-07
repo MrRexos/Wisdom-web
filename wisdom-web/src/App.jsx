@@ -2177,7 +2177,7 @@ function App() {
                 <span className="font-medium text-[#050505]">More</span>
                 <div className="flex items-center gap-4 text-[#9ca3af]">
                   <a href="#" className="hover:text-[#050505] transition-colors">Terms</a>
-                  <a href="#" className="hover:text-[#050505] transition-colors">Privacy</a>
+                  <a href="/privacy" className="hover:text-[#050505] transition-colors">Privacy</a>
                 </div>
               </div>
 

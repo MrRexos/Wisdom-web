@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import DataDeletion from './DataDeletion.jsx';
+import PrivacyPolicy from './PrivacyPolicy.jsx';
 import { LocaleProvider } from './i18n/LocaleContext.jsx';
 import './index.css';
 
@@ -16,7 +17,7 @@ const currentPath = normalizePathname(window.location.pathname);
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <LocaleProvider>
-      {currentPath === '/data-deletion' ? <DataDeletion /> : <App />}
+      {currentPath === '/data-deletion' ? <DataDeletion /> : currentPath === '/privacy' ? <PrivacyPolicy /> : <App />}
     </LocaleProvider>
   </StrictMode>,
 );
