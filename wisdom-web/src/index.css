@@ -20,6 +20,10 @@ body {
   overflow: hidden;
 }
 
+body.users-dashboard-active {
+  overflow: auto;
+}
+
 html,
 body {
   overflow-x: hidden;
