@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import DataDeletion from './DataDeletion.jsx';
 import PrivacyPolicy from './PrivacyPolicy.jsx';
+import TermsAndConditions from './TermsAndConditions.jsx';
 import UsersDashboard from './UsersDashboard.jsx';
 import { LocaleProvider } from './i18n/LocaleContext.jsx';
 import './index.css';
@@ -22,9 +23,11 @@ createRoot(document.getElementById('root')).render(
         ? <DataDeletion />
         : currentPath === '/privacy'
           ? <PrivacyPolicy />
-          : currentPath === '/users'
-            ? <UsersDashboard />
-            : <App />}
+          : currentPath === '/terms'
+            ? <TermsAndConditions />
+            : currentPath === '/users'
+              ? <UsersDashboard />
+              : <App />}
     </LocaleProvider>
   </StrictMode>,
 );

@@ -144,7 +144,7 @@ const en = {
       },
       {
         title: 'Protected Payments',
-        description: 'No hidden fees. You pay a small deposit to book, and the rest is secured. If plans change, our Wisdom Guarantee has you covered.',
+        description: 'No hidden fees. You pay a small deposit to book, and the rest is secured. The service fee includes protection if plans change.',
       },
       {
         title: 'Privacy by Design',
@@ -287,7 +287,7 @@ const es = {
       },
       {
         title: 'Pagos protegidos',
-        description: 'Sin comisiones ocultas. Pagas un pequeño depósito para reservar y el resto queda asegurado. Si los planes cambian, la Garantía Wisdom te respalda.',
+        description: 'Sin tarifas del servicio ocultas. Pagas un pequeño depósito para reservar y el resto queda asegurado. La tarifa del servicio incluye protección si cambian los planes.',
       },
       {
         title: 'Privacidad por diseño',
@@ -430,7 +430,7 @@ const ca = {
       },
       {
         title: 'Pagaments protegits',
-        description: 'Sense comissions ocultes. Pagues un petit dipòsit per reservar i la resta queda assegurada. Si els plans canvien, la Garantia Wisdom et respalda.',
+        description: 'Sense tarifes del servei ocultes. Pagues un petit dipòsit per reservar i la resta queda assegurada. La tarifa del servei inclou protecció si canvien els plans.',
       },
       {
         title: 'Privacitat per disseny',
@@ -573,7 +573,7 @@ const fr = {
       },
       {
         title: 'Paiements protégés',
-        description: 'Pas de frais cachés. Vous payez un petit acompte pour réserver et le reste est sécurisé. Si les plans changent, la Garantie Wisdom vous couvre.',
+        description: 'Pas de frais cachés. Vous payez un petit acompte pour réserver et le reste est sécurisé. Les frais de service incluent une protection en cas de changement de programme.',
       },
       {
         title: 'Confidentialité intégrée',
@@ -716,7 +716,7 @@ const pt = {
       },
       {
         title: 'Pagamentos protegidos',
-        description: 'Sem taxas escondidas. Pagas um pequeno depósito para reservar e o resto fica seguro. Se os planos mudarem, a Garantia Wisdom protege-te.',
+        description: 'Sem taxas escondidas. Pagas um pequeno depósito para reservar e o resto fica seguro. A taxa de serviço inclui proteção caso os planos mudem.',
       },
       {
         title: 'Privacidade por design',

@@ -127,7 +127,7 @@ const securityFeatures = [
   },
   {
     title: 'Protected Payments',
-    description: 'No hidden fees. You pay a small deposit to book, and the rest is secured. If plans change, our Wisdom Guarantee has you covered.',
+    description: 'No hidden fees. You pay a small deposit to book, and the rest is secured. The service fee includes protection if plans change.',
     icon: (
       // Icono de candado/escudo
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
@@ -246,7 +246,7 @@ const footerNav = {
   primary: ['Home', 'How it works', 'For Customers', 'For Professionals', 'Categories', 'Testimonials', 'Safety', 'Pricing', 'Help & FAQ', 'Devices'],
   secondary: ['Blog', 'About Wisdom'],
   useCases: ['Home Services', 'Health & Wellness', 'Classes & Tutoring', 'Beauty & Grooming', 'Events & Experiences', 'Online Services'],
-  legal: ['Privacy Policy', 'Terms of Use', 'Cancellation Policy', 'Booking Policy', 'Wisdom Guarantee'],
+  legal: ['Privacy Policy', 'Terms of Use', 'Cancellation Policy', 'Booking Policy', 'Service Fee'],
 };
 
 
@@ -2176,7 +2176,7 @@ function App() {
               <div className="flex items-center gap-4">
                 <span className="font-medium text-[#050505]">More</span>
                 <div className="flex items-center gap-4 text-[#9ca3af]">
-                  <a href="#" className="hover:text-[#050505] transition-colors">Terms</a>
+                  <a href="/terms" className="hover:text-[#050505] transition-colors">Terms</a>
                   <a href="/privacy" className="hover:text-[#050505] transition-colors">Privacy</a>
                 </div>
               </div>
