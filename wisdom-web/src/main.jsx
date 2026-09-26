@@ -20,18 +20,18 @@ const currentPath = normalizePathname(window.location.pathname);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <LocaleProvider>
-      {currentPath === '/data-deletion'
-        ? <DataDeletion />
-        : currentPath === '/privacy'
-          ? <PrivacyPolicy />
-          : currentPath === '/terms'
-            ? <TermsAndConditions />
-            : currentPath === '/users'
-              ? <UsersDashboard />
-              : currentPath === APP_DOWNLOAD_PATH
-                ? <AppDownload />
+    {currentPath === APP_DOWNLOAD_PATH ? <AppDownload /> : (
+      <LocaleProvider>
+        {currentPath === '/data-deletion'
+          ? <DataDeletion />
+          : currentPath === '/privacy'
+            ? <PrivacyPolicy />
+            : currentPath === '/terms'
+              ? <TermsAndConditions />
+              : currentPath === '/users'
+                ? <UsersDashboard />
                 : <App />}
-    </LocaleProvider>
+      </LocaleProvider>
+    )}
   </StrictMode>,
 );

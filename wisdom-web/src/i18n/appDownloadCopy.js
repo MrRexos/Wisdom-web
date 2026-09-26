@@ -2,58 +2,63 @@ const copy = {
   en: {
     title: 'Get Wisdom',
     description: 'Find, compare and book professional services. All in one app.',
-    redirecting: 'Opening your app store…',
-    fallback: 'If it does not open, choose your store below.',
-    chooseStore: 'Choose your store to download Wisdom.',
     scan: 'Scan with your phone',
-    scanDescription: 'Open your camera and point it at the QR code to download Wisdom.',
     qrLabel: 'QR code to download Wisdom',
     back: 'Back to the website',
   },
   es: {
     title: 'Descarga Wisdom',
     description: 'Busca, compara y reserva servicios profesionales. Todo en una app.',
-    redirecting: 'Abriendo tu tienda de aplicaciones…',
-    fallback: 'Si no se abre, elige tu tienda a continuación.',
-    chooseStore: 'Elige tu tienda para descargar Wisdom.',
     scan: 'Escanea con tu móvil',
-    scanDescription: 'Abre la cámara y apunta al código QR para descargar Wisdom.',
     qrLabel: 'Código QR para descargar Wisdom',
     back: 'Volver a la web',
   },
   ca: {
     title: 'Descarrega Wisdom',
     description: 'Busca, compara i reserva serveis professionals. Tot en una app.',
-    redirecting: 'Obrint la teva botiga d’aplicacions…',
-    fallback: 'Si no s’obre, tria la teva botiga a continuació.',
-    chooseStore: 'Tria la teva botiga per descarregar Wisdom.',
     scan: 'Escaneja amb el mòbil',
-    scanDescription: 'Obre la càmera i apunta al codi QR per descarregar Wisdom.',
     qrLabel: 'Codi QR per descarregar Wisdom',
     back: 'Torna al web',
   },
   fr: {
     title: 'Téléchargez Wisdom',
     description: 'Trouvez, comparez et réservez des services professionnels. Dans une seule app.',
-    redirecting: 'Ouverture de votre boutique d’applications…',
-    fallback: 'Si elle ne s’ouvre pas, choisissez votre boutique ci-dessous.',
-    chooseStore: 'Choisissez votre boutique pour télécharger Wisdom.',
     scan: 'Scannez avec votre téléphone',
-    scanDescription: 'Ouvrez l’appareil photo et visez le code QR pour télécharger Wisdom.',
     qrLabel: 'Code QR pour télécharger Wisdom',
     back: 'Retour au site',
   },
   pt: {
     title: 'Descarrega a Wisdom',
     description: 'Encontra, compara e reserva serviços profissionais. Tudo numa app.',
-    redirecting: 'A abrir a tua loja de aplicações…',
-    fallback: 'Se não abrir, escolhe a tua loja abaixo.',
-    chooseStore: 'Escolhe a tua loja para descarregar a Wisdom.',
     scan: 'Lê o código com o telemóvel',
-    scanDescription: 'Abre a câmara e aponta para o código QR para descarregar a Wisdom.',
     qrLabel: 'Código QR para descarregar a Wisdom',
     back: 'Voltar ao site',
+  },
+  zh: {
+    title: '下载 Wisdom',
+    description: '查找、比较并预约专业服务。一个应用，全部搞定。',
+    scan: '用手机扫码',
+    qrLabel: '下载 Wisdom 的二维码',
+    back: '返回网站',
+  },
+  ar: {
+    title: 'حمّل Wisdom',
+    description: 'ابحث عن الخدمات المهنية وقارن بينها واحجزها. كل ذلك في تطبيق واحد.',
+    scan: 'امسح الرمز بهاتفك',
+    qrLabel: 'رمز QR لتنزيل Wisdom',
+    back: 'العودة إلى الموقع',
   },
 };
 
 export const getAppDownloadCopy = (locale) => copy[locale] || copy.en;
+
+// El idioma del navegador tiene prioridad sobre el país o una detección antigua guardada.
+export function getAppDownloadLocale({ languages = [], language = 'en' } = {}) {
+  for (const candidate of [...languages, language]) {
+    if (typeof candidate !== 'string') continue;
+    const locale = candidate.toLowerCase().split(/[-_]/)[0];
+    if (Object.keys(copy).includes(locale)) return locale;
+  }
+
+  return 'en';
+}
