@@ -1,6 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
+import AppDownload from './AppDownload.jsx';
+import { APP_DOWNLOAD_PATH } from './appLinks';
 import DataDeletion from './DataDeletion.jsx';
 import PrivacyPolicy from './PrivacyPolicy.jsx';
 import TermsAndConditions from './TermsAndConditions.jsx';
@@ -27,7 +29,9 @@ createRoot(document.getElementById('root')).render(
             ? <TermsAndConditions />
             : currentPath === '/users'
               ? <UsersDashboard />
-              : <App />}
+              : currentPath === APP_DOWNLOAD_PATH
+                ? <AppDownload />
+                : <App />}
     </LocaleProvider>
   </StrictMode>,
 );

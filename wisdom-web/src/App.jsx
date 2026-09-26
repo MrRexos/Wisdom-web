@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from '@studio-freight/lenis';
+import { ANDROID_PLAY_STORE_URL, APP_DOWNLOAD_PATH, IOS_APP_STORE_URL } from './appLinks';
 
 gsap.registerPlugin(ScrollTrigger);
 if (typeof window !== 'undefined') {
@@ -1850,9 +1851,9 @@ function App() {
 
         {/* DERECHA: Botón en su propio flex-1 */}
         <div className="flex flex-1 justify-end">
-          <button className={`rounded-full bg-[#050505] font-semibold text-white hover:bg-black transition-colors ${isVertical ? 'px-4 py-1.5 text-xs' : 'px-6 py-2 text-sm'}`}>
+          <a href={APP_DOWNLOAD_PATH} className={`rounded-full bg-[#050505] font-semibold text-white hover:bg-black transition-colors ${isVertical ? 'px-4 py-1.5 text-xs' : 'px-6 py-2 text-sm'}`}>
             Get the app
-          </button>
+          </a>
         </div>
         
       </header>
@@ -1918,7 +1919,7 @@ function App() {
               
               {/* Botón App Store */}
               <a 
-                href="https://apps.apple.com/es/app/wisdom-contrata-servicios/id6737240739"
+                href={IOS_APP_STORE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`flex items-center justify-center gap-2.5 rounded-[28px] bg-[#111111] font-semibold text-white transition-all hover:scale-105 hover:bg-black whitespace-nowrap ${isVertical ? 'w-full px-5 py-2.5 text-sm' : 'px-7 py-3 text-[15px] min-w-[168px]'}`}
@@ -1930,12 +1931,12 @@ function App() {
               </a>
               
               {/* Botón Play Store */}
-              <button className={`flex items-center justify-center gap-2.5 rounded-[28px] bg-[#111111] font-semibold text-white transition-all hover:scale-105 hover:bg-black whitespace-nowrap ${isVertical ? 'w-full px-5 py-2.5 text-sm' : 'px-7 py-3 text-[15px] min-w-[168px]'}`}>
+              <a href={ANDROID_PLAY_STORE_URL} target="_blank" rel="noopener noreferrer" className={`flex items-center justify-center gap-2.5 rounded-[28px] bg-[#111111] font-semibold text-white transition-all hover:scale-105 hover:bg-black whitespace-nowrap ${isVertical ? 'w-full px-5 py-2.5 text-sm' : 'px-7 py-3 text-[15px] min-w-[168px]'}`}>
                 <svg viewBox="0 0 512 512" width="18" height="18" fill="currentColor" className="shrink-0">
                   <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/>
                 </svg>
                 Play Store
-              </button>
+              </a>
               
             </div>
           </div>
@@ -2145,9 +2146,9 @@ function App() {
             <p className={`mt-5 text-[#9ca3af] font-medium max-w-md leading-relaxed ${isVertical ? 'text-base' : 'text-lg md:text-xl'}`}>
               Join the new standard for services today on Apple and Android.
             </p>
-            <button className="mt-10 rounded-full bg-[#0F0F0F] px-8 py-3 text-sm font-bold text-white transition-transform hover:scale-105">
+            <a href={APP_DOWNLOAD_PATH} className="mt-10 rounded-full bg-[#0F0F0F] px-8 py-3 text-sm font-bold text-white transition-transform hover:scale-105">
               Give Wisdom a try
-            </button>
+            </a>
           </div>
 
           {/* FOOTER (Fijado en la parte inferior de esta sección) */}

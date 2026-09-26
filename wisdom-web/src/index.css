@@ -20,7 +20,8 @@ body {
   overflow: hidden;
 }
 
-body.users-dashboard-active {
+body.users-dashboard-active,
+body.app-download-active {
   overflow: auto;
 }
 
