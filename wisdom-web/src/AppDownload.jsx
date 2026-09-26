@@ -54,7 +54,7 @@ export default function AppDownload() {
     <main className="flex min-h-screen flex-col items-center justify-center bg-[#F9F8F8] px-5 py-12 text-[#050505]">
       <section className="w-full max-w-xl rounded-[32px] border border-black/5 bg-white px-6 py-10 text-center shadow-sm sm:px-12" aria-labelledby="download-title">
         <a href="/" aria-label="Wisdom" className="inline-flex rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">
-          <WisdomLogo color="#050505" width={72} height={42} aria-hidden="true" focusable="false" />
+          <WisdomLogo color="#050505" width={48} height={28} aria-hidden="true" focusable="false" />
         </a>
 
         <h1 id="download-title" className="mt-8 text-3xl font-bold tracking-tight sm:text-4xl">
