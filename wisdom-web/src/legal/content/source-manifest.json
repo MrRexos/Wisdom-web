@@ -1,0 +1,69 @@
+{
+  "sourceDate": "2026-10-01",
+  "normalization": "Nonempty source lines trimmed and joined with a newline; no wording changes.",
+  "documents": {
+    "terms": {
+      "sourceId": "1zpcA7Vm5P6u6yrxNJsWm2ZmwU8naq1c4BWKR24pYqlk",
+      "sourceUrl": "https://docs.google.com/document/d/1zpcA7Vm5P6u6yrxNJsWm2ZmwU8naq1c4BWKR24pYqlk/edit?usp=drivesdk",
+      "sourceModifiedTime": "2026-10-01T20:19:58.392Z",
+      "paragraphCount": 503,
+      "normalizedSha256": "ad750a4aff6424f2dcdb37813e1a51ee673db14f20a82df967292c2401b27d09"
+    },
+    "faq": {
+      "sourceId": "1uYZwy4pm4fzfnhyoQUwtSXEFBWbu8hhXLYvgoTxsb_E",
+      "sourceUrl": "https://docs.google.com/document/d/1uYZwy4pm4fzfnhyoQUwtSXEFBWbu8hhXLYvgoTxsb_E/edit?usp=drivesdk",
+      "sourceModifiedTime": "2026-10-01T19:03:05.776Z",
+      "paragraphCount": 254,
+      "normalizedSha256": "cb3afc56935d65155f70dcf3c1e884b52b9a6273eb64472235c2c356fb88dd18"
+    },
+    "privacy": {
+      "sourceId": "17r7Sl6cF95PSNBSqi-5XQISWnmnLVcvdkNWE_u6620Y",
+      "sourceUrl": "https://docs.google.com/document/d/17r7Sl6cF95PSNBSqi-5XQISWnmnLVcvdkNWE_u6620Y/edit?usp=drivesdk",
+      "sourceModifiedTime": "2026-10-01T19:02:54.631Z",
+      "paragraphCount": 215,
+      "normalizedSha256": "2642710b5197a09ffb55b2222d3bf26624b792668e2d7e5c33802b32a1ccab88"
+    },
+    "bookings": {
+      "sourceId": "1SEljqToak2nauBV1G9brolUMEZ5ZkClI5Re2xFGIO-Y",
+      "sourceUrl": "https://docs.google.com/document/d/1SEljqToak2nauBV1G9brolUMEZ5ZkClI5Re2xFGIO-Y/edit?usp=drivesdk",
+      "sourceModifiedTime": "2026-10-01T19:02:46.985Z",
+      "paragraphCount": 688,
+      "normalizedSha256": "307f002024e61daf0f82035c917e1c58bf7b67aa143151ad9c387c6a9e06de2a"
+    },
+    "cancellation": {
+      "sourceId": "109EJorKg0nRWnYz3D6kFdvBPXSrfVK-NyjpDG5wxkHw",
+      "sourceUrl": "https://docs.google.com/document/d/109EJorKg0nRWnYz3D6kFdvBPXSrfVK-NyjpDG5wxkHw/edit?usp=drivesdk",
+      "sourceModifiedTime": "2026-10-01T19:02:38.489Z",
+      "paragraphCount": 94,
+      "normalizedSha256": "cd12c6f38476827d18ff3ab8e5f583279d0a3a448594db611198e1334cd574e5"
+    },
+    "invoicing": {
+      "sourceId": "1nfQubcqV0deyyXvVh9dVup1GZuLp-X10OKR6trI6VqE",
+      "sourceUrl": "https://docs.google.com/document/d/1nfQubcqV0deyyXvVh9dVup1GZuLp-X10OKR6trI6VqE/edit?usp=drivesdk",
+      "sourceModifiedTime": "2026-10-01T19:02:30.138Z",
+      "paragraphCount": 55,
+      "normalizedSha256": "50f40e402569049b25f4a0348cae596cd30d1bb4572d7443bd19c9b26609c69e"
+    },
+    "invoicingDetails": {
+      "sourceId": "1UPx0qOjUEw1K3aG4EccIwQkOB3b3__YlZG-HDs9Yak0",
+      "sourceUrl": "https://docs.google.com/document/d/1UPx0qOjUEw1K3aG4EccIwQkOB3b3__YlZG-HDs9Yak0/edit?usp=drivesdk",
+      "sourceModifiedTime": "2026-10-01T19:02:21.760Z",
+      "paragraphCount": 145,
+      "normalizedSha256": "5798b31cbc92687cd7155f18b0664fe01a0a4a6d34cfd34b90472ed4f85459b6"
+    },
+    "premium": {
+      "sourceId": "1IqYGnfPTggpxPIIzF_HrIK6dRseIMZ7BPtSGfBmOGS4",
+      "sourceUrl": "https://docs.google.com/document/d/1IqYGnfPTggpxPIIzF_HrIK6dRseIMZ7BPtSGfBmOGS4/edit?usp=drivesdk",
+      "sourceModifiedTime": "2026-10-01T19:02:12.348Z",
+      "paragraphCount": 138,
+      "normalizedSha256": "ab2c09d2ae3122c05d621cdcbe83ed229dd2988479deeb7da0104132f31ac721"
+    },
+    "serviceFee": {
+      "sourceId": "10HXQUwYFZjk8vffizxRYDLqI7q2y5tCtgQAqi95wEOs",
+      "sourceUrl": "https://docs.google.com/document/d/10HXQUwYFZjk8vffizxRYDLqI7q2y5tCtgQAqi95wEOs/edit?usp=drivesdk",
+      "sourceModifiedTime": "2026-10-01T19:01:09.434Z",
+      "paragraphCount": 63,
+      "normalizedSha256": "39e9623b3231d14153925f2392e4355d4df471c911b563ea92aac476f1c7db3f"
+    }
+  }
+}

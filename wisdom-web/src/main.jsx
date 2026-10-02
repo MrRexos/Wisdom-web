@@ -1,14 +1,15 @@
-import { StrictMode } from 'react';
+import { lazy, StrictMode, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import AppDownload from './AppDownload.jsx';
 import { APP_DOWNLOAD_PATH } from './appLinks';
 import DataDeletion from './DataDeletion.jsx';
-import PrivacyPolicy from './PrivacyPolicy.jsx';
-import TermsAndConditions from './TermsAndConditions.jsx';
+import { LEGAL_ROUTES } from './legal/routes';
 import UsersDashboard from './UsersDashboard.jsx';
 import { LocaleProvider } from './i18n/LocaleContext.jsx';
 import './index.css';
+
+const LegalDocumentPage = lazy(() => import('./legal/LegalDocumentPage.jsx'));
 
 const normalizePathname = (pathname) => {
   if (!pathname) return '/';
@@ -24,11 +25,9 @@ createRoot(document.getElementById('root')).render(
       <LocaleProvider>
         {currentPath === '/data-deletion'
           ? <DataDeletion />
-          : currentPath === '/privacy'
-            ? <PrivacyPolicy />
-            : currentPath === '/terms'
-              ? <TermsAndConditions />
-              : currentPath === '/users'
+          : LEGAL_ROUTES[currentPath]
+            ? <Suspense fallback={<main aria-busy="true" />}><LegalDocumentPage documentKey={LEGAL_ROUTES[currentPath]} /></Suspense>
+            : currentPath === '/users'
                 ? <UsersDashboard />
                 : <App />}
       </LocaleProvider>

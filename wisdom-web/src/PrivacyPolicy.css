@@ -34,6 +34,7 @@ body.privacy-policy-active {
   font-weight: 700;
   letter-spacing: 0;
   line-height: 0.98;
+  overflow-wrap: anywhere;
 }
 
 .privacy-policy-page .privacy-policy-intro {
@@ -97,6 +98,65 @@ body.privacy-policy-active {
   padding-top: 64px;
   color: #6e6e73;
   font-size: 0.95rem;
+}
+
+.legal-language-control {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  font-size: 0.95rem;
+}
+
+.legal-language-control select {
+  padding: 8px 12px;
+  border: 1px solid #d2d2d7;
+  border-radius: 8px;
+  background: #fff;
+  color: #1d1d1f;
+  font: inherit;
+}
+
+.legal-document-body {
+  margin-top: 32px;
+  overflow-wrap: anywhere;
+}
+
+.privacy-policy-page .legal-section-heading {
+  margin: 56px 0 22px;
+  color: #1d1d1f;
+  font-size: clamp(1.75rem, 2.6vw, 2.5rem);
+  font-weight: 700;
+}
+
+.legal-document-body > h3 {
+  margin: 32px 0 12px;
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+
+.legal-list-item {
+  padding-inline-start: 1.25rem;
+}
+
+.legal-related-documents {
+  display: grid;
+  gap: 16px;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid #d2d2d7;
+  overflow-wrap: anywhere;
+}
+
+.legal-faq-item {
+  margin-bottom: 20px;
+}
+
+.legal-faq-item summary {
+  cursor: pointer;
+  margin-bottom: 12px;
+  font-weight: 600;
 }
 
 @media (max-width: 900px) {
