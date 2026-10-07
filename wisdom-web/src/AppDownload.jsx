@@ -1,12 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import officialAppIcon from './assets/official_app_icon.png';
 import AppStoreLinks from './AppStoreLinks';
+import { getDeviceStoreUrl } from './appLinks';
 import { getAppDownloadCopy } from './i18n/appDownloadCopy';
 import { useLocale } from './i18n/LocaleContext';
 
 export default function AppDownload() {
   const { locale } = useLocale();
   const copy = getAppDownloadCopy(locale);
+  const hasRedirected = useRef(false);
+
+  useEffect(() => {
+    const storeUrl = getDeviceStoreUrl(navigator);
+    if (!storeUrl || hasRedirected.current) return;
+
+    hasRedirected.current = true;
+    try {
+      // Evita volver a redirigir al usuario cuando pulsa Atrás desde la tienda.
+      window.location.replace(storeUrl);
+    } catch {
+      // Los enlaces siguen disponibles si el navegador bloquea la redirección.
+    }
+  }, []);
 
   useEffect(() => {
     document.title = `${copy.title} | Wisdom`;
