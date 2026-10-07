@@ -1,0 +1,386 @@
+{
+  "en": {
+    "title": "Wisdom in numbers",
+    "environment": "Production",
+    "overview": "Overview",
+    "updated": "Updated",
+    "errorTitle": "Couldn’t load the figures",
+    "errorDescription": "The connection to production is currently unavailable.",
+    "retry": "Try again",
+    "newUsers": "New users",
+    "daily": "Daily registrations · last 7 days · UTC",
+    "registrations": "registrations",
+    "chartLabel": "Users registered per day over the last seven days",
+    "privacy": "Aggregate data, no personal information",
+    "metrics": {
+      "users": {
+        "label": "Users",
+        "description": "Registered accounts"
+      },
+      "professionals": {
+        "label": "Professionals",
+        "description": "Professional mode active"
+      },
+      "services": {
+        "label": "Services",
+        "description": "Services created"
+      },
+      "bookings": {
+        "label": "Bookings",
+        "description": "Total bookings"
+      }
+    }
+  },
+  "es": {
+    "title": "Wisdom en números",
+    "environment": "Producción",
+    "overview": "Vista general",
+    "updated": "Actualizado",
+    "errorTitle": "No se pudieron cargar las cifras",
+    "errorDescription": "La conexión con producción no está disponible ahora mismo.",
+    "retry": "Reintentar",
+    "newUsers": "Nuevos usuarios",
+    "daily": "Altas diarias · últimos 7 días · UTC",
+    "registrations": "altas",
+    "chartLabel": "Usuarios registrados por día durante los últimos siete días",
+    "privacy": "Datos agregados, sin información personal",
+    "metrics": {
+      "users": {
+        "label": "Usuarios",
+        "description": "Cuentas registradas"
+      },
+      "professionals": {
+        "label": "Profesionales",
+        "description": "Modo profesional activo"
+      },
+      "services": {
+        "label": "Servicios",
+        "description": "Servicios creados"
+      },
+      "bookings": {
+        "label": "Reservas",
+        "description": "Reservas totales"
+      }
+    }
+  },
+  "ca": {
+    "title": "Wisdom en xifres",
+    "environment": "Producció",
+    "overview": "Vista general",
+    "updated": "Actualitzat",
+    "errorTitle": "No s’han pogut carregar les xifres",
+    "errorDescription": "La connexió amb producció no està disponible ara mateix.",
+    "retry": "Torna-ho a provar",
+    "newUsers": "Nous usuaris",
+    "daily": "Altes diàries · últims 7 dies · UTC",
+    "registrations": "altes",
+    "chartLabel": "Usuaris registrats cada dia durant els últims set dies",
+    "privacy": "Dades agregades, sense informació personal",
+    "metrics": {
+      "users": {
+        "label": "Usuaris",
+        "description": "Comptes registrats"
+      },
+      "professionals": {
+        "label": "Professionals",
+        "description": "Mode professional actiu"
+      },
+      "services": {
+        "label": "Serveis",
+        "description": "Serveis creats"
+      },
+      "bookings": {
+        "label": "Reserves",
+        "description": "Reserves totals"
+      }
+    }
+  },
+  "fr": {
+    "title": "Wisdom en chiffres",
+    "environment": "Production",
+    "overview": "Vue d’ensemble",
+    "updated": "Mis à jour",
+    "errorTitle": "Impossible de charger les chiffres",
+    "errorDescription": "La connexion à l’environnement de production est momentanément indisponible.",
+    "retry": "Réessayer",
+    "newUsers": "Nouveaux utilisateurs",
+    "daily": "Inscriptions quotidiennes · 7 derniers jours · UTC",
+    "registrations": "inscriptions",
+    "chartLabel": "Utilisateurs inscrits par jour au cours des sept derniers jours",
+    "privacy": "Données agrégées, sans informations personnelles",
+    "metrics": {
+      "users": {
+        "label": "Utilisateurs",
+        "description": "Comptes inscrits"
+      },
+      "professionals": {
+        "label": "Professionnels",
+        "description": "Mode professionnel actif"
+      },
+      "services": {
+        "label": "Services",
+        "description": "Services créés"
+      },
+      "bookings": {
+        "label": "Réservations",
+        "description": "Total des réservations"
+      }
+    }
+  },
+  "pt": {
+    "title": "Wisdom em números",
+    "environment": "Produção",
+    "overview": "Visão geral",
+    "updated": "Atualizado",
+    "errorTitle": "Não foi possível carregar os números",
+    "errorDescription": "A ligação ao ambiente de produção está indisponível neste momento.",
+    "retry": "Tentar novamente",
+    "newUsers": "Novos utilizadores",
+    "daily": "Registos diários · últimos 7 dias · UTC",
+    "registrations": "registos",
+    "chartLabel": "Utilizadores registados por dia nos últimos sete dias",
+    "privacy": "Dados agregados, sem informação pessoal",
+    "metrics": {
+      "users": {
+        "label": "Utilizadores",
+        "description": "Contas registadas"
+      },
+      "professionals": {
+        "label": "Profissionais",
+        "description": "Modo profissional ativo"
+      },
+      "services": {
+        "label": "Serviços",
+        "description": "Serviços criados"
+      },
+      "bookings": {
+        "label": "Reservas",
+        "description": "Total de reservas"
+      }
+    }
+  },
+  "de": {
+    "title": "Wisdom in Zahlen",
+    "environment": "Produktion",
+    "overview": "Überblick",
+    "updated": "Aktualisiert",
+    "errorTitle": "Zahlen konnten nicht geladen werden",
+    "errorDescription": "Die Verbindung zur Produktionsumgebung ist derzeit nicht verfügbar.",
+    "retry": "Erneut versuchen",
+    "newUsers": "Neue Nutzer",
+    "daily": "Tägliche Registrierungen · letzte 7 Tage · UTC",
+    "registrations": "Registrierungen",
+    "chartLabel": "Täglich registrierte Nutzer in den letzten sieben Tagen",
+    "privacy": "Zusammengefasste Daten ohne personenbezogene Informationen",
+    "metrics": {
+      "users": {
+        "label": "Nutzer",
+        "description": "Registrierte Konten"
+      },
+      "professionals": {
+        "label": "Profis",
+        "description": "Profimodus aktiv"
+      },
+      "services": {
+        "label": "Dienstleistungen",
+        "description": "Erstellte Dienstleistungen"
+      },
+      "bookings": {
+        "label": "Buchungen",
+        "description": "Buchungen insgesamt"
+      }
+    }
+  },
+  "it": {
+    "title": "Wisdom in numeri",
+    "environment": "Produzione",
+    "overview": "Panoramica",
+    "updated": "Aggiornato",
+    "errorTitle": "Impossibile caricare i dati",
+    "errorDescription": "La connessione all’ambiente di produzione non è disponibile al momento.",
+    "retry": "Riprova",
+    "newUsers": "Nuovi utenti",
+    "daily": "Iscrizioni giornaliere · ultimi 7 giorni · UTC",
+    "registrations": "iscrizioni",
+    "chartLabel": "Utenti registrati ogni giorno negli ultimi sette giorni",
+    "privacy": "Dati aggregati, senza informazioni personali",
+    "metrics": {
+      "users": {
+        "label": "Utenti",
+        "description": "Account registrati"
+      },
+      "professionals": {
+        "label": "Professionisti",
+        "description": "Modalità professionale attiva"
+      },
+      "services": {
+        "label": "Servizi",
+        "description": "Servizi creati"
+      },
+      "bookings": {
+        "label": "Prenotazioni",
+        "description": "Prenotazioni totali"
+      }
+    }
+  },
+  "zh": {
+    "title": "Wisdom 数据一览",
+    "environment": "生产环境",
+    "overview": "概览",
+    "updated": "更新于",
+    "errorTitle": "无法加载数据",
+    "errorDescription": "目前无法连接到生产环境。",
+    "retry": "重试",
+    "newUsers": "新用户",
+    "daily": "每日注册 · 最近 7 天 · UTC",
+    "registrations": "次注册",
+    "chartLabel": "最近七天每天注册的用户数",
+    "privacy": "汇总数据，不含个人信息",
+    "metrics": {
+      "users": {
+        "label": "用户",
+        "description": "已注册账户"
+      },
+      "professionals": {
+        "label": "专业人士",
+        "description": "已启用专业模式"
+      },
+      "services": {
+        "label": "服务",
+        "description": "已创建服务"
+      },
+      "bookings": {
+        "label": "预约",
+        "description": "预约总数"
+      }
+    }
+  },
+  "ar": {
+    "title": "Wisdom بالأرقام",
+    "environment": "بيئة الإنتاج",
+    "overview": "نظرة عامة",
+    "updated": "آخر تحديث",
+    "errorTitle": "تعذّر تحميل الأرقام",
+    "errorDescription": "الاتصال ببيئة الإنتاج غير متاح حاليًا.",
+    "retry": "حاول مجددًا",
+    "newUsers": "مستخدمون جدد",
+    "daily": "التسجيلات اليومية · آخر 7 أيام · UTC",
+    "registrations": "تسجيلات",
+    "chartLabel": "المستخدمون المسجّلون يوميًا خلال الأيام السبعة الماضية",
+    "privacy": "بيانات مجمّعة دون معلومات شخصية",
+    "metrics": {
+      "users": {
+        "label": "المستخدمون",
+        "description": "الحسابات المسجّلة"
+      },
+      "professionals": {
+        "label": "المحترفون",
+        "description": "الوضع المهني مفعّل"
+      },
+      "services": {
+        "label": "الخدمات",
+        "description": "الخدمات المنشأة"
+      },
+      "bookings": {
+        "label": "الحجوزات",
+        "description": "إجمالي الحجوزات"
+      }
+    }
+  },
+  "hi": {
+    "title": "आँकड़ों में Wisdom",
+    "environment": "प्रोडक्शन",
+    "overview": "एक नज़र में",
+    "updated": "अपडेट किया गया",
+    "errorTitle": "आँकड़े लोड नहीं हो सके",
+    "errorDescription": "प्रोडक्शन से कनेक्शन फ़िलहाल उपलब्ध नहीं है।",
+    "retry": "फिर कोशिश करें",
+    "newUsers": "नए उपयोगकर्ता",
+    "daily": "दैनिक पंजीकरण · पिछले 7 दिन · UTC",
+    "registrations": "पंजीकरण",
+    "chartLabel": "पिछले सात दिनों में प्रतिदिन पंजीकृत उपयोगकर्ता",
+    "privacy": "समेकित डेटा, कोई निजी जानकारी नहीं",
+    "metrics": {
+      "users": {
+        "label": "उपयोगकर्ता",
+        "description": "पंजीकृत खाते"
+      },
+      "professionals": {
+        "label": "पेशेवर",
+        "description": "पेशेवर मोड सक्रिय"
+      },
+      "services": {
+        "label": "सेवाएँ",
+        "description": "बनाई गई सेवाएँ"
+      },
+      "bookings": {
+        "label": "बुकिंग",
+        "description": "कुल बुकिंग"
+      }
+    }
+  },
+  "ja": {
+    "title": "数字で見るWisdom",
+    "environment": "本番環境",
+    "overview": "概要",
+    "updated": "更新日時",
+    "errorTitle": "データを読み込めませんでした",
+    "errorDescription": "現在、本番環境に接続できません。",
+    "retry": "再試行",
+    "newUsers": "新規ユーザー",
+    "daily": "日別の登録数 · 過去7日間 · UTC",
+    "registrations": "件の登録",
+    "chartLabel": "過去7日間の日別ユーザー登録数",
+    "privacy": "個人情報を含まない集計データ",
+    "metrics": {
+      "users": {
+        "label": "ユーザー",
+        "description": "登録済みアカウント"
+      },
+      "professionals": {
+        "label": "プロ",
+        "description": "プロモードが有効"
+      },
+      "services": {
+        "label": "サービス",
+        "description": "作成されたサービス"
+      },
+      "bookings": {
+        "label": "予約",
+        "description": "予約総数"
+      }
+    }
+  },
+  "ru": {
+    "title": "Wisdom в цифрах",
+    "environment": "Рабочая среда",
+    "overview": "Обзор",
+    "updated": "Обновлено",
+    "errorTitle": "Не удалось загрузить данные",
+    "errorDescription": "Соединение с рабочей средой сейчас недоступно.",
+    "retry": "Повторить",
+    "newUsers": "Новые пользователи",
+    "daily": "Регистрации по дням · последние 7 дней · UTC",
+    "registrations": "регистраций",
+    "chartLabel": "Число зарегистрированных пользователей по дням за последние семь дней",
+    "privacy": "Агрегированные данные без личной информации",
+    "metrics": {
+      "users": {
+        "label": "Пользователи",
+        "description": "Зарегистрированные аккаунты"
+      },
+      "professionals": {
+        "label": "Специалисты",
+        "description": "Профессиональный режим активен"
+      },
+      "services": {
+        "label": "Услуги",
+        "description": "Созданные услуги"
+      },
+      "bookings": {
+        "label": "Бронирования",
+        "description": "Всего бронирований"
+      }
+    }
+  }
+}

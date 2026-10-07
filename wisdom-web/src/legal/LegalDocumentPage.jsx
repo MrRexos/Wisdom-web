@@ -3,19 +3,20 @@ import GetAppLink from '../GetAppLink';
 import brandmark from '../assets/brandmark.svg';
 import wordmark from '../assets/WISDOM_brandmark.svg';
 import { useLocale } from '../i18n/LocaleContext';
-import { getLegalDocument, LEGAL_LANGUAGES, normalizeLegalLanguage } from './content';
+import { getCopy } from '../i18n/translations';
+import { getLegalDocument } from './content';
+import { getLegalLocale, LEGAL_LANGUAGES, normalizeLegalLanguage } from './language';
 import { LEGAL_ROUTES } from './routes';
 import '../PrivacyPolicy.css';
 
 /* eslint-disable react/prop-types */
-const languageNames = { es: 'Español', en: 'English', ca: 'Català', fr: 'Français', ar: 'العربية', zh: '中文' };
-const languageLabels = { es: 'Idioma', en: 'Language', ca: 'Idioma', fr: 'Langue', ar: 'اللغة', zh: '语言' };
+const languageNames = { es: 'Español', en: 'English' };
+const languageLabels = { es: 'Idioma', en: 'Language' };
 
 function getRequestedLanguage() {
   const requested = new URLSearchParams(window.location.search).get('lang');
   if (requested && LEGAL_LANGUAGES.includes(requested.toLowerCase().split(/[-_]/)[0])) return normalizeLegalLanguage(requested);
-  const browser = (navigator.language || '').toLowerCase().split('-')[0];
-  return browser === 'ar' || browser === 'zh' ? browser : null;
+  return null;
 }
 
 function LinkedText({ text }) {
@@ -35,13 +36,20 @@ function DocumentBlock({ block }) {
 export default function LegalDocumentPage({ documentKey }) {
   const { locale } = useLocale();
   const [selectedLanguage, setSelectedLanguage] = useState(getRequestedLanguage);
-  const isEnglishOnly = documentKey === 'terms' || documentKey === 'privacy';
-  const language = isEnglishOnly ? 'en' : selectedLanguage || normalizeLegalLanguage(locale);
+  const isPrimaryDocument = documentKey === 'terms' || documentKey === 'privacy';
+  const language = selectedLanguage || getLegalLocale();
+  const copy = getCopy(language);
   const content = getLegalDocument(language, documentKey);
 
   useEffect(() => {
     document.title = `${content.title} - Wisdom`;
-  }, [content.title]);
+    document.documentElement.lang = language;
+    document.documentElement.dir = 'ltr';
+    return () => {
+      document.documentElement.lang = locale;
+      document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
+    };
+  }, [content.title, language, locale]);
 
   useEffect(() => {
     document.body.classList.add('privacy-policy-active');
@@ -58,27 +66,25 @@ export default function LegalDocumentPage({ documentKey }) {
 
   return (
     <>
-      {isEnglishOnly && (
-        <header className="legal-page-header" lang="en">
-          <a className="legal-page-brandmark" href="/" aria-label="Wisdom home">
+      {isPrimaryDocument && (
+        <header className="legal-page-header" lang={language} dir="ltr">
+          <a className="legal-page-brandmark" href="/" aria-label="Wisdom">
             <img src={brandmark} alt="" width="280" height="161" />
           </a>
-          <a className="legal-page-wordmark" href="/" aria-label="Wisdom home">
+          <a className="legal-page-wordmark" href="/" aria-label="Wisdom">
             <img src={wordmark} alt="WISDOM" width="504" height="91" />
           </a>
-          <GetAppLink className="legal-page-download">Get the app</GetAppLink>
+          <GetAppLink className="legal-page-download">{copy.header.getApp}</GetAppLink>
         </header>
       )}
-      <main className={`privacy-policy-page${isEnglishOnly ? ' privacy-policy-page--primary' : ''}`} lang={language} dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <main className={`privacy-policy-page${isPrimaryDocument ? ' privacy-policy-page--primary' : ''}`} lang={language} dir="ltr">
         <article className="privacy-policy-shell">
-          {!isEnglishOnly && (
-            <label className="legal-language-control">
-              <span>{languageLabels[language]}</span>
-              <select value={language} onChange={changeLanguage}>
-                {LEGAL_LANGUAGES.map((key) => <option key={key} value={key}>{languageNames[key]}</option>)}
-              </select>
-            </label>
-          )}
+          <label className="legal-language-control">
+            <span>{languageLabels[language]}</span>
+            <select value={language} onChange={changeLanguage}>
+              {LEGAL_LANGUAGES.map((key) => <option key={key} value={key}>{languageNames[key]}</option>)}
+            </select>
+          </label>
           <p className="privacy-policy-kicker">{content.lastUpdated}</p>
           <h1>{content.title}</h1>
           <div className="legal-document-body">

@@ -1,28 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import officialAppIcon from './assets/official_app_icon.png';
 import AppStoreLinks from './AppStoreLinks';
-import { getAppDownloadCopy, getAppDownloadLocale } from './i18n/appDownloadCopy';
+import { getAppDownloadCopy } from './i18n/appDownloadCopy';
+import { useLocale } from './i18n/LocaleContext';
 
 export default function AppDownload() {
-  const [locale] = useState(() => getAppDownloadLocale(navigator));
+  const { locale } = useLocale();
   const copy = getAppDownloadCopy(locale);
-  const direction = locale === 'ar' ? 'rtl' : 'ltr';
 
   useEffect(() => {
     document.title = `${copy.title} | Wisdom`;
   }, [copy.title]);
-
-  useEffect(() => {
-    const previousLanguage = document.documentElement.lang;
-    const previousDirection = document.documentElement.dir;
-    document.documentElement.lang = locale;
-    document.documentElement.dir = direction;
-
-    return () => {
-      document.documentElement.lang = previousLanguage;
-      document.documentElement.dir = previousDirection;
-    };
-  }, [locale, direction]);
 
   useEffect(() => {
     document.body.classList.add('app-download-active');

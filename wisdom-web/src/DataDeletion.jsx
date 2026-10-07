@@ -1,10 +1,22 @@
 import { useEffect } from 'react';
+import { useLocale } from './i18n/LocaleContext';
+import { getLegalLocale } from './legal/language';
+import { getDataDeletionCopy } from './i18n/dataDeletionCopy';
 import './DataDeletion.css';
 
 export default function DataDeletion() {
+  const { locale } = useLocale();
+  const language = getLegalLocale();
+  const copy = getDataDeletionCopy(language);
   useEffect(() => {
-    document.title = 'Wisdom – Data Deletion Request';
-  }, []);
+    document.title = copy.title;
+    document.documentElement.lang = language;
+    document.documentElement.dir = 'ltr';
+    return () => {
+      document.documentElement.lang = locale;
+      document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
+    };
+  }, [copy.title, language, locale]);
 
   useEffect(() => {
     document.body.classList.add('data-deletion-active');
@@ -14,53 +26,48 @@ export default function DataDeletion() {
   }, []);
 
   return (
-    <main className="data-deletion-page">
+    <main className="data-deletion-page" lang={language} dir="ltr">
       <header className="data-deletion-header">
-        <h1>Wisdom – Data Deletion Request</h1>
+        <h1>{copy.title}</h1>
         <p>
-          <span className="label">Developer</span>
+          <span className="label">{copy.developer}</span>
           <span>Oier Hernanz Arroyo</span>
         </p>
         <p>
-          <span className="label">App</span>
+          <span className="label">{copy.app}</span>
           <span>Wisdom (com.anonymous.Wisdom_expo)</span>
         </p>
       </header>
 
       <section className="data-deletion-card">
-        <h2>How to request deletion</h2>
+        <h2>{copy.requestTitle}</h2>
         <p>
-          Email{' '}
-          <a href="mailto:wisdom.helpcontact@gmail.com">wisdom.helpcontact@gmail.com</a> from the address linked to your account. Tell us whether you need a partial deletion (services, chats, addresses, images) or a full account removal. We process every request within 30 days and confirm completion by email.
+          {copy.requestBefore}{' '}
+          <a href="mailto:wisdom.helpcontact@gmail.com">wisdom.helpcontact@gmail.com</a>{' '}{copy.requestAfter}
         </p>
       </section>
 
       <section className="data-deletion-card">
-        <h2>What we delete</h2>
+        <h2>{copy.deleteTitle}</h2>
         <ul>
-          <li>Profile details</li>
-          <li>Saved addresses</li>
-          <li>Services and related images</li>
-          <li>Chats and messages</li>
-          <li>Reviews and ratings</li>
-          <li>Booking history</li>
+          {copy.items.map((item) => <li key={item}>{item}</li>)}
         </ul>
       </section>
 
       <section className="data-deletion-card">
-        <h2>What we retain and for how long</h2>
+        <h2>{copy.retainTitle}</h2>
         <p>
-          Payment and billing records (Stripe) and security or fraud logs are retained for up to 90 days to meet legal obligations. After that period they are deleted or anonymized.
+          {copy.retain}
         </p>
       </section>
 
       <section className="data-deletion-card">
-        <h2>Security</h2>
-        <p>All data is transmitted over encrypted connections (TLS/HTTPS).</p>
+        <h2>{copy.securityTitle}</h2>
+        <p>{copy.security}</p>
       </section>
 
       <footer className="data-deletion-footer">
-        <p>Last updated: {new Date().toLocaleDateString('en-US')}</p>
+        <p>{copy.updated} {new Date().toLocaleDateString(language)}</p>
       </footer>
     </main>
   );

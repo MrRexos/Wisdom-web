@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useLocale } from './i18n/LocaleContext';
+import dashboardCopy from './i18n/dashboardCopy.json';
 
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'https://api.wisdomapp.es').replace(/\/$/, '');
 
 const metricDefinitions = [
   {
     key: 'users',
-    label: 'Usuarios',
-    description: 'Cuentas registradas',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
@@ -17,8 +17,6 @@ const metricDefinitions = [
   },
   {
     key: 'professionals',
-    label: 'Profesionales',
-    description: 'Modo profesional activo',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <rect x="3" y="7" width="18" height="13" rx="2" />
@@ -28,8 +26,6 @@ const metricDefinitions = [
   },
   {
     key: 'services',
-    label: 'Servicios',
-    description: 'Servicios creados',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M12 2 4 6v12l8 4 8-4V6l-8-4Z" />
@@ -39,8 +35,6 @@ const metricDefinitions = [
   },
   {
     key: 'bookings',
-    label: 'Reservas',
-    description: 'Reservas totales',
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <rect x="3" y="5" width="18" height="16" rx="2" />
@@ -50,24 +44,16 @@ const metricDefinitions = [
   },
 ];
 
-const numberFormatter = new Intl.NumberFormat('es-ES');
-const dayFormatter = new Intl.DateTimeFormat('es-ES', {
-  weekday: 'short',
-  day: 'numeric',
-  timeZone: 'UTC',
-});
-const updatedAtFormatter = new Intl.DateTimeFormat('es-ES', {
-  day: 'numeric',
-  month: 'short',
-  hour: '2-digit',
-  minute: '2-digit',
-});
-
-function formatDay(date) {
-  return dayFormatter.format(new Date(`${date}T00:00:00Z`)).replace('.', '');
-}
-
 function UsersDashboard() {
+  const { locale } = useLocale();
+  const copy = dashboardCopy[locale] || dashboardCopy.en;
+  const { numberFormatter, dayFormatter, updatedAtFormatter } = useMemo(() => ({
+    numberFormatter: new Intl.NumberFormat(locale),
+    dayFormatter: new Intl.DateTimeFormat(locale, { weekday: 'short', day: 'numeric', timeZone: 'UTC' }),
+    updatedAtFormatter: new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
+  }), [locale]);
+  const formatDay = (date) => dayFormatter.format(new Date(`${date}T00:00:00Z`)).replace('.', '');
+  useEffect(() => { document.title = copy.title; }, [copy.title]);
   const [stats, setStats] = useState(null);
   const [status, setStatus] = useState('loading');
 
@@ -98,7 +84,7 @@ function UsersDashboard() {
   useEffect(() => {
     const previousTitle = document.title;
     const controller = new AbortController();
-    document.title = 'Wisdom en números';
+
     document.body.classList.add('users-dashboard-active');
     loadStats(controller.signal);
 
@@ -126,21 +112,21 @@ function UsersDashboard() {
           </a>
           <div className="flex items-center gap-2 text-xs font-medium text-[#6f6f69]">
             <span className="h-2 w-2 rounded-full bg-[#56b781] shadow-[0_0_0_4px_rgba(86,183,129,0.12)]" />
-            Producción
+            {copy.environment}
           </div>
         </header>
 
         <section className="flex flex-1 flex-col py-10 sm:py-14 lg:py-16">
           <div className="mb-9 flex flex-col justify-between gap-5 sm:mb-11 sm:flex-row sm:items-end">
             <div>
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#8b8b84]">Vista general</p>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#8b8b84]">{copy.overview}</p>
               <h1 className="m-0 max-w-2xl text-4xl font-semibold tracking-[-0.055em] sm:text-5xl lg:text-[58px]">
-                Wisdom en números
+                {copy.title}
               </h1>
             </div>
             {stats?.generated_at ? (
               <p className="m-0 text-sm text-[#84847d]">
-                Actualizado {updatedAtFormatter.format(new Date(stats.generated_at))}
+                {copy.updated} {updatedAtFormatter.format(new Date(stats.generated_at))}
               </p>
             ) : null}
           </div>
@@ -148,14 +134,14 @@ function UsersDashboard() {
           {status === 'error' ? (
             <div className="flex min-h-[360px] flex-col items-center justify-center rounded-[28px] border border-black/10 bg-white px-6 text-center">
               <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-full bg-[#f1f1ed] text-xl">!</div>
-              <h2 className="m-0 text-xl font-semibold tracking-[-0.03em]">No se pudieron cargar las cifras</h2>
-              <p className="mb-6 mt-2 max-w-sm text-sm text-[#777770]">La conexión con producción no está disponible ahora mismo.</p>
+              <h2 className="m-0 text-xl font-semibold tracking-[-0.03em]">{copy.errorTitle}</h2>
+              <p className="mb-6 mt-2 max-w-sm text-sm text-[#777770]">{copy.errorDescription}</p>
               <button
                 type="button"
                 onClick={() => loadStats()}
                 className="rounded-full border-0 bg-[#11110f] px-5 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-[1.02]"
               >
-                Reintentar
+                {copy.retry}
               </button>
             </div>
           ) : (
@@ -167,7 +153,7 @@ function UsersDashboard() {
                     className={`min-h-[176px] p-5 sm:min-h-[190px] sm:p-7 ${index % 2 === 1 ? 'border-l border-black/10' : ''} ${index >= 2 ? 'border-t border-black/10' : ''} ${index > 0 ? 'lg:border-l' : 'lg:border-l-0'} lg:border-t-0`}
                   >
                     <div className="mb-6 flex items-start justify-between sm:mb-10">
-                      <span className="text-sm font-medium text-[#6f6f69]">{metric.label}</span>
+                      <span className="text-sm font-medium text-[#6f6f69]">{copy.metrics[metric.key].label}</span>
                       <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#f3f3ef] text-[#55554f] [&>svg]:h-[17px] [&>svg]:w-[17px] [&>svg]:fill-none [&>svg]:stroke-current [&>svg]:stroke-[1.7]">
                         {metric.icon}
                       </span>
@@ -179,7 +165,7 @@ function UsersDashboard() {
                         {numberFormatter.format(stats?.totals?.[metric.key] || 0)}
                       </p>
                     )}
-                    <p className="mb-0 mt-2 text-[11px] text-[#999991] sm:text-xs">{metric.description}</p>
+                    <p className="mb-0 mt-2 text-[11px] text-[#999991] sm:text-xs">{copy.metrics[metric.key].description}</p>
                   </article>
                 ))}
               </div>
@@ -187,12 +173,12 @@ function UsersDashboard() {
               <section className="mt-5 rounded-[28px] border border-black/10 bg-white p-6 sm:p-8 lg:p-9">
                 <div className="mb-10 flex items-start justify-between gap-4 sm:items-center">
                   <div>
-                    <h2 className="m-0 text-lg font-semibold tracking-[-0.035em]">Nuevos usuarios</h2>
-                    <p className="mb-0 mt-1 text-sm text-[#8a8a83]">Altas diarias · últimos 7 días · UTC</p>
+                    <h2 className="m-0 text-lg font-semibold tracking-[-0.035em]">{copy.newUsers}</h2>
+                    <p className="mb-0 mt-1 text-sm text-[#8a8a83]">{copy.daily}</p>
                   </div>
                   {status === 'success' ? (
                     <span className="shrink-0 rounded-full bg-[#f1f5ef] px-3 py-1.5 text-xs font-semibold text-[#56805f]">
-                      +{numberFormatter.format(newUsersThisWeek)} altas
+                      {copy.registrations}: +{numberFormatter.format(newUsersThisWeek)}
                     </span>
                   ) : null}
                 </div>
@@ -200,13 +186,13 @@ function UsersDashboard() {
                 {status === 'loading' ? (
                   <div className="h-[220px] animate-pulse rounded-2xl bg-[#f2f2ee]" />
                 ) : (
-                  <div className="grid h-[230px] grid-cols-7 items-end gap-2 sm:gap-4" aria-label="Usuarios registrados por día durante los últimos siete días">
+                  <div className="grid h-[230px] grid-cols-7 items-end gap-2 sm:gap-4" aria-label={copy.chartLabel}>
                     {dailyUsers.map((day) => {
                       const height = day.count === 0 ? 4 : Math.max((day.count / maxDailyUsers) * 100, 14);
 
                       return (
                         <div key={day.date} className="flex h-full min-w-0 flex-col items-center justify-end">
-                          <span className="mb-2 text-xs font-semibold text-[#55554f]">{day.count}</span>
+                          <span className="mb-2 text-xs font-semibold text-[#55554f]">{numberFormatter.format(day.count)}</span>
                           <div className="flex h-[168px] w-full items-end rounded-[12px] bg-[#f4f4f0] p-1 sm:rounded-2xl">
                             <div
                               className="w-full rounded-[9px] bg-[#171714] transition-[height] duration-500 sm:rounded-xl"
@@ -227,7 +213,7 @@ function UsersDashboard() {
         </section>
 
         <footer className="flex items-center justify-between border-t border-black/10 pt-5 text-xs text-[#91918a]">
-          <span>Datos agregados, sin información personal</span>
+          <span>{copy.privacy}</span>
           <span>© 2026 Wisdom</span>
         </footer>
       </main>

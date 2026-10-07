@@ -1,11 +1,13 @@
-import React, {
+/* eslint-disable react/prop-types */
+import {
   createContext,
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
 } from 'react';
-import { detectLocale, getInitialLocale, getStoredLocale } from './detectLocale';
+import { getBrowserLocale } from './detectLocale';
 import { getCopy } from './translations';
 import { buildServiceFamilies } from './serviceFamilyData';
 
@@ -13,32 +15,20 @@ const LocaleContext = createContext({
   locale: 'en',
   copy: getCopy('en'),
   serviceFamilies: buildServiceFamilies(getCopy('en')),
-  isDetecting: true,
 });
 
 export const LocaleProvider = ({ children }) => {
-  const [locale, setLocale] = useState(getInitialLocale);
-  const [isDetecting, setIsDetecting] = useState(() => !getStoredLocale());
+  const [locale, setLocale] = useState(getBrowserLocale);
 
   useEffect(() => {
-    let isMounted = true;
-
-    detectLocale()
-      .then((nextLocale) => {
-        if (!isMounted) return;
-        setLocale(nextLocale);
-      })
-      .finally(() => {
-        if (isMounted) setIsDetecting(false);
-      });
-
-    return () => {
-      isMounted = false;
-    };
+    const updateLocale = () => setLocale(getBrowserLocale());
+    window.addEventListener('languagechange', updateLocale);
+    return () => window.removeEventListener('languagechange', updateLocale);
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.documentElement.lang = locale;
+    document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
   }, [locale]);
 
   const value = useMemo(() => {
@@ -47,9 +37,8 @@ export const LocaleProvider = ({ children }) => {
       locale,
       copy,
       serviceFamilies: buildServiceFamilies(copy),
-      isDetecting,
     };
-  }, [locale, isDetecting]);
+  }, [locale]);
 
   return (
     <LocaleContext.Provider value={value}>

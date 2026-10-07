@@ -21,16 +21,14 @@ const currentPath = normalizePathname(window.location.pathname);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {currentPath === APP_DOWNLOAD_PATH ? <AppDownload /> : (
-      <LocaleProvider>
-        {currentPath === '/data-deletion'
-          ? <DataDeletion />
-          : LEGAL_ROUTES[currentPath]
-            ? <Suspense fallback={<main aria-busy="true" />}><LegalDocumentPage documentKey={LEGAL_ROUTES[currentPath]} /></Suspense>
-            : currentPath === '/users'
-                ? <UsersDashboard />
-                : <App />}
-      </LocaleProvider>
-    )}
+    <LocaleProvider>
+      {currentPath === APP_DOWNLOAD_PATH ? <AppDownload /> : currentPath === '/data-deletion'
+        ? <DataDeletion />
+        : LEGAL_ROUTES[currentPath]
+          ? <Suspense fallback={<main aria-busy="true" />}><LegalDocumentPage documentKey={LEGAL_ROUTES[currentPath]} /></Suspense>
+          : currentPath === '/users'
+            ? <UsersDashboard />
+            : <App />}
+    </LocaleProvider>
   </StrictMode>,
 );

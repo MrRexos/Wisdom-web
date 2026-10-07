@@ -425,3 +425,33 @@ html {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
+
+/* El texto árabe se lee de derecha a izquierda sin invertir la geometría animada. */
+[data-locale='ar'] :is(header, .hero-copy, .search-section p, .readable-section-text,
+  [data-pro-story-text], .unified-section p, .experience-section, .cosmos-section,
+  .works-heading, .works-fan h3, .security-section, .cta-section) {
+  direction: rtl;
+}
+
+[data-locale='ar'] :is(h1, h2, h3, p, button, a, span) {
+  letter-spacing: normal;
+}
+
+[data-locale='ar'] :is([data-pro-story-text], .security-section h3, .security-section p) {
+  text-align: right;
+}
+
+[data-locale='ar'] .mobile-footer-nav button { text-align: right; }
+[data-locale='ar'] .mobile-footer-nav button:last-child { text-align: left; }
+
+[data-layout] .hero-copy,
+[data-layout] .works-heading,
+[data-layout] .cta-section > :first-child {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+[data-layout] header a,
+.legal-page-download {
+  text-align: center;
+}

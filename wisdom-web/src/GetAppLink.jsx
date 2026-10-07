@@ -2,7 +2,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { APP_DOWNLOAD_PATH, isMobileDevice } from './appLinks';
-import { getAppDownloadCopy, getAppDownloadLocale } from './i18n/appDownloadCopy';
+import { getAppDownloadCopy } from './i18n/appDownloadCopy';
+import { useLocale } from './i18n/LocaleContext';
 import AppStoreLinks from './AppStoreLinks';
 import appQr from './assets/qr-wisdom-app-redondo.svg';
 import './GetAppLink.css';
@@ -11,7 +12,8 @@ export default function GetAppLink({ children, className }) {
   const [isOpen, setIsOpen] = useState(false);
   const dialogRef = useRef(null);
   const triggerRef = useRef(null);
-  const copy = getAppDownloadCopy(getAppDownloadLocale(navigator));
+  const { locale } = useLocale();
+  const copy = getAppDownloadCopy(locale);
 
   useEffect(() => {
     const dialog = dialogRef.current;

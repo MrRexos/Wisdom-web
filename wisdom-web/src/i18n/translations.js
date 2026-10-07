@@ -1,3 +1,11 @@
+import de from './locales/de.json';
+import it from './locales/it.json';
+import zh from './locales/zh.json';
+import ar from './locales/ar.json';
+import hi from './locales/hi.json';
+import ja from './locales/ja.json';
+import ru from './locales/ru.json';
+
 const sharedScreens = [
   '/images/IMG_7890.PNG',
   '/images/IMG_7959.PNG',
@@ -162,6 +170,7 @@ const en = {
     more: 'More',
     terms: 'Terms',
     privacy: 'Privacy',
+    navigation: 'Footer navigation',
   },
   families: {
     forYou: { name: 'For you', description: '' },
@@ -221,11 +230,11 @@ const es = {
     forProfessionals: 'Para profesionales',
     safety: 'Seguridad',
   },
-  header: { getApp: 'Descargar app' },
+  header: { getApp: 'Descarga la app' },
   hero: {
     titleLine1: 'Contrata a cualquier profesional.',
     titleLine2: 'Reserva con confianza.',
-    subtitleLine1: 'El primer marketplace donde la confianza es lo normal.',
+    subtitleLine1: 'El primer marketplace donde la confianza es la norma.',
     subtitleLine2: 'Simple. Pagos seguros. Reseñas verificadas. Una sola app.',
     appStore: 'App Store',
     playStore: 'Play Store',
@@ -236,7 +245,7 @@ const es = {
   },
   proStory: {
     line1: 'Buscar ayuda solía ser un salto al vacío.',
-    line2: 'El gran talento se perdía en el ruido. Gestionar reservas era manual, la confianza costaba construirla y la credibilidad tardaba años.',
+    line2: 'El talento se perdía entre tanto ruido. Las reservas se gestionaban a mano, ganarse la confianza era difícil y construir una reputación llevaba años.',
   },
   untilNow: 'Hasta ahora.',
   unified: 'Wisdom unifica el caos.',
@@ -253,8 +262,8 @@ const es = {
     ],
     professionals: [
       { title: 'Libertad.', description: 'Ofrece cualquier servicio que imagines.' },
-      { title: 'Control.', description: 'Tú pones precios, horarios y reglas.' },
-      { title: 'Crecimiento.', description: 'Herramientas automáticas para clientes y pagos.' },
+      { title: 'Control.', description: 'Tú decides tus tarifas, horarios y reglas.' },
+      { title: 'Crecimiento.', description: 'Herramientas automatizadas para gestionar clientes y pagos.' },
     ],
   },
   cosmos: {
@@ -287,10 +296,10 @@ const es = {
       },
       {
         title: 'Pagos protegidos',
-        description: 'Sin tarifas del servicio ocultas. Pagas un pequeño depósito para reservar y el resto queda asegurado. La tarifa del servicio incluye protección si cambian los planes.',
+        description: 'Sin cargos ocultos. Pagas un pequeño anticipo para reservar y el resto queda protegido. La tarifa de servicio incluye protección si cambian los planes.',
       },
       {
-        title: 'Privacidad por diseño',
+        title: 'Privacidad desde el diseño',
         description: 'Tu teléfono y tus datos de pago no salen de la app. Chatea, comparte fotos y paga de forma segura dentro de nuestro entorno cifrado.',
       },
     ],
@@ -301,10 +310,11 @@ const es = {
     button: 'Prueba Wisdom',
   },
   footer: {
-    connect: 'Conectar',
+    connect: 'Síguenos',
     more: 'Más',
     terms: 'Términos',
     privacy: 'Privacidad',
+    navigation: 'Navegación del pie de página',
   },
   families: {
     forYou: { name: 'Para ti', description: '' },
@@ -364,7 +374,7 @@ const ca = {
     forProfessionals: 'Per a professionals',
     safety: 'Seguretat',
   },
-  header: { getApp: 'Descarregar app' },
+  header: { getApp: 'Descarrega l’app' },
   hero: {
     titleLine1: 'Contracta qualsevol professional.',
     titleLine2: 'Reserva amb confiança.',
@@ -375,16 +385,16 @@ const ca = {
   },
   search: { title: 'Buscar ajuda solia ser un salt al buit.' },
   endless: {
-    body: 'Cerques infinites. Dependència del passa-paraula. Zero garanties. El món dels serveis estava fragmentat i et feia endevinar en lloc d\'escollir.',
+    body: 'Cerques infinites. Dependència del boca-orella. Cap garantia. El món dels serveis estava fragmentat i et feia anar a les palpentes en lloc de triar.',
   },
   proStory: {
     line1: 'Buscar ajuda solia ser un salt al buit.',
-    line2: 'El gran talent es perdia en el soroll. Gestionar reserves era manual, la confiança costava construir-la i la credibilitat trigava anys.',
+    line2: 'El talent es perdia entre tant de soroll. Les reserves es gestionaven a mà, guanyar-se la confiança era difícil i construir una reputació demanava anys.',
   },
   untilNow: 'Fins ara.',
   unified: 'Wisdom unifica el caos.',
   chaos: {
-    body: 'Hem substituït el passa-paraula per dades verificades. Hem substituït la incertesa per perfils transparents. Un sol ecosistema on la qualitat és visible i la confiança és la norma.',
+    body: 'Hem substituït el boca-orella per dades verificades. La incertesa, per perfils transparents. Un sol ecosistema on la qualitat és visible i la confiança és la norma.',
   },
   experience: {
     client: 'Client',
@@ -392,17 +402,17 @@ const ca = {
     customers: [
       { title: 'Una cerca.', description: 'De lampistes a professors de piano.' },
       { title: 'Claredat total.', description: 'Preus i ressenyes des del principi.' },
-      { title: 'Segur.', description: 'Les teves dades i pagaments, protegits.' },
+      { title: 'Seguretat.', description: 'Les teves dades i els teus pagaments, protegits.' },
     ],
     professionals: [
       { title: 'Llibertat.', description: 'Ofereix qualsevol servei que imaginis.' },
-      { title: 'Control.', description: 'Tu poses preus, horaris i regles.' },
-      { title: 'Creixement.', description: 'Eines automàtiques per a clients i pagaments.' },
+      { title: 'Control.', description: 'Tu decideixes les tarifes, els horaris i les regles.' },
+      { title: 'Creixement.', description: 'Eines automatitzades per gestionar clients i pagaments.' },
     ],
   },
   cosmos: {
     title: 'Sense categories. Només talent.',
-    subtitle: 'Wisdom et dóna la llibertat de trobar o oferir el que el món necessita.',
+    subtitle: 'Wisdom et dona la llibertat de trobar o oferir allò que el món necessita.',
     like: 'Com',
     fallbackCategory: 'Màgia',
   },
@@ -426,14 +436,14 @@ const ca = {
     features: [
       {
         title: 'Reputació demostrada',
-        description: 'El talent està obert a tothom, però la confiança es guanya. Les ressenyes només venen de reserves reals, perquè cada estrella reflecteixi una feina feta. Contractes per resultats, no promeses.',
+        description: 'Tothom pot mostrar el seu talent, però la confiança es guanya. Les ressenyes estan vinculades a reserves reals, perquè cada estrella reflecteixi una feina feta. Contractes per resultats, no per promeses.',
       },
       {
         title: 'Pagaments protegits',
-        description: 'Sense tarifes del servei ocultes. Pagues un petit dipòsit per reservar i la resta queda assegurada. La tarifa del servei inclou protecció si canvien els plans.',
+        description: 'Sense càrrecs ocults. Pagues una petita bestreta per reservar i la resta queda protegida. La tarifa de servei inclou protecció si canvien els plans.',
       },
       {
-        title: 'Privacitat per disseny',
+        title: 'Privacitat des del disseny',
         description: 'El teu telèfon i les teves dades de pagament no surten de l\'app. Xateja, comparteix fotos i paga de forma segura dins el nostre entorn xifrat.',
       },
     ],
@@ -444,10 +454,11 @@ const ca = {
     button: 'Prova Wisdom',
   },
   footer: {
-    connect: 'Connectar',
+    connect: 'Segueix-nos',
     more: 'Més',
     terms: 'Termes',
     privacy: 'Privacitat',
+    navigation: 'Navegació del peu de pàgina',
   },
   families: {
     forYou: { name: 'Per a tu', description: '' },
@@ -509,7 +520,7 @@ const fr = {
   },
   header: { getApp: 'Télécharger' },
   hero: {
-    titleLine1: 'Engagez n\'importe quel professionnel.',
+    titleLine1: 'Faites appel à des pros de tous horizons.',
     titleLine2: 'Réservez en toute confiance.',
     subtitleLine1: 'La première marketplace où la confiance est la norme.',
     subtitleLine2: 'Simple. Paiements sécurisés. Avis vérifiés. Une seule app.',
@@ -522,7 +533,7 @@ const fr = {
   },
   proStory: {
     line1: 'Chercher de l\'aide était un pari risqué.',
-    line2: 'Les grands talents se perdaient dans le bruit. Gérer les réservations était manuel, la confiance était difficile à construire et la crédibilité prenait des années.',
+    line2: 'Les meilleurs talents se perdaient dans la masse. Les réservations se géraient à la main, la confiance était difficile à gagner et la crédibilité prenait des années à se construire.',
   },
   untilNow: 'Jusqu\'à maintenant.',
   unified: 'Wisdom unifie le chaos.',
@@ -538,9 +549,9 @@ const fr = {
       { title: 'Sécurisé.', description: 'Vos données et paiements, protégés.' },
     ],
     professionals: [
-      { title: 'Liberté.', description: 'Proposez n\'importe quel service.' },
+      { title: 'Liberté.', description: 'Proposez tous les services que vous pouvez imaginer.' },
       { title: 'Contrôle.', description: 'Fixez vos tarifs, horaires et règles.' },
-      { title: 'Croissance.', description: 'Outils automatisés pour clients et paiements.' },
+      { title: 'Croissance.', description: 'Des outils automatisés pour gérer clients et paiements.' },
     ],
   },
   cosmos: {
@@ -569,7 +580,7 @@ const fr = {
     features: [
       {
         title: 'Réputation prouvée',
-        description: 'Le talent est ouvert à tous, mais la confiance se mérite. Les avis proviennent uniquement de réservations réelles, pour que chaque étoile reflète un travail accompli.',
+        description: 'Chacun peut exprimer son talent, mais la confiance se mérite. Les avis sont liés à de vraies réservations : chaque étoile reflète un travail réellement accompli. Vous choisissez sur les résultats, pas sur les promesses.',
       },
       {
         title: 'Paiements protégés',
@@ -577,7 +588,7 @@ const fr = {
       },
       {
         title: 'Confidentialité intégrée',
-        description: 'Votre numéro et vos paiements ne quittent jamais l\'app. Discutez, partagez des photos et payez en toute sécurité dans notre environnement chiffré.',
+        description: 'Votre numéro de téléphone et vos données de paiement ne quittent jamais l’app. Discutez, partagez des photos et payez en toute sécurité dans notre environnement chiffré.',
       },
     ],
   },
@@ -591,6 +602,7 @@ const fr = {
     more: 'Plus',
     terms: 'Conditions',
     privacy: 'Confidentialité',
+    navigation: 'Navigation de bas de page',
   },
   families: {
     forYou: { name: 'Pour vous', description: '' },
@@ -650,27 +662,27 @@ const pt = {
     forProfessionals: 'Para profissionais',
     safety: 'Segurança',
   },
-  header: { getApp: 'Baixar app' },
+  header: { getApp: 'Descarrega a app' },
   hero: {
-    titleLine1: 'Contrate qualquer profissional.',
-    titleLine2: 'Reserve com confiança.',
+    titleLine1: 'Contrata qualquer profissional.',
+    titleLine2: 'Reserva com confiança.',
     subtitleLine1: 'O primeiro marketplace onde a confiança é o padrão.',
-    subtitleLine2: 'Simples. Pagamentos seguros. Avaliações verificadas. Um só app.',
+    subtitleLine2: 'Simples. Pagamentos seguros. Avaliações verificadas. Uma só app.',
     appStore: 'App Store',
     playStore: 'Play Store',
   },
   search: { title: 'Procurar ajuda costumava ser um salto no escuro.' },
   endless: {
-    body: 'Buscas infinitas. Dependência do boca a boca. Zero garantias. O mundo dos serviços estava fragmentado e obrigava-te a adivinhar em vez de escolher.',
+    body: 'Pesquisas sem fim. Dependência do passa-palavra. Nenhuma garantia. O mundo dos serviços estava fragmentado e obrigava-te a adivinhar em vez de escolher.',
   },
   proStory: {
     line1: 'Procurar ajuda costumava ser um salto no escuro.',
-    line2: 'Grandes talentos perdiam-se no ruído. Gerir reservas era manual, a confiança era difícil de construir e a credibilidade demorava anos.',
+    line2: 'Grandes talentos perdiam-se no ruído. As reservas eram geridas à mão, conquistar confiança era difícil e construir credibilidade levava anos.',
   },
   untilNow: 'Até agora.',
   unified: 'A Wisdom unifica o caos.',
   chaos: {
-    body: 'Substituímos o boca a boca por dados verificados. Substituímos a incerteza por perfis transparentes. Um ecossistema onde a qualidade é visível e a confiança é o padrão.',
+    body: 'Substituímos o passa-palavra por dados verificados. A incerteza, por perfis transparentes. Um único ecossistema onde a qualidade é visível e a confiança é a norma.',
   },
   experience: {
     client: 'Cliente',
@@ -683,7 +695,7 @@ const pt = {
     professionals: [
       { title: 'Liberdade.', description: 'Oferece qualquer serviço que imagines.' },
       { title: 'Controlo.', description: 'Define preços, horários e regras.' },
-      { title: 'Crescimento.', description: 'Ferramentas automáticas para clientes e pagamentos.' },
+      { title: 'Crescimento.', description: 'Ferramentas automatizadas para gerir clientes e pagamentos.' },
     ],
   },
   cosmos: {
@@ -712,7 +724,7 @@ const pt = {
     features: [
       {
         title: 'Reputação comprovada',
-        description: 'O talento está aberto a todos, mas a confiança conquista-se. As avaliações vêm apenas de reservas reais, para que cada estrela reflita um trabalho feito.',
+        description: 'Todos podem mostrar o seu talento, mas a confiança conquista-se. As avaliações estão ligadas a reservas reais, para que cada estrela reflita um trabalho concluído. Escolhes pelos resultados, não pelas promessas.',
       },
       {
         title: 'Pagamentos protegidos',
@@ -730,10 +742,11 @@ const pt = {
     button: 'Experimenta a Wisdom',
   },
   footer: {
-    connect: 'Ligar',
+    connect: 'Segue-nos',
     more: 'Mais',
     terms: 'Termos',
     privacy: 'Privacidade',
+    navigation: 'Navegação do rodapé',
   },
   families: {
     forYou: { name: 'Para ti', description: '' },
@@ -796,6 +809,13 @@ export const translations = {
   ca: withDerivedContent(ca),
   fr: withDerivedContent(fr),
   pt: withDerivedContent(pt),
+  de: withDerivedContent(de),
+  it: withDerivedContent(it),
+  zh: withDerivedContent(zh),
+  ar: withDerivedContent(ar),
+  hi: withDerivedContent(hi),
+  ja: withDerivedContent(ja),
+  ru: withDerivedContent(ru),
 };
 
 export const getCopy = (locale) => translations[locale] || translations.en;

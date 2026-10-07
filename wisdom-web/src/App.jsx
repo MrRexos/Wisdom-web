@@ -8,6 +8,7 @@ import { createStatementAnimations } from './statementAnimations';
 import { createProStoryAnimations } from './proStoryAnimations';
 import { ANDROID_PLAY_STORE_URL, IOS_APP_STORE_URL } from './appLinks';
 import GetAppLink from './GetAppLink';
+import { useLocale } from './i18n/LocaleContext';
 import officialAppIcon from './assets/official_app_icon.png';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -24,20 +25,8 @@ if (typeof window !== 'undefined') {
   };
 }
 
-const navLinks = ['Vision', 'How it works', 'For professionals', 'Safety'];
+const navLinks = ['vision', 'howItWorks', 'forProfessionals', 'safety'];
 const EXPERIENCE_TABS = ['customers', 'professionals'];
-const EXPERIENCE_CONTENT = {
-  customers: [
-    { title: "One search.", description: "From plumbers to piano teachers." },
-    { title: "Total clarity.", description: "See prices and reviews upfront." },
-    { title: "Secure.", description: "Your data and payments, protected." },
-  ],
-  professionals: [
-    { title: "Freedom.", description: "Offer any service you can imagine." },
-    { title: "Control.", description: "Set your rates, schedule, and rules." },
-    { title: "Growth.", description: "Automated tools to manage clients and payments." },
-  ],
-};
 
 const heroTiles = [
   // Arriba Izquierda
@@ -115,146 +104,26 @@ const grayShapes = [
   { size: 'w-32 h-14 md:w-48 md:h-20', style: { top: '37%', right: '10%' } },
 ];
 
-const sharedScreens = [
-  '/images/IMG_7890.PNG',
-  '/images/IMG_7959.PNG',
-  '/images/IMG_7960.PNG',
-  '/images/IMG_7965%20(1).PNG',
-];
-
 const securityFeatures = [
   {
-    title: 'Proven Reputation',
-    description: 'Talent is open to everyone, but trust is earned. Reviews are locked to actual bookings, ensuring every star reflects a real job completed. You hire based on performance, not promises.',
     icon: (
       // Icono de estrella/reputación
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
     ),
   },
   {
-    title: 'Protected Payments',
-    description: 'No hidden fees. You pay a small deposit to book, and the rest is secured. The service fee includes protection if plans change.',
     icon: (
       // Icono de candado/escudo
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
     ),
   },
   {
-    title: 'Privacy by Design',
-    description: 'Your phone number and payment details never leave the app. Chat, share photos, and pay securely inside our encrypted bubble.',
     icon: (
       // Icono de privacidad/escudo con check
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="m9 12 2 2 4-4" /></svg>
     ),
   },
 ];
-
-const serviceFamilies = [
-  {
-    family: 'For you',
-    categories: [
-      { id: 2, category: 'Plumbing', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174847.png" },
-      { id: 89, category: 'AI Development', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20201215.png" },
-      { id: 1, category: 'Home Cleaning', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174733.png" },
-      { id: 31, category: 'Personal Training', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175621.png" },
-      { id: 317, category: 'Dog Walkers', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20190223.png" },
-      { id: 318, category: 'Pet Care', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20190446.png" },
-      { id: 5, category: 'Masonry', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175117.png" },
-      { id: 83, category: 'App Development', url: "https://storage.googleapis.com/wisdom-images/451067aa-4bd3-43d8-874d-ff8b5e50ce7e.jpeg" },
-      { id: 84, category: 'Web Development', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181853.png" },
-      { id: 151, category: 'Architects', url: "https://storage.googleapis.com/wisdom-images/526bda5b-c0c2-4170-b552-12a17db69fa9.jpeg" },
-      { id: 8, category: 'Painting', url: "https://storage.googleapis.com/wisdom-images/237ee01c-4454-4d81-8f27-f502f74ac9d3.jpeg" }
-    ]
-  },
-  {
-    family: 'Home & Maintenance',
-    description: 'Find trusted professionals for your home.',
-    categories: [
-      { id: 1, category: 'Home Cleaning', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174733.png" },
-      { id: 2, category: 'Plumbing', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174847.png" },
-      { id: 3, category: 'Electrical Work', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175034.png" },
-      { id: 5, category: 'Masonry', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175117.png" },
-      { id: 6, category: 'Gardening', url: "https://storage.googleapis.com/wisdom-images/4a4881ba-a06f-4bb1-be9d-016d2b49eae4.jpeg" },
-      { id: 8, category: 'Painting', url: "https://storage.googleapis.com/wisdom-images/237ee01c-4454-4d81-8f27-f502f74ac9d3.jpeg" }
-    ]
-  },
-  {
-    family: 'Health & Wellbeing',
-    description: 'Take care of your body and mind.',
-    categories: [
-      { id: 31, category: 'Personal Training', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175621.png" },
-      { id: 32, category: 'Nutritionists', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175812.png" },
-      { id: 34, category: 'Psychology', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180032.png" },
-      { id: 35, category: 'Yoga', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180113.png" },
-      { id: 36, category: 'Meditation', url: "https://storage.googleapis.com/wisdom-images/53a50b05-32d7-4e90-86ce-62702bc97d65.jpeg" },
-      { id: 37, category: 'Massages', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180612.png" },
-      { id: 54, category: 'Therapy', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180656.png" }
-    ]
-  },
-  {
-    family: 'Education',
-    description: 'Learn something new today.',
-    categories: [
-      { id: 56, category: 'Private Tutors', url: "https://storage.googleapis.com/wisdom-images/77502ab75202d6b38aa0df57113b6746.jpg" },
-      { id: 57, category: 'Math Classes', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180933.png" },
-      { id: 58, category: 'Languages', url: "https://storage.googleapis.com/wisdom-images/6f1a64adbbe28f7d572a9fef189ea542.jpg" },
-      { id: 59, category: 'Science', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181138.png" },
-      { id: 68, category: 'Job Interview', url: "https://storage.googleapis.com/wisdom-images/36548671ef1476a260d9e3dbb8fe4706.jpg" },
-      { id: 65, category: 'Music', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181310.png" },
-      { id: 61, category: 'Programming', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181628.png" }
-    ]
-  },
-  {
-    family: 'Digital & Online',
-    description: 'Digital services for the modern world.',
-    categories: [
-      { id: 83, category: 'App Dev', url: "https://storage.googleapis.com/wisdom-images/451067aa-4bd3-43d8-874d-ff8b5e50ce7e.jpeg" },
-      { id: 84, category: 'Web Dev', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181853.png" },
-      { id: 89, category: 'AI Dev', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20201215.png" },
-      { id: 85, category: 'Frontend', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20182501.png" },
-      { id: 86, category: 'Backend', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20182034.png" },
-      { id: 90, category: 'Design', url: "https://storage.googleapis.com/wisdom-images/a2b2c958-2d21-4308-8b07-51a1820f6faa.jpeg" },
-      { id: 94, category: 'Video Editing', url: "https://storage.googleapis.com/wisdom-images/ad3a9403cb4273ff3bfb2ab24429bb62.jpg" },
-      { id: 100, category: '3D Design', url: "https://storage.googleapis.com/wisdom-images/4475f6e7e9766c27834ae79e308907db2d4fe361f741e26a2e9357b0a6c63082_1920x1080.webp" },
-      { id: 101, category: 'Content Creation', url: "https://storage.googleapis.com/wisdom-images/contentcretor.png" },
-    ]
-  },
-  {
-    family: 'Events',
-    description: 'Make your events memorable.',
-    categories: [
-      { id: 172, category: 'Wedding Planners', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184608.png" },
-      { id: 173, category: 'Catering', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184635.png" },
-      { id: 174, category: 'Photography', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184808.png" },
-      { id: 175, category: 'DJs', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184853.png" },
-      { id: 178, category: 'Entertainers', url: "https://storage.googleapis.com/wisdom-images/1.webp" },
-      { id: 181, category: 'Security', url: "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20185110.png" }
-    ]
-  }
-];
-
-const howItWorksFlows = {
-  customers: [
-    { id: 'search', label: 'Search', screen: sharedScreens[0] },
-    { id: 'choose', label: 'Choose',  screen: sharedScreens[1] },
-    { id: 'reserve', label: 'Reserve',  screen: sharedScreens[2] },
-    { id: 'relax', label: 'Relax',  screen: sharedScreens[3] },
-  ],
-  professionals: [
-    { id: 'publish', label: 'Publish',  screen: sharedScreens[0] },
-    { id: 'manage', label: 'Manage',  screen: sharedScreens[1] },
-    { id: 'deliver', label: 'Deliver',  screen: sharedScreens[2] },
-    { id: 'earn', label: 'Earn',  screen: sharedScreens[3] },
-  ],
-};
-
-const footerNav = {
-  primary: ['Home', 'How it works', 'For Customers', 'For Professionals', 'Categories', 'Testimonials', 'Safety', 'Pricing', 'Help & FAQ', 'Devices'],
-  secondary: ['Blog', 'About Wisdom'],
-  useCases: ['Home Services', 'Health & Wellness', 'Classes & Tutoring', 'Beauty & Grooming', 'Events & Experiences', 'Online Services'],
-  legal: ['Privacy Policy', 'Terms of Use', 'Cancellation Policy', 'Booking Policy', 'Service Fee'],
-};
-
 
 const PlaceholderBox = ({ className, style = {} }) => (
   <div className={`bg-[#d9d9d9] ${className}`} style={style} aria-hidden />
@@ -348,7 +217,7 @@ const HowItWorks3D = ({ steps, activeIndex, isVertical = false }) => (
       <div className={`works-device relative flex h-auto items-center justify-center ${isVertical ? 'w-[180px]' : 'w-[220px] md:w-[300px]'}`}>
         <img
           src="/images/phone.png"
-          alt="Phone frame"
+          alt=""
           className="pointer-events-none relative z-20 h-auto w-full drop-shadow-2xl"
         />
         <div className="absolute left-1/2 top-1/2 z-10 h-[94%] w-[85%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[30px] bg-black md:rounded-[46px]">
@@ -373,6 +242,7 @@ const HowItWorks3D = ({ steps, activeIndex, isVertical = false }) => (
 );
 
 const HowItWorksSection = ({ sectionRef, flows, activeTab, onTabChange, isVertical = false }) => {
+  const { copy } = useLocale();
   const steps = flows[activeTab] || flows.customers;
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef(null);
@@ -408,7 +278,7 @@ const HowItWorksSection = ({ sectionRef, flows, activeTab, onTabChange, isVertic
       <div ref={containerRef} className="works-pin flex h-screen w-full items-center justify-center overflow-hidden">
         <div className={`works-content mx-auto flex h-full w-full max-w-[1800px] origin-center flex-col justify-center px-4 md:px-6 md:scale-[0.94] md:gap-9 md:pt-32 md:pb-14 ${isVertical ? 'gap-5 pt-24 pb-8' : 'scale-[0.9] gap-8 pt-28 pb-10'}`}>
           <div className={`works-heading flex flex-col items-center gap-6 ${isVertical ? '' : 'mt-14'}`}>
-            <SectionHeading title="How Wisdom works" />
+            <SectionHeading title={copy.howItWorks.title} />
 
             <div className="flex justify-center">
               <div className="pointer-events-auto relative flex rounded-full bg-[#F3F4F6] p-1">
@@ -429,7 +299,7 @@ const HowItWorksSection = ({ sectionRef, flows, activeTab, onTabChange, isVertic
                     )}
 
                     <span className="relative z-10 capitalize">
-                      {tab === 'customers' ? 'For customers' : 'For professionals'}
+                      {tab === 'customers' ? copy.howItWorks.forCustomers : copy.howItWorks.forProfessionals}
                     </span>
                   </button>
                 ))}
@@ -482,6 +352,7 @@ const FanItem = ({ item, index, activeIndex, isVertical = false }) => {
 };
 
 const MobileFooter = () => {
+  const { copy } = useLocale();
   const [expandedMenu, setExpandedMenu] = useState(null);
   const menuButtons = useRef({});
   const links = expandedMenu === 'connect'
@@ -491,8 +362,8 @@ const MobileFooter = () => {
       { label: 'X', href: 'https://x.com/wisdom_entity?s=11', external: true },
     ]
     : [
-      { label: 'Terms', href: '/terms' },
-      { label: 'Privacy', href: '/privacy' },
+      { label: copy.footer.terms, href: '/terms' },
+      { label: copy.footer.privacy, href: '/privacy' },
     ];
 
   const toggleMenu = (menu) => setExpandedMenu((current) => current === menu ? null : menu);
@@ -505,7 +376,7 @@ const MobileFooter = () => {
       </div>
       <nav
         className="mobile-footer-nav"
-        aria-label="Footer"
+        aria-label={copy.footer.navigation}
         onKeyDown={(event) => {
           if (event.key === 'Escape' && expandedMenu) {
             menuButtons.current[expandedMenu]?.focus();
@@ -519,7 +390,7 @@ const MobileFooter = () => {
           aria-expanded={expandedMenu === 'connect'}
           aria-controls="mobile-footer-links"
           onClick={() => toggleMenu('connect')}
-        >Connect</button>
+        >{copy.footer.connect}</button>
         <div id="mobile-footer-links" className="mobile-footer-links" aria-hidden={!expandedMenu} inert={!expandedMenu ? '' : undefined}>
           <AnimatePresence initial={false} mode="wait">
             {expandedMenu && (
@@ -549,13 +420,14 @@ const MobileFooter = () => {
           aria-expanded={expandedMenu === 'more'}
           aria-controls="mobile-footer-links"
           onClick={() => toggleMenu('more')}
-        >More</button>
+        >{copy.footer.more}</button>
       </nav>
     </footer>
   );
 };
 
 const InteractiveToggleSection = ({ sectionRef, activeMode, onModeChange, isVertical = false }) => {
+  const { copy } = useLocale();
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   // Reiniciar el hover cuando cambiamos de pestaña para evitar bugs visuales
@@ -564,12 +436,12 @@ const InteractiveToggleSection = ({ sectionRef, activeMode, onModeChange, isVert
   }, [activeMode]);
 
   const toggleItems = [
-    { label: 'Client', value: 'customers' },
-    { label: 'Profesional', value: 'professionals' }
+    { label: copy.experience.client, value: 'customers' },
+    { label: copy.experience.professional, value: 'professionals' }
   ];
 
   // Seleccionamos el contenido según el modo activo
-  const contentItems = EXPERIENCE_CONTENT[activeMode] || EXPERIENCE_CONTENT.customers;
+  const contentItems = copy.experience[activeMode] || copy.experience.customers;
 
   return (
     <section ref={sectionRef} className={`experience-section fade-section -mt-[190vh] w-full mx-auto flex flex-col justify-center items-center py-4 ${isVertical ? 'min-h-[55vh] px-4' : 'min-h-[42vh]'}`}>
@@ -664,6 +536,7 @@ const InteractiveToggleSection = ({ sectionRef, activeMode, onModeChange, isVert
 
 
 const CosmosSpiral = ({ serviceFamilies, isVertical = false }) => {
+  const { copy } = useLocale();
   // 1. Aplanar todas las categorías para obtener imágenes y nombres
   const contentPool = useMemo(() => {
     const pool = [];
@@ -720,12 +593,12 @@ const CosmosSpiral = ({ serviceFamilies, isVertical = false }) => {
 
         {/* 1. TÍTULO GRANDE */}
         <h1 className={`font-bold tracking-tighter text-[#1a1a1a] mb-6 drop-shadow-sm ${isVertical ? 'text-3xl leading-tight' : 'text-5xl md:text-7xl'}`}>
-          No categories. Just talent.
+          {copy.cosmos.title}
         </h1>
 
         {/* 2. SUBTÍTULO FIJO */}
         <p className={`text-[#9F9F9F] font-medium max-w-2xl leading-relaxed mb-8 ${isVertical ? 'text-base px-2' : 'text-lg md:text-xl'}`}>
-          Wisdom gives you the freedom to find or offer whatever the world needs.
+          {copy.cosmos.subtitle}
         </p>
 
         {/* 3. ELEMENTO DINÁMICO (CÁPSULA) */}
@@ -734,7 +607,7 @@ const CosmosSpiral = ({ serviceFamilies, isVertical = false }) => {
           {/* Contenedor izquierdo: Fijo, ocupa el 50% y alinea a la derecha */}
           <div className="flex flex-1 justify-end pr-3">
             <span className="text-md font-semibold uppercase tracking-widest text-[#9F9F9F] mt-1">
-              Like
+              {copy.cosmos.like}
             </span>
           </div>
 
@@ -756,7 +629,7 @@ const CosmosSpiral = ({ serviceFamilies, isVertical = false }) => {
                   className="flex items-center justify-center h-full"
                 >
                   <span className={`text-[#1a1a1a] font-bold whitespace-nowrap ${isVertical ? 'text-base' : 'text-xl'}`}>
-                    {contentPool[textIndex]?.label || "Magic"}
+                    {contentPool[textIndex]?.label || copy.cosmos.fallbackCategory}
                   </span>
                 </motion.div>
               </AnimatePresence>
@@ -841,6 +714,7 @@ const FloatingImage = ({ index, total, images }) => {
 
 
 function App() {
+  const { copy, serviceFamilies, locale } = useLocale();
   // --- AÑADIR ESTO ---
   const lenisRef = useRef(null);
   const appRef = useRef(null);
@@ -879,7 +753,7 @@ function App() {
     }, 150);
 
     return () => window.clearTimeout(timeoutId);
-  }, [isVertical]);
+  }, [isVertical, locale]);
 
   useEffect(() => {
     // 1. Configuración de Lenis (Scroll Suave)
@@ -1537,28 +1411,28 @@ function App() {
   };
 
   const handleNavClick = (link) => {
-    if (link === 'How it works') {
+    if (link === 'howItWorks') {
       scrollToHowItWorks('customers');
       return;
     }
 
-    if (link === 'For professionals') {
+    if (link === 'forProfessionals') {
       scrollToHowItWorks('professionals');
       return;
     }
 
-    if (link === 'Vision') {
+    if (link === 'vision') {
       scrollToSection(searchSectionRef, 'navigation-vision');
       return;
     }
 
-    if (link === 'Safety') {
+    if (link === 'safety') {
       scrollToSection(secureSectionRef, 'navigation-safety');
     }
   };
 
   return (
-    <div ref={appRef} data-layout={isVertical ? 'vertical' : 'horizontal'} className="min-h-screen bg-white text-[#050505]">
+    <div ref={appRef} dir="ltr" data-locale={locale} data-layout={isVertical ? 'vertical' : 'horizontal'} className="min-h-screen bg-white text-[#050505]">
 
       <header className={`fixed backdrop-blur-xl top-4 left-1/2 z-20 flex -translate-x-1/2 items-center rounded-full font-semibold bg-white/50 ${isVertical ? 'site-header w-[calc(100%-1.5rem)] px-3 py-2' : 'w-[min(1100px,calc(100%-2rem))] px-4 py-3'}`}>
         
@@ -1566,7 +1440,7 @@ function App() {
         <div className="flex flex-1 items-center justify-start gap-2 ml-1 md:ml-2">
           <img
             src={officialAppIcon}
-            alt="Wisdom Icon"
+            alt="Wisdom"
             className={`relative flex items-center justify-center ${isVertical ? 'h-8 w-8' : 'h-10 w-10 md:h-8 md:w-8'}`}
           />
           <div className={isVertical ? 'text-base' : 'text-lg'}>Wisdom</div>
@@ -1576,12 +1450,12 @@ function App() {
         <nav className={isVertical ? 'hidden' : 'hidden flex-none flex-wrap items-center justify-center gap-8 md:flex'}>
           {navLinks.map((link) => (
             <button
-              key={link}
+              key={copy.nav[link]}
               type="button"
               onClick={() => handleNavClick(link)}
               className="text-sm font-semibold text-[#4c5563] hover:text-[#050505] transition-colors"
             >
-              {link}
+              {copy.nav[link]}
             </button>
           ))}
         </nav>
@@ -1589,7 +1463,7 @@ function App() {
         {/* DERECHA: Botón en su propio flex-1 */}
         <div className="flex flex-1 justify-end">
           <GetAppLink className={`rounded-full bg-[#050505] font-semibold text-white hover:bg-black transition-colors ${isVertical ? 'px-4 py-1.5 text-xs' : 'px-6 py-2 text-sm'}`}>
-            Get the app
+            {copy.header.getApp}
           </GetAppLink>
         </div>
         
@@ -1616,7 +1490,7 @@ function App() {
                   {isAnimatedBox && (
                     <img
                       src={shape.imageInside}
-                      alt="Transition"
+                      alt=""
                       className="w-full h-full object-cover opacity-0" // Empieza invisible (gris)
                       // Usamos una clase específica para seleccionarla con GSAP luego si queremos, 
                       // o simplemente confiamos en que es la única img dentro.
@@ -1642,13 +1516,13 @@ function App() {
             
             {/* Título Principal */}
             <h1 className={`font-bold text-[#111111] leading-[1.1] tracking-tight ${isVertical ? 'text-[32px]' : 'text-[40px] sm:text-[50px] md:text-[60px]'}`}>
-              Hire any professional.<br />Book with confidence.
+              {copy.hero.titleLine1}<br />{copy.hero.titleLine2}
             </h1>
             
             {/* Subtítulo */}
             <p className={`mt-6 font-medium text-[#9F9F9F] leading-relaxed max-w-2xl ${isVertical ? 'text-base px-2' : 'text-xl md:text-[23px]'}`}>
-              The first marketplace where trust is the default.{isVertical ? ' ' : null}<br className="hidden md:block" />
-              Simple. Secure payments. Verified reviews. One app.
+              {copy.hero.subtitleLine1}{isVertical ? ' ' : null}<br className="hidden md:block" />
+              {copy.hero.subtitleLine2}
             </p>
             
             {/* Contenedor de Botones */}
@@ -1693,7 +1567,7 @@ function App() {
 
           <div ref={searchTextRef} className={`max-w-2xl ${isVertical ? 'px-2' : ''}`}>
             <p className={`font-semibold leading-tight text-center md:text-left ${isVertical ? 'text-[28px] leading-snug' : 'text-4xl md:text-6xl'}`}>
-              Looking for help used to be a leap of faith.
+              {copy.search.title}
             </p>
           </div>
         </section>
@@ -1702,7 +1576,7 @@ function App() {
         <section ref={endlessSearchSectionRef} className={`endless-section statement-section min-h-screen mx-auto flex w-full justify-center items-center py-24 ${isVertical ? 'px-4' : 'px-6'}`}>
           <div className="statement-frame">
             <p ref={endlessSearchTextRef} className={`readable-section-text mx-auto max-w-[820px] text-center font-semibold text-[#050505] ${isVertical ? 'text-2xl leading-snug' : 'text-[42px] leading-[1.3] leading-relaxed'}`}>
-              Endless searches. Reliance on word-of-mouth. Zero guarantees. The service world was fragmented, forcing you to guess instead of choose.
+              {copy.endless.body}
             </p>
           </div>
         </section>
@@ -1713,7 +1587,7 @@ function App() {
             <div ref={proStoryImageRef} className={`pro-story-image relative overflow-hidden ${isVertical ? 'w-screen max-w-none' : ''}`}>
               <img
                 src="/images/pro_alone4.png"
-                alt="People collaborating in a group"
+                alt=""
                 className="h-full w-full object-cover"
                 style={isVertical ? { objectPosition: '50% 35%' } : undefined}
               />
@@ -1724,13 +1598,13 @@ function App() {
                 data-pro-story-text
                 className={`absolute left-14 max-w-[min(500px,78vw)] text-left font-semibold leading-snug text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)] ${isVertical ? 'bottom-24 text-sm px-2' : 'bottom-40 md:bottom-56 md:left-44 text-base md:text-xl'}`}
               >
-                Looking for help used to be a leap of faith.
+                {copy.search.title}
               </p>
               <p
                 data-pro-story-text
                 className={`absolute left-14 max-w-[min(560px,80vw)] text-left font-semibold leading-snug text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)] ${isVertical ? 'bottom-10 text-xs px-2' : 'bottom-40 md:bottom-56 md:left-44 text-sm md:text-lg'}`}
               >
-                Great skills got lost in noise. Managing bookings was manual, trust was hard to build, and credibility took years to establish.
+                {copy.proStory.line2}
               </p>
             </div>
           </div>
@@ -1739,7 +1613,7 @@ function App() {
         {/* 5. Until now */}
         <section ref={untilNowSectionRef} className={`until-section statement-section mx-auto flex min-h-screen w-full justify-center items-center bg-white relative ${isVertical ? 'px-4 py-16' : 'px-6 py-24'}`}>
           <div className="statement-frame">
-            <p ref={untilNowTextRef} className={`text-center font-semibold ${isVertical ? 'text-5xl' : 'text-8xl'}`}>Until now.</p>
+            <p ref={untilNowTextRef} className={`text-center font-semibold ${isVertical ? 'text-5xl' : 'text-8xl'}`}>{copy.untilNow}</p>
           </div>
         </section>
 
@@ -1753,7 +1627,7 @@ function App() {
                  data-x="18vw" data-y="-25vh" data-rotate="8" data-mobile-x="22vw" data-mobile-y="-20vh">
               <img
                 src="https://storage.googleapis.com/wisdom-images/53a50b05-32d7-4e90-86ce-62702bc97d65.jpeg"
-                alt="Meditation"
+                alt=""
                 className="w-full h-full object-cover"
               />
             </div>
@@ -1763,7 +1637,7 @@ function App() {
                  data-x="-24vw" data-y="-18vh" data-rotate="-6" data-mobile-x="-28vw" data-mobile-y="-18vh">
               <img
                 src="https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184635.png"
-                alt="Catering"
+                alt=""
                 className="w-full h-full object-cover"
               />
             </div>
@@ -1773,7 +1647,7 @@ function App() {
                  data-x="-22vw" data-y="20vh" data-rotate="5" data-mobile-x="-25vw" data-mobile-y="20vh">
               <img
                 src="https://storage.googleapis.com/wisdom-images/526bda5b-c0c2-4170-b552-12a17db69fa9.jpeg"
-                alt="Architect"
+                alt=""
                 className="w-full h-full object-cover"
               />
             </div>
@@ -1783,7 +1657,7 @@ function App() {
                  data-x="26vw" data-y="-4vh" data-rotate="3" data-mobile-x="30vw" data-mobile-y="-4vh">
               <img
                 src="https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20185810.png"
-                alt="Finances"
+                alt=""
                 className="w-full h-full object-cover"
               />
             </div>
@@ -1793,7 +1667,7 @@ function App() {
                  data-x="18vw" data-y="28vh" data-rotate="-5" data-mobile-x="20vw" data-mobile-y="24vh">
               <img
                 src="https://storage.googleapis.com/wisdom-images/393cd8b9-f908-4d5a-a67b-cf6850b287e9.jpg"
-                alt="Gardener"
+                alt=""
                 className="w-full h-full object-cover"
               />
             </div>
@@ -1801,13 +1675,13 @@ function App() {
             {/* LOGO CENTRAL */}
             <img
               src={officialAppIcon}
-              alt="Wisdom Icon"
+              alt="Wisdom"
               className={`relative z-10 flex items-center justify-center ${isVertical ? 'h-28 w-28' : 'h-40 w-40 md:h-72 md:w-72'}`}
             />
             
             {/* TEXTO DE DEBAJO QUE APARECERÁ */}
             <div className={`unified-text absolute top-1/2 left-1/2 -translate-x-1/2 w-full text-center z-20 pointer-events-none ${isVertical ? 'mt-24' : 'mt-32 md:mt-48'}`}>
-              <p className={`font-semibold text-[#050505] ${isVertical ? 'text-2xl leading-snug px-3' : 'text-[32px] md:text-[42px]'}`}>Wisdom unifies the chaos.</p>
+              <p className={`font-semibold text-[#050505] ${isVertical ? 'text-2xl leading-snug px-3' : 'text-[32px] md:text-[42px]'}`}>{copy.unified}</p>
             </div>
           </div>
 
@@ -1817,7 +1691,7 @@ function App() {
         <section ref={chaosSectionRef} className={`chaos-section statement-section -mt-[-350vh] min-h-screen mx-auto flex w-full justify-center items-center py-20 ${isVertical ? 'px-4' : 'px-6'}`}>
           <div className="statement-frame">
             <p className={`readable-section-text mx-auto max-w-[1000px] text-center font-semibold text-[#050505] ${isVertical ? 'text-2xl leading-snug' : 'text-[42px] leading-[1.3] leading-relaxed'}`}>
-              We replaced word-of-mouth with verified data. We replaced uncertainty with transparent profiles. A single ecosystem where quality is visible, and trust is the default.
+              {copy.chaos.body}
             </p>
           </div>
         </section>
@@ -1835,7 +1709,7 @@ function App() {
         {/* 9. How Wisdom works */}
         <HowItWorksSection
           sectionRef={howWorksRef}
-          flows={howItWorksFlows}
+          flows={copy.howItWorksFlows}
           activeTab={experienceMode}
           onTabChange={setExperienceMode}
           isVertical={isVertical}
@@ -1847,14 +1721,14 @@ function App() {
           {/* Título de la sección */}
           <div className={`text-center ${isVertical ? 'mb-6' : 'mb-20'}`}>
             <h2 className={`section-heading font-semibold text-[#050505] ${isVertical ? 'text-2xl' : 'text-4xl md:text-5xl'}`}>
-              Wisdom is security
+              {copy.security.title}
             </h2>
           </div>
 
           <div className={`mx-auto grid w-full ${isVertical ? 'max-w-sm gap-4' : 'max-w-7xl gap-8 md:grid-cols-3'}`}>
             {securityFeatures.map((feature, index) => (
               <motion.div
-                key={feature.title}
+                key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -1868,9 +1742,9 @@ function App() {
                 </div>
 
                 <div className="flex flex-col flex-grow text-left">
-                  <h3 className={`font-bold text-[#050505] ${isVertical ? 'mb-2 text-base' : 'mb-4 text-xl'}`}>{feature.title}</h3>
+                  <h3 className={`font-bold text-[#050505] ${isVertical ? 'mb-2 text-base' : 'mb-4 text-xl'}`}>{copy.security.features[index].title}</h3>
                   <p className={`font-medium leading-relaxed text-[#6B7280] ${isVertical ? 'text-sm' : 'text-base'}`}>
-                    {feature.description}
+                    {copy.security.features[index].description}
                   </p>
                 </div>
               </motion.div>
@@ -1884,13 +1758,13 @@ function App() {
           {/* Contenido del CTA (Centrado en la pantalla) */}
           <div className={`flex flex-col items-center justify-center text-center ${isVertical ? 'px-4' : 'px-6'}`}>
             <h2 className={`font-bold tracking-tight text-[#050505] ${isVertical ? 'text-3xl leading-tight' : 'text-4xl md:text-[42px]'}`}>
-              Ready to simplify your life?
+              {copy.cta.title}
             </h2>
             <p className={`mt-5 text-[#9ca3af] font-medium max-w-md leading-relaxed ${isVertical ? 'text-base' : 'text-lg md:text-xl'}`}>
-              Join the new standard for services today on Apple and Android.
+              {copy.cta.subtitle}
             </p>
             <GetAppLink className="mt-10 rounded-full bg-[#0F0F0F] px-8 py-3 text-sm font-bold text-white transition-transform hover:scale-105">
-              Give Wisdom a try
+              {copy.cta.button}
             </GetAppLink>
           </div>
 
@@ -1908,7 +1782,7 @@ function App() {
               
               {/* Grupo Connect */}
               <div className="flex items-center gap-4">
-                <span className="font-medium text-[#050505]">Connect</span>
+                <span className="font-medium text-[#050505]">{copy.footer.connect}</span>
                 <div className="flex flex-wrap items-center gap-4 text-[#9ca3af]">
                   <a href="https://www.instagram.com/wisdom__app?igsh=MWttN3dhc3FjajluNA==" target="_blank" rel="noopener noreferrer" className="hover:text-[#050505] transition-colors">Instagram</a>
                   <a href="https://www.tiktok.com/@wisdom_app?_r=1&_t=ZN-9AMWqSWcozu" target="_blank" rel="noopener noreferrer" className="hover:text-[#050505] transition-colors">TikTok</a>
@@ -1918,10 +1792,10 @@ function App() {
 
               {/* Grupo More */}
               <div className="flex items-center gap-4">
-                <span className="font-medium text-[#050505]">More</span>
+                <span className="font-medium text-[#050505]">{copy.footer.more}</span>
                 <div className="flex items-center gap-4 text-[#9ca3af]">
-                  <a href="/terms" className="hover:text-[#050505] transition-colors">Terms</a>
-                  <a href="/privacy" className="hover:text-[#050505] transition-colors">Privacy</a>
+                  <a href="/terms" className="hover:text-[#050505] transition-colors">{copy.footer.terms}</a>
+                  <a href="/privacy" className="hover:text-[#050505] transition-colors">{copy.footer.privacy}</a>
                 </div>
               </div>
 

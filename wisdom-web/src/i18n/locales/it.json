@@ -1,0 +1,182 @@
+{
+  "nav": {
+    "vision": "Visione",
+    "howItWorks": "Come funziona",
+    "forProfessionals": "Per i professionisti",
+    "safety": "Sicurezza"
+  },
+  "header": {
+    "getApp": "Scarica l’app"
+  },
+  "hero": {
+    "titleLine1": "Ingaggia professionisti per ogni esigenza.",
+    "titleLine2": "Prenota con fiducia.",
+    "subtitleLine1": "Il primo marketplace dove la fiducia è la norma.",
+    "subtitleLine2": "Semplice. Pagamenti sicuri. Recensioni verificate. Una sola app.",
+    "appStore": "App Store",
+    "playStore": "Play Store"
+  },
+  "search": {
+    "title": "Un tempo, cercare aiuto era un salto nel buio."
+  },
+  "endless": {
+    "body": "Ricerche infinite. Dipendenza dal passaparola. Nessuna garanzia. Il mondo dei servizi era frammentato: dovevi andare a intuito invece di scegliere."
+  },
+  "proStory": {
+    "line1": "Un tempo, cercare aiuto era un salto nel buio.",
+    "line2": "Le grandi competenze si perdevano nel rumore. Le prenotazioni si gestivano a mano, conquistare la fiducia era difficile e costruire credibilità richiedeva anni."
+  },
+  "untilNow": "Fino a oggi.",
+  "unified": "Wisdom mette ordine nel caos.",
+  "chaos": {
+    "body": "Abbiamo sostituito il passaparola con dati verificati. L’incertezza con profili trasparenti. Un unico ecosistema dove la qualità è visibile e la fiducia è la norma."
+  },
+  "experience": {
+    "client": "Clienti",
+    "professional": "Professionisti",
+    "customers": [
+      {
+        "title": "Una ricerca.",
+        "description": "Dagli idraulici agli insegnanti di pianoforte."
+      },
+      {
+        "title": "Tutto chiaro.",
+        "description": "Prezzi e recensioni visibili fin da subito."
+      },
+      {
+        "title": "Al sicuro.",
+        "description": "I tuoi dati e pagamenti, protetti."
+      }
+    ],
+    "professionals": [
+      {
+        "title": "Libertà.",
+        "description": "Offri qualsiasi servizio tu possa immaginare."
+      },
+      {
+        "title": "Controllo.",
+        "description": "Decidi tariffe, orari e regole."
+      },
+      {
+        "title": "Crescita.",
+        "description": "Strumenti automatizzati per gestire clienti e pagamenti."
+      }
+    ]
+  },
+  "cosmos": {
+    "title": "Niente categorie. Solo talento.",
+    "subtitle": "Wisdom ti dà la libertà di trovare o offrire ciò di cui il mondo ha bisogno.",
+    "like": "Ad esempio",
+    "fallbackCategory": "Magia"
+  },
+  "howItWorks": {
+    "title": "Come funziona Wisdom",
+    "forCustomers": "Per i clienti",
+    "forProfessionals": "Per i professionisti",
+    "steps": {
+      "search": "Cerca",
+      "choose": "Scegli",
+      "reserve": "Prenota",
+      "relax": "Rilassati",
+      "publish": "Pubblica",
+      "manage": "Gestisci",
+      "deliver": "Svolgi",
+      "earn": "Guadagna"
+    }
+  },
+  "security": {
+    "title": "Wisdom è sicurezza",
+    "features": [
+      {
+        "title": "Reputazione dimostrata",
+        "description": "Il talento è aperto a tutti, ma la fiducia si guadagna. Le recensioni sono legate a prenotazioni reali, così ogni stella riflette un lavoro svolto davvero. Scegli in base ai risultati, non alle promesse."
+      },
+      {
+        "title": "Pagamenti protetti",
+        "description": "Nessun costo nascosto. Versi un piccolo acconto per prenotare e il resto è al sicuro. La commissione di servizio include una protezione se i programmi cambiano."
+      },
+      {
+        "title": "Privacy fin dall’inizio",
+        "description": "Il tuo numero di telefono e i dati di pagamento non escono dall’app. Chatta, condividi foto e paga in sicurezza nel nostro ambiente crittografato."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Vuoi semplificarti la vita?",
+    "subtitle": "Scopri oggi il nuovo standard dei servizi su Apple e Android.",
+    "button": "Prova Wisdom"
+  },
+  "footer": {
+    "connect": "Seguici",
+    "more": "Altro",
+    "terms": "Condizioni",
+    "privacy": "Privacy",
+    "navigation": "Navigazione a piè di pagina"
+  },
+  "families": {
+    "forYou": {
+      "name": "Per te",
+      "description": ""
+    },
+    "homeMaintenance": {
+      "name": "Casa e manutenzione",
+      "description": "Trova professionisti di fiducia per la tua casa."
+    },
+    "healthWellbeing": {
+      "name": "Salute e benessere",
+      "description": "Prenditi cura del corpo e della mente."
+    },
+    "education": {
+      "name": "Formazione",
+      "description": "Impara qualcosa di nuovo oggi."
+    },
+    "digitalOnline": {
+      "name": "Digitale e online",
+      "description": "Servizi digitali per il mondo di oggi."
+    },
+    "events": {
+      "name": "Eventi",
+      "description": "Rendi i tuoi eventi indimenticabili."
+    }
+  },
+  "categories": {
+    "1": "Pulizie domestiche",
+    "2": "Idraulica",
+    "3": "Lavori elettrici",
+    "5": "Muratura",
+    "6": "Giardinaggio",
+    "8": "Tinteggiatura",
+    "31": "Personal training",
+    "32": "Nutrizionisti",
+    "34": "Psicologia",
+    "35": "Yoga",
+    "36": "Meditazione",
+    "37": "Massaggi",
+    "54": "Terapia",
+    "56": "Ripetizioni",
+    "57": "Lezioni di matematica",
+    "58": "Lingue",
+    "59": "Scienze",
+    "61": "Programmazione",
+    "65": "Musica",
+    "68": "Colloqui di lavoro",
+    "83": "Sviluppo app",
+    "84": "Sviluppo web",
+    "85": "Frontend",
+    "86": "Backend",
+    "89": "Sviluppo IA",
+    "90": "Design",
+    "94": "Montaggio video",
+    "100": "Design 3D",
+    "101": "Creazione di contenuti",
+    "151": "Architetti",
+    "172": "Organizzazione matrimoni",
+    "173": "Catering",
+    "174": "Fotografia",
+    "175": "DJ",
+    "178": "Animazione",
+    "181": "Sicurezza",
+    "317": "Dog sitter",
+    "318": "Cura degli animali"
+  }
+}
