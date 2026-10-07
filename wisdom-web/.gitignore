@@ -10,6 +10,8 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+.playwright-cli/
+output/playwright/seo-*
 *.local
 
 # Editor directories and files
@@ -22,3 +24,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Reproducible local screenshot exports and visual checks.
+/output/playwright/how-it-works/

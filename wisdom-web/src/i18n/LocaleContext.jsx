@@ -7,7 +7,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { getBrowserLocale } from './detectLocale';
+import { getBrowserLocale, getRequestedLocale } from './detectLocale';
 import { getCopy } from './translations';
 import { buildServiceFamilies } from './serviceFamilyData';
 
@@ -17,11 +17,14 @@ const LocaleContext = createContext({
   serviceFamilies: buildServiceFamilies(getCopy('en')),
 });
 
-export const LocaleProvider = ({ children }) => {
-  const [locale, setLocale] = useState(getBrowserLocale);
+const getPageLocale = () => (typeof window !== 'undefined'
+  && getRequestedLocale(window.location.search, undefined, window.location.pathname)) || getBrowserLocale();
+
+export const LocaleProvider = ({ children, initialLocale }) => {
+  const [locale, setLocale] = useState(() => initialLocale || getPageLocale());
 
   useEffect(() => {
-    const updateLocale = () => setLocale(getBrowserLocale());
+    const updateLocale = () => setLocale(getPageLocale());
     window.addEventListener('languagechange', updateLocale);
     return () => window.removeEventListener('languagechange', updateLocale);
   }, []);

@@ -8,9 +8,11 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node scripts/build-seo.mjs",
+    "test": "node --test scripts/i18n.test.mjs scripts/seo.test.mjs",
+    "images:optimize": "node scripts/optimize-site-images.mjs",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "node scripts/preview-seo.mjs"
   },
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",
@@ -34,6 +36,7 @@
     "eslint-plugin-react-refresh": "^0.4.12",
     "globals": "^15.9.0",
     "postcss": "^8.4.47",
+    "sharp": "^0.34.5",
     "tailwindcss": "^3.4.13",
     "vite": "^5.4.9"
   }

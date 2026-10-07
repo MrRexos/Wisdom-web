@@ -44,7 +44,7 @@ export default function GetAppLink({ children, className }) {
       <a ref={triggerRef} href={APP_DOWNLOAD_PATH} className={className} onClick={handleClick}>
         {children}
       </a>
-      {createPortal(
+      {typeof document !== 'undefined' && createPortal(
         <dialog
           ref={dialogRef}
           className="app-download-dialog"

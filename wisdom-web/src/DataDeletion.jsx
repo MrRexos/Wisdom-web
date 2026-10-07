@@ -4,9 +4,10 @@ import { getLegalLocale } from './legal/language';
 import { getDataDeletionCopy } from './i18n/dataDeletionCopy';
 import './DataDeletion.css';
 
-export default function DataDeletion() {
+// eslint-disable-next-line react/prop-types
+export default function DataDeletion({ initialLanguage }) {
   const { locale } = useLocale();
-  const language = getLegalLocale();
+  const language = initialLanguage || getLegalLocale();
   const copy = getDataDeletionCopy(language);
   useEffect(() => {
     document.title = copy.title;

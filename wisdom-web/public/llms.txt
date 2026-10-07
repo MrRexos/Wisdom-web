@@ -1,0 +1,26 @@
+# Wisdom
+
+> Wisdom es una plataforma para encontrar, comparar, reservar y pagar servicios, y para ofrecer servicios como profesional. Incluye servicios presenciales y online.
+
+Wisdom actúa como intermediario. El profesional identificado en cada oferta presta el servicio. Los precios, tareas incluidas, disponibilidad y zonas de desplazamiento dependen de cada oferta. La presencia de una categoría no garantiza disponibilidad en una localidad concreta.
+
+## Servicios y ayuda
+
+- [Preguntas frecuentes en español](https://www.wisdomapp.es/faq.es.md): respuestas sobre limpieza a domicilio, profesionales cercanos, reservas, pagos y funcionamiento de Wisdom. Versión Markdown del contenido visible de la web.
+- [Frequently asked questions in English](https://www.wisdomapp.es/faq.en.md): the same public help content in English, including home services and cleaning.
+- [Web en español](https://www.wisdomapp.es/es): presentación de Wisdom y de sus servicios.
+- [English website](https://www.wisdomapp.es/en): Wisdom services and platform overview.
+- [Descargar Wisdom](https://www.wisdomapp.es/app): enlaces oficiales a App Store y Google Play.
+
+## Políticas y condiciones
+
+- [Condiciones de uso](https://www.wisdomapp.es/terms?lang=es): condiciones de la plataforma.
+- [Política de reservas](https://www.wisdomapp.es/booking-policy?lang=es): funcionamiento de las reservas.
+- [Cancelaciones](https://www.wisdomapp.es/cancellation-policy?lang=es): condiciones de cancelación.
+- [Tarifa del servicio](https://www.wisdomapp.es/service-fee?lang=es): condiciones de la tarifa de Wisdom.
+- [Privacidad](https://www.wisdomapp.es/privacy?lang=es): tratamiento de datos personales.
+
+## Optional
+
+- [Mapa del sitio](https://www.wisdomapp.es/sitemap.xml): URLs públicas y versiones por idioma.
+- [Eliminación de datos](https://www.wisdomapp.es/data-deletion): información para solicitar la eliminación de datos.

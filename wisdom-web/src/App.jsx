@@ -10,6 +10,9 @@ import { ANDROID_PLAY_STORE_URL, IOS_APP_STORE_URL } from './appLinks';
 import GetAppLink from './GetAppLink';
 import { useLocale } from './i18n/LocaleContext';
 import officialAppIcon from './assets/official_app_icon.png';
+import { getHomeMetadata, updatePageMetadata } from './seo/metadata';
+import { getRequestedLocale } from './i18n/detectLocale';
+import { responsiveImage } from './seo/responsiveImages';
 
 gsap.registerPlugin(ScrollTrigger);
 if (typeof window !== 'undefined') {
@@ -217,14 +220,23 @@ const HowItWorks3D = ({ steps, activeIndex, isVertical = false }) => (
       <div className={`works-device relative flex h-auto items-center justify-center ${isVertical ? 'w-[180px]' : 'w-[220px] md:w-[300px]'}`}>
         <img
           src="/images/phone.png"
+          width={400}
+          height={772}
+          loading="lazy"
+          decoding="async"
           alt=""
           className="pointer-events-none relative z-20 h-auto w-full drop-shadow-2xl"
         />
-        <div className="absolute left-1/2 top-1/2 z-10 h-[94%] w-[85%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[30px] bg-black md:rounded-[46px]">
+        <div className="works-screen">
           {steps.map((step, index) => (
             <motion.img
               key={step.id}
+              // Conservar los PNG solicitados y la nitidez del texto de la app.
               src={step.screen}
+              width={1125}
+              height={2436}
+              loading="lazy"
+              decoding="async"
               alt={step.label}
               initial={{ opacity: 0 }}
               animate={{
@@ -232,7 +244,7 @@ const HowItWorks3D = ({ steps, activeIndex, isVertical = false }) => (
                 scale: activeIndex === index ? 1 : 1.02,
               }}
               transition={{ duration: 0.4, ease: 'easeInOut' }}
-              className="absolute inset-0 h-full w-full object-fill"
+              className="absolute inset-0 block h-full w-full object-contain"
             />
           ))}
         </div>
@@ -592,9 +604,9 @@ const CosmosSpiral = ({ serviceFamilies, isVertical = false }) => {
       <div className="relative z-10 text-center flex flex-col items-center justify-center px-4 mix-blend-multiply">
 
         {/* 1. TÍTULO GRANDE */}
-        <h1 className={`font-bold tracking-tighter text-[#1a1a1a] mb-6 drop-shadow-sm ${isVertical ? 'text-3xl leading-tight' : 'text-5xl md:text-7xl'}`}>
+        <h2 className={`font-bold tracking-tighter text-[#1a1a1a] mb-6 drop-shadow-sm ${isVertical ? 'text-3xl leading-tight' : 'text-5xl md:text-7xl'}`}>
           {copy.cosmos.title}
-        </h1>
+        </h2>
 
         {/* 2. SUBTÍTULO FIJO */}
         <p className={`text-[#9F9F9F] font-medium max-w-2xl leading-relaxed mb-8 ${isVertical ? 'text-base px-2' : 'text-lg md:text-xl'}`}>
@@ -700,7 +712,9 @@ const FloatingImage = ({ index, total, images }) => {
       }}
     >
       <img
-        src={randomImage}
+        {...responsiveImage(randomImage)}
+        loading="lazy"
+        decoding="async"
         alt=""
         className="w-full h-full object-cover rounded-sm shadow-xl opacity-80 hover:opacity-100 transition-opacity"
       />
@@ -715,6 +729,9 @@ const FloatingImage = ({ index, total, images }) => {
 
 function App() {
   const { copy, serviceFamilies, locale } = useLocale();
+  useEffect(() => {
+    updatePageMetadata({ ...getHomeMetadata(copy, locale), language: locale, explicitLanguage: Boolean(getRequestedLocale(window.location.search, undefined, window.location.pathname)) });
+  }, [copy, locale]);
   // --- AÑADIR ESTO ---
   const lenisRef = useRef(null);
   const appRef = useRef(null);
@@ -1440,6 +1457,9 @@ function App() {
         <div className="flex flex-1 items-center justify-start gap-2 ml-1 md:ml-2">
           <img
             src={officialAppIcon}
+            width="1024"
+            height="1024"
+            decoding="async"
             alt="Wisdom"
             className={`relative flex items-center justify-center ${isVertical ? 'h-8 w-8' : 'h-10 w-10 md:h-8 md:w-8'}`}
           />
@@ -1489,7 +1509,8 @@ function App() {
                   {/* SI ES EL CUADRO ANIMADO, RENDERIZAMOS LA IMAGEN DENTRO (OCULTA AL PRINCIPIO) */}
                   {isAnimatedBox && (
                     <img
-                      src={shape.imageInside}
+                      {...responsiveImage(shape.imageInside, '(max-width: 767px) 300px, 420px')}
+                      decoding="async"
                       alt=""
                       className="w-full h-full object-cover opacity-0" // Empieza invisible (gris)
                       // Usamos una clase específica para seleccionarla con GSAP luego si queremos, 
@@ -1506,7 +1527,7 @@ function App() {
           <div className="hero-tiles absolute inset-0 w-full h-full pointer-events-none">
             {heroTiles.map((tile, index) => (
               <div key={`tile-${index}`} className={`parallax-item absolute overflow-hidden opacity-75 ${tile.size}`} style={tile.style} data-speed={isVertical ? '30' : '60'}>
-                <img src={tile.url} alt="" className="w-full h-full object-cover" />
+                <img {...responsiveImage(tile.url, '(max-width: 767px) 22vw, 240px')} decoding="async" alt="" className="w-full h-full object-cover" />
               </div>
             ))}
           </div>
@@ -1559,7 +1580,8 @@ function App() {
           {/* Contenedor imagen con REF - La imagen aquí es INVISIBLE (opacity-0) */}
           <div ref={searchImageRef} className={`aspect-[3/4] w-full shrink-0 relative ${isVertical ? 'max-w-[260px]' : 'max-w-[420px]'}`}>
             <img
-              src="https://storage.googleapis.com/wisdom-images/search_services.png"
+              {...responsiveImage('https://storage.googleapis.com/wisdom-images/search_services.png', '(max-width: 767px) 300px, 420px')}
+              decoding="async"
               alt=""
               className="w-full h-full object-cover opacity-0" // <--- IMPORTANTE: Invisible
             />
@@ -1586,7 +1608,9 @@ function App() {
           <div ref={proStoryPinRef} className="pro-story-pin relative flex h-screen w-full items-center justify-center">
             <div ref={proStoryImageRef} className={`pro-story-image relative overflow-hidden ${isVertical ? 'w-screen max-w-none' : ''}`}>
               <img
-                src="/images/pro_alone4.png"
+                src={import.meta.env.PROD ? '/images/pro_alone4.webp' : '/images/pro_alone4.png'}
+                loading="lazy"
+                decoding="async"
                 alt=""
                 className="h-full w-full object-cover"
                 style={isVertical ? { objectPosition: '50% 35%' } : undefined}
@@ -1626,7 +1650,9 @@ function App() {
             <div className="unified-photo absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-20 md:w-56 md:h-36 shadow-lg" 
                  data-x="18vw" data-y="-25vh" data-rotate="8" data-mobile-x="22vw" data-mobile-y="-20vh">
               <img
-                src="https://storage.googleapis.com/wisdom-images/53a50b05-32d7-4e90-86ce-62702bc97d65.jpeg"
+                {...responsiveImage('https://storage.googleapis.com/wisdom-images/53a50b05-32d7-4e90-86ce-62702bc97d65.jpeg')}
+                loading="lazy"
+                decoding="async"
                 alt=""
                 className="w-full h-full object-cover"
               />
@@ -1636,7 +1662,9 @@ function App() {
             <div className="unified-photo absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-24 md:w-60 md:h-40 shadow-lg"
                  data-x="-24vw" data-y="-18vh" data-rotate="-6" data-mobile-x="-28vw" data-mobile-y="-18vh">
               <img
-                src="https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184635.png"
+                {...responsiveImage('https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184635.png')}
+                loading="lazy"
+                decoding="async"
                 alt=""
                 className="w-full h-full object-cover"
               />
@@ -1646,7 +1674,9 @@ function App() {
             <div className="unified-photo absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-24 md:w-56 md:h-40 shadow-lg"
                  data-x="-22vw" data-y="20vh" data-rotate="5" data-mobile-x="-25vw" data-mobile-y="20vh">
               <img
-                src="https://storage.googleapis.com/wisdom-images/526bda5b-c0c2-4170-b552-12a17db69fa9.jpeg"
+                {...responsiveImage('https://storage.googleapis.com/wisdom-images/526bda5b-c0c2-4170-b552-12a17db69fa9.jpeg')}
+                loading="lazy"
+                decoding="async"
                 alt=""
                 className="w-full h-full object-cover"
               />
@@ -1656,7 +1686,9 @@ function App() {
             <div className="unified-photo absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-24 md:w-60 md:h-40 shadow-lg"
                  data-x="26vw" data-y="-4vh" data-rotate="3" data-mobile-x="30vw" data-mobile-y="-4vh">
               <img
-                src="https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20185810.png"
+                {...responsiveImage('https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20185810.png')}
+                loading="lazy"
+                decoding="async"
                 alt=""
                 className="w-full h-full object-cover"
               />
@@ -1666,7 +1698,9 @@ function App() {
             <div className="unified-photo absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-32 md:w-40 md:h-52 shadow-lg"
                  data-x="18vw" data-y="28vh" data-rotate="-5" data-mobile-x="20vw" data-mobile-y="24vh">
               <img
-                src="https://storage.googleapis.com/wisdom-images/393cd8b9-f908-4d5a-a67b-cf6850b287e9.jpg"
+                {...responsiveImage('https://storage.googleapis.com/wisdom-images/393cd8b9-f908-4d5a-a67b-cf6850b287e9.jpg')}
+                loading="lazy"
+                decoding="async"
                 alt=""
                 className="w-full h-full object-cover"
               />

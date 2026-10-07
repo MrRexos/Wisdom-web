@@ -6,12 +6,7 @@ import hi from './locales/hi.json';
 import ja from './locales/ja.json';
 import ru from './locales/ru.json';
 
-const sharedScreens = [
-  '/images/IMG_7890.PNG',
-  '/images/IMG_7959.PNG',
-  '/images/IMG_7960.PNG',
-  '/images/IMG_7965%20(1).PNG',
-];
+const howItWorksScreen = (step) => `/images/how-it-works/${step}.png`;
 
 const categoryIds = {
   1: 'homeCleaning',
@@ -62,16 +57,16 @@ const buildCategories = (labels) => (
 
 const buildHowItWorksFlows = (labels) => ({
   customers: [
-    { id: 'search', label: labels.search, screen: sharedScreens[0] },
-    { id: 'choose', label: labels.choose, screen: sharedScreens[1] },
-    { id: 'reserve', label: labels.reserve, screen: sharedScreens[2] },
-    { id: 'relax', label: labels.relax, screen: sharedScreens[3] },
+    { id: 'search', label: labels.search, screen: howItWorksScreen('search') },
+    { id: 'choose', label: labels.choose, screen: howItWorksScreen('choose') },
+    { id: 'reserve', label: labels.reserve, screen: howItWorksScreen('reserve') },
+    { id: 'relax', label: labels.relax, screen: howItWorksScreen('relax') },
   ],
   professionals: [
-    { id: 'publish', label: labels.publish, screen: sharedScreens[0] },
-    { id: 'manage', label: labels.manage, screen: sharedScreens[1] },
-    { id: 'deliver', label: labels.deliver, screen: sharedScreens[2] },
-    { id: 'earn', label: labels.earn, screen: sharedScreens[3] },
+    { id: 'publish', label: labels.publish, screen: howItWorksScreen('publish') },
+    { id: 'manage', label: labels.manage, screen: howItWorksScreen('manage') },
+    { id: 'deliver', label: labels.deliver, screen: howItWorksScreen('deliver') },
+    { id: 'earn', label: labels.earn, screen: howItWorksScreen('earn') },
   ],
 });
 

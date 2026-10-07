@@ -1,7 +1,359 @@
 {
-    "rewrites":  [
-      {"source": "/app", "destination": "/app/index.html"},
-      {"source": "/app/", "destination": "/app/index.html"},
-      {"source": "/(.*)", "destination": "/"}
-    ]
-  }
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/app/index.html",
+      "destination": "/app",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/images/responsive/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/seo/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
+    },
+    {
+      "source": "/users",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
+    },
+    {
+      "source": "/data-deletion",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/en",
+      "destination": "/seo/home.en.html"
+    },
+    {
+      "source": "/es",
+      "destination": "/seo/home.es.html"
+    },
+    {
+      "source": "/ca",
+      "destination": "/seo/home.ca.html"
+    },
+    {
+      "source": "/fr",
+      "destination": "/seo/home.fr.html"
+    },
+    {
+      "source": "/pt",
+      "destination": "/seo/home.pt.html"
+    },
+    {
+      "source": "/de",
+      "destination": "/seo/home.de.html"
+    },
+    {
+      "source": "/it",
+      "destination": "/seo/home.it.html"
+    },
+    {
+      "source": "/zh",
+      "destination": "/seo/home.zh.html"
+    },
+    {
+      "source": "/ar",
+      "destination": "/seo/home.ar.html"
+    },
+    {
+      "source": "/hi",
+      "destination": "/seo/home.hi.html"
+    },
+    {
+      "source": "/ja",
+      "destination": "/seo/home.ja.html"
+    },
+    {
+      "source": "/ru",
+      "destination": "/seo/home.ru.html"
+    },
+    {
+      "source": "/app",
+      "destination": "/app/index.html"
+    },
+    {
+      "source": "/terms",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "es"
+        }
+      ],
+      "destination": "/seo/terms.es.html"
+    },
+    {
+      "source": "/terms",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "en"
+        }
+      ],
+      "destination": "/seo/terms.en.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/seo/terms.default.html"
+    },
+    {
+      "source": "/privacy",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "es"
+        }
+      ],
+      "destination": "/seo/privacy.es.html"
+    },
+    {
+      "source": "/privacy",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "en"
+        }
+      ],
+      "destination": "/seo/privacy.en.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/seo/privacy.default.html"
+    },
+    {
+      "source": "/booking-policy",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "es"
+        }
+      ],
+      "destination": "/seo/booking-policy.es.html"
+    },
+    {
+      "source": "/booking-policy",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "en"
+        }
+      ],
+      "destination": "/seo/booking-policy.en.html"
+    },
+    {
+      "source": "/booking-policy",
+      "destination": "/seo/booking-policy.default.html"
+    },
+    {
+      "source": "/cancellation-policy",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "es"
+        }
+      ],
+      "destination": "/seo/cancellation-policy.es.html"
+    },
+    {
+      "source": "/cancellation-policy",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "en"
+        }
+      ],
+      "destination": "/seo/cancellation-policy.en.html"
+    },
+    {
+      "source": "/cancellation-policy",
+      "destination": "/seo/cancellation-policy.default.html"
+    },
+    {
+      "source": "/invoicing-policy",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "es"
+        }
+      ],
+      "destination": "/seo/invoicing-policy.es.html"
+    },
+    {
+      "source": "/invoicing-policy",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "en"
+        }
+      ],
+      "destination": "/seo/invoicing-policy.en.html"
+    },
+    {
+      "source": "/invoicing-policy",
+      "destination": "/seo/invoicing-policy.default.html"
+    },
+    {
+      "source": "/invoicing-policy/details",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "es"
+        }
+      ],
+      "destination": "/seo/invoicing-policy-details.es.html"
+    },
+    {
+      "source": "/invoicing-policy/details",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "en"
+        }
+      ],
+      "destination": "/seo/invoicing-policy-details.en.html"
+    },
+    {
+      "source": "/invoicing-policy/details",
+      "destination": "/seo/invoicing-policy-details.default.html"
+    },
+    {
+      "source": "/premium-policy",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "es"
+        }
+      ],
+      "destination": "/seo/premium-policy.es.html"
+    },
+    {
+      "source": "/premium-policy",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "en"
+        }
+      ],
+      "destination": "/seo/premium-policy.en.html"
+    },
+    {
+      "source": "/premium-policy",
+      "destination": "/seo/premium-policy.default.html"
+    },
+    {
+      "source": "/service-fee",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "es"
+        }
+      ],
+      "destination": "/seo/service-fee.es.html"
+    },
+    {
+      "source": "/service-fee",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "en"
+        }
+      ],
+      "destination": "/seo/service-fee.en.html"
+    },
+    {
+      "source": "/service-fee",
+      "destination": "/seo/service-fee.default.html"
+    },
+    {
+      "source": "/faq",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "es"
+        }
+      ],
+      "destination": "/seo/faq.es.html"
+    },
+    {
+      "source": "/faq",
+      "has": [
+        {
+          "type": "query",
+          "key": "lang",
+          "value": "en"
+        }
+      ],
+      "destination": "/seo/faq.en.html"
+    },
+    {
+      "source": "/faq",
+      "destination": "/seo/faq.default.html"
+    },
+    {
+      "source": "/data-deletion",
+      "destination": "/seo/data-deletion.default.html"
+    },
+    {
+      "source": "/users",
+      "destination": "/seo/users.default.html"
+    }
+  ]
+}

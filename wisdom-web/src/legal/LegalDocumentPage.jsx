@@ -4,9 +4,10 @@ import brandmark from '../assets/brandmark.svg';
 import wordmark from '../assets/WISDOM_brandmark.svg';
 import { useLocale } from '../i18n/LocaleContext';
 import { getCopy } from '../i18n/translations';
-import { getLegalDocument } from './content';
+import { getWebsiteDocument as getLegalDocument } from './websiteContent';
 import { getLegalLocale, LEGAL_LANGUAGES, normalizeLegalLanguage } from './language';
 import { LEGAL_ROUTES } from './routes';
+import { updatePageMetadata } from '../seo/metadata';
 import '../PrivacyPolicy.css';
 
 /* eslint-disable react/prop-types */
@@ -14,6 +15,7 @@ const languageNames = { es: 'Español', en: 'English' };
 const languageLabels = { es: 'Idioma', en: 'Language' };
 
 function getRequestedLanguage() {
+  if (typeof window === 'undefined') return null;
   const requested = new URLSearchParams(window.location.search).get('lang');
   if (requested && LEGAL_LANGUAGES.includes(requested.toLowerCase().split(/[-_]/)[0])) return normalizeLegalLanguage(requested);
   return null;
@@ -33,9 +35,9 @@ function DocumentBlock({ block }) {
   return <p className={block.type === 'list-item' ? 'legal-list-item' : undefined}><LinkedText text={block.text} /></p>;
 }
 
-export default function LegalDocumentPage({ documentKey }) {
+export default function LegalDocumentPage({ documentKey, initialLanguage }) {
   const { locale } = useLocale();
-  const [selectedLanguage, setSelectedLanguage] = useState(getRequestedLanguage);
+  const [selectedLanguage, setSelectedLanguage] = useState(() => initialLanguage || getRequestedLanguage());
   const isPrimaryDocument = documentKey === 'terms' || documentKey === 'privacy';
   const language = selectedLanguage || getLegalLocale();
   const copy = getCopy(language);
@@ -43,13 +45,14 @@ export default function LegalDocumentPage({ documentKey }) {
 
   useEffect(() => {
     document.title = `${content.title} - Wisdom`;
+    updatePageMetadata({ title: document.title, description: content.description || `${content.title}. ${content.lastUpdated}`, language, explicitLanguage: Boolean(selectedLanguage), faqSections: documentKey === 'faq' ? content.sections : undefined });
     document.documentElement.lang = language;
     document.documentElement.dir = 'ltr';
     return () => {
       document.documentElement.lang = locale;
       document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
     };
-  }, [content.title, language, locale]);
+  }, [content.title, content.description, content.lastUpdated, content.sections, documentKey, language, locale, selectedLanguage]);
 
   useEffect(() => {
     document.body.classList.add('privacy-policy-active');
@@ -89,10 +92,10 @@ export default function LegalDocumentPage({ documentKey }) {
           <h1>{content.title}</h1>
           <div className="legal-document-body">
             {documentKey === 'faq' ? content.sections.map((section) => (
-              <section key={section.id} className="privacy-policy-section">
+              <section key={section.id} id={section.id} className="privacy-policy-section">
                 <h2>{section.title}</h2>
                 {section.items.map((item) => (
-                  <details key={item.id} className="legal-faq-item">
+                  <details key={item.id} id={item.id} className="legal-faq-item">
                     <summary>{item.question}</summary>
                     {item.answer.split('\n\n').map((paragraph, index) => <p key={index}><LinkedText text={paragraph} /></p>)}
                   </details>

@@ -1,0 +1,837 @@
+{
+  "/images/how-it-works/choose.webp": {
+    "sourceHash": "6d08457e5bcc89b0",
+    "width": 1125,
+    "height": 2436,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/6d08457e5bcc89b0-320-q95.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/6d08457e5bcc89b0-640-q95.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/6d08457e5bcc89b0-960-q95.webp"
+      }
+    ]
+  },
+  "/images/how-it-works/deliver.webp": {
+    "sourceHash": "3ee4fdfb5859ca92",
+    "width": 1125,
+    "height": 2436,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/3ee4fdfb5859ca92-320-q95.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/3ee4fdfb5859ca92-640-q95.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/3ee4fdfb5859ca92-960-q95.webp"
+      }
+    ]
+  },
+  "/images/how-it-works/earn.webp": {
+    "sourceHash": "e6e1c160ed68329e",
+    "width": 1125,
+    "height": 2436,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/e6e1c160ed68329e-320-q95.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/e6e1c160ed68329e-640-q95.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/e6e1c160ed68329e-960-q95.webp"
+      }
+    ]
+  },
+  "/images/how-it-works/manage.webp": {
+    "sourceHash": "2bd7354ccf92deca",
+    "width": 1125,
+    "height": 2436,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/2bd7354ccf92deca-320-q95.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/2bd7354ccf92deca-640-q95.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/2bd7354ccf92deca-960-q95.webp"
+      }
+    ]
+  },
+  "/images/how-it-works/publish.webp": {
+    "sourceHash": "88a2b76aa64e0637",
+    "width": 1125,
+    "height": 2436,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/88a2b76aa64e0637-320-q95.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/88a2b76aa64e0637-640-q95.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/88a2b76aa64e0637-960-q95.webp"
+      }
+    ]
+  },
+  "/images/how-it-works/relax.webp": {
+    "sourceHash": "4c0f022eb5c8a371",
+    "width": 1125,
+    "height": 2436,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/4c0f022eb5c8a371-320-q95.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/4c0f022eb5c8a371-640-q95.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/4c0f022eb5c8a371-960-q95.webp"
+      }
+    ]
+  },
+  "/images/how-it-works/reserve.webp": {
+    "sourceHash": "465e6e18f009b4e3",
+    "width": 1125,
+    "height": 2436,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/465e6e18f009b4e3-320-q95.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/465e6e18f009b4e3-640-q95.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/465e6e18f009b4e3-960-q95.webp"
+      }
+    ]
+  },
+  "/images/how-it-works/search.webp": {
+    "sourceHash": "3004294bae674198",
+    "width": 1125,
+    "height": 2436,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/3004294bae674198-320-q95.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/3004294bae674198-640-q95.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/3004294bae674198-960-q95.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/1.webp": {
+    "sourceHash": "d05a674e53de96b3",
+    "width": 480,
+    "height": 270,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/d05a674e53de96b3-320-q86.webp"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/d05a674e53de96b3-480-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/237ee01c-4454-4d81-8f27-f502f74ac9d3.jpeg": {
+    "sourceHash": "96eb418ea363379e",
+    "width": 1170,
+    "height": 1447,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/96eb418ea363379e-320-q86.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/96eb418ea363379e-640-q86.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/96eb418ea363379e-960-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/36548671ef1476a260d9e3dbb8fe4706.jpg": {
+    "sourceHash": "204018c00e6d53d8",
+    "width": 563,
+    "height": 375,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/204018c00e6d53d8-320-q86.webp"
+      },
+      {
+        "width": 563,
+        "src": "/images/responsive/204018c00e6d53d8-563-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/393cd8b9-f908-4d5a-a67b-cf6850b287e9.jpg": {
+    "sourceHash": "4e6cd58f8dd2a757",
+    "width": 1080,
+    "height": 1351,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/4e6cd58f8dd2a757-320-q86.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/4e6cd58f8dd2a757-640-q86.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/4e6cd58f8dd2a757-960-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/4475f6e7e9766c27834ae79e308907db2d4fe361f741e26a2e9357b0a6c63082_1920x1080.webp": {
+    "sourceHash": "f07514ffbb0c6a2e",
+    "width": 1920,
+    "height": 1080,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/f07514ffbb0c6a2e-320-q86.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/f07514ffbb0c6a2e-640-q86.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/f07514ffbb0c6a2e-960-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/451067aa-4bd3-43d8-874d-ff8b5e50ce7e.jpeg": {
+    "sourceHash": "8f65f9c45c6d3368",
+    "width": 1340,
+    "height": 880,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/8f65f9c45c6d3368-320-q86.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/8f65f9c45c6d3368-640-q86.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/8f65f9c45c6d3368-960-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/4a4881ba-a06f-4bb1-be9d-016d2b49eae4.jpeg": {
+    "sourceHash": "66cf02e177621b60",
+    "width": 1080,
+    "height": 720,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/66cf02e177621b60-320-q86.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/66cf02e177621b60-640-q86.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/66cf02e177621b60-960-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/526bda5b-c0c2-4170-b552-12a17db69fa9.jpeg": {
+    "sourceHash": "3f42aad39df7ca13",
+    "width": 1080,
+    "height": 720,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/3f42aad39df7ca13-320-q86.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/3f42aad39df7ca13-640-q86.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/3f42aad39df7ca13-960-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/53a50b05-32d7-4e90-86ce-62702bc97d65.jpeg": {
+    "sourceHash": "f2a7101a6e4774c2",
+    "width": 800,
+    "height": 598,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/f2a7101a6e4774c2-320-q86.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/f2a7101a6e4774c2-640-q86.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/responsive/f2a7101a6e4774c2-800-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/6f1a64adbbe28f7d572a9fef189ea542.jpg": {
+    "sourceHash": "23bd4f72658bf4a8",
+    "width": 563,
+    "height": 500,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/23bd4f72658bf4a8-320-q86.webp"
+      },
+      {
+        "width": 563,
+        "src": "/images/responsive/23bd4f72658bf4a8-563-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/77502ab75202d6b38aa0df57113b6746.jpg": {
+    "sourceHash": "1884663506127f1e",
+    "width": 620,
+    "height": 412,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/1884663506127f1e-320-q86.webp"
+      },
+      {
+        "width": 620,
+        "src": "/images/responsive/1884663506127f1e-620-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174733.png": {
+    "sourceHash": "ce25597bc68f1344",
+    "width": 577,
+    "height": 515,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/ce25597bc68f1344-320-q86.webp"
+      },
+      {
+        "width": 577,
+        "src": "/images/responsive/ce25597bc68f1344-577-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20174847.png": {
+    "sourceHash": "d298236f64488221",
+    "width": 577,
+    "height": 511,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/d298236f64488221-320-q86.webp"
+      },
+      {
+        "width": 577,
+        "src": "/images/responsive/d298236f64488221-577-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175034.png": {
+    "sourceHash": "2f658f84ab2f2ac7",
+    "width": 748,
+    "height": 543,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/2f658f84ab2f2ac7-320-q86.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/2f658f84ab2f2ac7-640-q86.webp"
+      },
+      {
+        "width": 748,
+        "src": "/images/responsive/2f658f84ab2f2ac7-748-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175117.png": {
+    "sourceHash": "fa952dbfb42804c7",
+    "width": 489,
+    "height": 320,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/fa952dbfb42804c7-320-q86.webp"
+      },
+      {
+        "width": 489,
+        "src": "/images/responsive/fa952dbfb42804c7-489-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175621.png": {
+    "sourceHash": "39e091d96f93eb8d",
+    "width": 499,
+    "height": 354,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/39e091d96f93eb8d-320-q86.webp"
+      },
+      {
+        "width": 499,
+        "src": "/images/responsive/39e091d96f93eb8d-499-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20175812.png": {
+    "sourceHash": "179071ed7d7f632d",
+    "width": 531,
+    "height": 341,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/179071ed7d7f632d-320-q86.webp"
+      },
+      {
+        "width": 531,
+        "src": "/images/responsive/179071ed7d7f632d-531-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180032.png": {
+    "sourceHash": "c146f264a5f57399",
+    "width": 501,
+    "height": 337,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/c146f264a5f57399-320-q86.webp"
+      },
+      {
+        "width": 501,
+        "src": "/images/responsive/c146f264a5f57399-501-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180113.png": {
+    "sourceHash": "c6faa27e422cbe3e",
+    "width": 707,
+    "height": 469,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/c6faa27e422cbe3e-320-q86.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/c6faa27e422cbe3e-640-q86.webp"
+      },
+      {
+        "width": 707,
+        "src": "/images/responsive/c6faa27e422cbe3e-707-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180612.png": {
+    "sourceHash": "e41474855db87a17",
+    "width": 485,
+    "height": 379,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/e41474855db87a17-320-q86.webp"
+      },
+      {
+        "width": 485,
+        "src": "/images/responsive/e41474855db87a17-485-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180656.png": {
+    "sourceHash": "7cb0c10e9dc62831",
+    "width": 725,
+    "height": 452,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/7cb0c10e9dc62831-320-q86.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/7cb0c10e9dc62831-640-q86.webp"
+      },
+      {
+        "width": 725,
+        "src": "/images/responsive/7cb0c10e9dc62831-725-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20180933.png": {
+    "sourceHash": "075aa250008a3989",
+    "width": 480,
+    "height": 323,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/075aa250008a3989-320-q86.webp"
+      },
+      {
+        "width": 480,
+        "src": "/images/responsive/075aa250008a3989-480-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181138.png": {
+    "sourceHash": "1e1160f134af34ca",
+    "width": 595,
+    "height": 375,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/1e1160f134af34ca-320-q86.webp"
+      },
+      {
+        "width": 595,
+        "src": "/images/responsive/1e1160f134af34ca-595-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181310.png": {
+    "sourceHash": "44a705ee94e77ffe",
+    "width": 511,
+    "height": 344,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/44a705ee94e77ffe-320-q86.webp"
+      },
+      {
+        "width": 511,
+        "src": "/images/responsive/44a705ee94e77ffe-511-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181628.png": {
+    "sourceHash": "3a36f20006e12668",
+    "width": 708,
+    "height": 390,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/3a36f20006e12668-320-q86.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/3a36f20006e12668-640-q86.webp"
+      },
+      {
+        "width": 708,
+        "src": "/images/responsive/3a36f20006e12668-708-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20181853.png": {
+    "sourceHash": "9bde5248e95389e2",
+    "width": 501,
+    "height": 352,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/9bde5248e95389e2-320-q86.webp"
+      },
+      {
+        "width": 501,
+        "src": "/images/responsive/9bde5248e95389e2-501-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20182034.png": {
+    "sourceHash": "f930b58e7628c46f",
+    "width": 708,
+    "height": 495,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/f930b58e7628c46f-320-q86.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/f930b58e7628c46f-640-q86.webp"
+      },
+      {
+        "width": 708,
+        "src": "/images/responsive/f930b58e7628c46f-708-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20182501.png": {
+    "sourceHash": "ef9403d77f4d041b",
+    "width": 469,
+    "height": 287,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/ef9403d77f4d041b-320-q86.webp"
+      },
+      {
+        "width": 469,
+        "src": "/images/responsive/ef9403d77f4d041b-469-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184608.png": {
+    "sourceHash": "0346c2acfd6b7f2e",
+    "width": 581,
+    "height": 411,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/0346c2acfd6b7f2e-320-q86.webp"
+      },
+      {
+        "width": 581,
+        "src": "/images/responsive/0346c2acfd6b7f2e-581-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184635.png": {
+    "sourceHash": "37b7d1df0c859b43",
+    "width": 634,
+    "height": 413,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/37b7d1df0c859b43-320-q86.webp"
+      },
+      {
+        "width": 634,
+        "src": "/images/responsive/37b7d1df0c859b43-634-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184808.png": {
+    "sourceHash": "1c799cd9b6b26994",
+    "width": 597,
+    "height": 422,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/1c799cd9b6b26994-320-q86.webp"
+      },
+      {
+        "width": 597,
+        "src": "/images/responsive/1c799cd9b6b26994-597-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20184853.png": {
+    "sourceHash": "628bbe43d4b29a90",
+    "width": 570,
+    "height": 385,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/628bbe43d4b29a90-320-q86.webp"
+      },
+      {
+        "width": 570,
+        "src": "/images/responsive/628bbe43d4b29a90-570-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20185110.png": {
+    "sourceHash": "6f473421dde63c86",
+    "width": 616,
+    "height": 427,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/6f473421dde63c86-320-q86.webp"
+      },
+      {
+        "width": 616,
+        "src": "/images/responsive/6f473421dde63c86-616-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20185810.png": {
+    "sourceHash": "6b8262ed98f14b01",
+    "width": 730,
+    "height": 466,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/6b8262ed98f14b01-320-q86.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/6b8262ed98f14b01-640-q86.webp"
+      },
+      {
+        "width": 730,
+        "src": "/images/responsive/6b8262ed98f14b01-730-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20190223.png": {
+    "sourceHash": "4f2d60b30bb3130b",
+    "width": 478,
+    "height": 327,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/4f2d60b30bb3130b-320-q86.webp"
+      },
+      {
+        "width": 478,
+        "src": "/images/responsive/4f2d60b30bb3130b-478-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20190446.png": {
+    "sourceHash": "9251f91035ab0567",
+    "width": 679,
+    "height": 425,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/9251f91035ab0567-320-q86.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/9251f91035ab0567-640-q86.webp"
+      },
+      {
+        "width": 679,
+        "src": "/images/responsive/9251f91035ab0567-679-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/Captura%20de%20pantalla%202024-09-27%20201215.png": {
+    "sourceHash": "2e4cbab75104f169",
+    "width": 666,
+    "height": 407,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/2e4cbab75104f169-320-q86.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/2e4cbab75104f169-640-q86.webp"
+      },
+      {
+        "width": 666,
+        "src": "/images/responsive/2e4cbab75104f169-666-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/a2b2c958-2d21-4308-8b07-51a1820f6faa.jpeg": {
+    "sourceHash": "3be28452aab97d41",
+    "width": 1080,
+    "height": 833,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/3be28452aab97d41-320-q86.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/3be28452aab97d41-640-q86.webp"
+      },
+      {
+        "width": 960,
+        "src": "/images/responsive/3be28452aab97d41-960-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/ad3a9403cb4273ff3bfb2ab24429bb62.jpg": {
+    "sourceHash": "a54e2f1b3bfae81a",
+    "width": 564,
+    "height": 363,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/a54e2f1b3bfae81a-320-q86.webp"
+      },
+      {
+        "width": 564,
+        "src": "/images/responsive/a54e2f1b3bfae81a-564-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/contentcretor.png": {
+    "sourceHash": "6279c279adde89e6",
+    "width": 499,
+    "height": 297,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/6279c279adde89e6-320-q86.webp"
+      },
+      {
+        "width": 499,
+        "src": "/images/responsive/6279c279adde89e6-499-q86.webp"
+      }
+    ]
+  },
+  "https://storage.googleapis.com/wisdom-images/search_services.png": {
+    "sourceHash": "a528012e25da5a9d",
+    "width": 1792,
+    "height": 2400,
+    "variants": [
+      {
+        "width": 320,
+        "src": "/images/responsive/a528012e25da5a9d-320-q95.webp"
+      },
+      {
+        "width": 640,
+        "src": "/images/responsive/a528012e25da5a9d-640-q95.webp"
+      },
+      {
+        "width": 1280,
+        "src": "/images/responsive/a528012e25da5a9d-1280-q95.webp"
+      }
+    ]
+  }
+}
