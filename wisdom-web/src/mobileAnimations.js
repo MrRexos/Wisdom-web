@@ -24,6 +24,7 @@ export function createMobileAnimations(root, lenisRef) {
 
     const searchTimeline = gsap.timeline({
       scrollTrigger: {
+        id: 'navigation-vision',
         trigger: search,
         start: 'top top',
         end: () => `+=${holdDistance()}`,
@@ -32,6 +33,7 @@ export function createMobileAnimations(root, lenisRef) {
         invalidateOnRefresh: true,
       },
     }).fromTo(text, {autoAlpha: 0, y: 32}, {autoAlpha: 1, y: 0, duration: 0.65})
+      .addLabel('centered')
       .to({}, {duration: 0.35});
 
     const destinationY = () => searchTimeline.scrollTrigger.start + target.offsetTop - sourceTop();

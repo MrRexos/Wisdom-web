@@ -332,8 +332,9 @@ const HowItWorks3D = ({ steps, activeIndex, isVertical = false }) => (
           {/* 2. RESTAURADO EL LEFT: Ponemos md:left-24 o lg:left-32. 
               Esto evita que la "S" de Search se corte al girar. */}
           <div className={`relative h-full w-full ${isVertical ? 'left-0' : 'left-12 md:left-24 lg:left-32'}`}>
+            {/* Conservar cada posición al cambiar de modo; solo sustituir su texto. */}
             {steps.map((step, index) => (
-              <FanItem key={step.id} item={step} index={index} activeIndex={activeIndex} isVertical={isVertical} />
+              <FanItem key={index} item={step} index={index} activeIndex={activeIndex} isVertical={isVertical} />
             ))}
           </div>
         </div>
@@ -376,13 +377,10 @@ const HowItWorksSection = ({ sectionRef, flows, activeTab, onTabChange, isVertic
   const containerRef = useRef(null);
 
   useEffect(() => {
-    setActiveIndex(0);
-  }, [activeTab]);
-
-  useEffect(() => {
     if (!containerRef.current) return;
 
     const st = ScrollTrigger.create({
+      id: 'navigation-how-it-works',
       trigger: containerRef.current,
       start: "center center",
       end: () => isVertical ? `+=${containerRef.current.offsetHeight * 2.4}` : '+=1800',
@@ -453,6 +451,7 @@ const FanItem = ({ item, index, activeIndex, isVertical = false }) => {
 
   return (
     <motion.div
+      initial={false}
       animate={{
         rotate: isVertical ? 0 : rotate,
         y: isVertical ? distance * 56 : 0,
@@ -487,8 +486,8 @@ const MobileFooter = () => {
   const links = expandedMenu === 'connect'
     ? [
       { label: 'Instagram', href: 'https://www.instagram.com/wisdom__app?igsh=MWttN3dhc3FjajluNA==', external: true },
-      { label: 'TikTok', href: '#' },
-      { label: 'X', href: '#' },
+      { label: 'TikTok', href: 'https://www.tiktok.com/@wisdom_app?_r=1&_t=ZN-9AMWqSWcozu', external: true },
+      { label: 'X', href: 'https://x.com/wisdom_entity?s=11', external: true },
     ]
     : [
       { label: 'Terms', href: '/terms' },
@@ -1177,6 +1176,7 @@ function App() {
         // PINNING (Sección Search se queda quieta un rato)
         const tlPin = gsap.timeline({
           scrollTrigger: {
+            id: 'navigation-vision',
             trigger: searchSectionRef.current,
             start: "center center",
             end: `+=${SEARCH_PIN_DISTANCE}`, // PINEADA 400 PX
@@ -1190,7 +1190,7 @@ function App() {
         tlPin.fromTo(searchTextRef.current,
           { y: 100, opacity: 0 },
           { y: 0, opacity: 1, duration: 1 }
-        );
+        ).addLabel('centered');
       }
 
       disposeStory = createProStoryAnimations(appRef.current, false);
@@ -1244,6 +1244,7 @@ function App() {
 
           const softPinTimeline = gsap.timeline({
             scrollTrigger: {
+              id: isSecure ? 'navigation-safety' : undefined,
               trigger: sectionEl,
               start: `top ${Math.round(SOFT_PIN_START_VIEWPORT_RATIO * 100)}%`,
               end: `+=${softPinTotalDistance}`,
@@ -1281,6 +1282,7 @@ function App() {
               ease: 'none',
               duration: SOFT_PIN_ENTRY_DECEL_DISTANCE,
             })
+            .addLabel('centered')
             .to({}, {
               duration: currentHoldDistance,
             })
@@ -1503,26 +1505,34 @@ function App() {
     };
   }, [isVertical]);
 
-  const scrollToSection = (sectionRef, options = {}) => {
+  const scrollToSection = (sectionRef, triggerId) => {
     if (!sectionRef?.current) return;
 
-    const { offset = -110 } = options;
+    const trigger = ScrollTrigger.getById(triggerId);
+    const bounds = sectionRef.current.getBoundingClientRect();
+    let targetY = window.scrollY + bounds.top + (bounds.height - window.innerHeight) / 2;
+
+    if (trigger) {
+      // Usar el punto centrado de la coreografía, incluso si ya está fijada.
+      const centered = trigger.animation?.labels?.centered;
+      targetY = centered === undefined ? trigger.start : trigger.labelToScroll('centered');
+      targetY = gsap.utils.clamp(trigger.start + 1, trigger.end - 1, targetY);
+    }
 
     if (lenisRef.current) {
-      lenisRef.current.scrollTo(sectionRef.current, {
-        offset,
+      lenisRef.current.scrollTo(targetY, {
         duration: 1.15,
+        lerp: 0,
       });
       return;
     }
 
-    const targetY = window.scrollY + sectionRef.current.getBoundingClientRect().top + offset;
     window.scrollTo({ top: targetY, behavior: 'smooth' });
   };
 
   const scrollToHowItWorks = (mode) => {
     setExperienceMode(mode);
-    window.setTimeout(() => scrollToSection(howWorksRef), 50);
+    window.setTimeout(() => scrollToSection(howWorksRef, 'navigation-how-it-works'), 50);
   };
 
   const handleNavClick = (link) => {
@@ -1537,12 +1547,12 @@ function App() {
     }
 
     if (link === 'Vision') {
-      scrollToSection(searchSectionRef, { offset: isVertical ? 0 : +150 });
+      scrollToSection(searchSectionRef, 'navigation-vision');
       return;
     }
 
     if (link === 'Safety') {
-      scrollToSection(secureSectionRef, { offset: isVertical ? -80 : -7000 });
+      scrollToSection(secureSectionRef, 'navigation-safety');
     }
   };
 
@@ -1900,8 +1910,8 @@ function App() {
                 <span className="font-medium text-[#050505]">Connect</span>
                 <div className="flex flex-wrap items-center gap-4 text-[#9ca3af]">
                   <a href="https://www.instagram.com/wisdom__app?igsh=MWttN3dhc3FjajluNA==" target="_blank" rel="noopener noreferrer" className="hover:text-[#050505] transition-colors">Instagram</a>
-                  <a href="#" className="hover:text-[#050505] transition-colors">TikTok</a>
-                  <a href="#" className="hover:text-[#050505] transition-colors">X</a>
+                  <a href="https://www.tiktok.com/@wisdom_app?_r=1&_t=ZN-9AMWqSWcozu" target="_blank" rel="noopener noreferrer" className="hover:text-[#050505] transition-colors">TikTok</a>
+                  <a href="https://x.com/wisdom_entity?s=11" target="_blank" rel="noopener noreferrer" className="hover:text-[#050505] transition-colors">X</a>
                 </div>
               </div>
 
