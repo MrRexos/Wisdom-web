@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from '@studio-freight/lenis';
+import { createMobileAnimations } from './mobileAnimations';
 import { ANDROID_PLAY_STORE_URL, APP_DOWNLOAD_PATH, IOS_APP_STORE_URL } from './appLinks';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -265,7 +266,7 @@ const VISIBLE_RANGE = 4;
 const ANGLE_PER_ITEM = 15.5;
 const RADIUS = 340;
 const SEARCH_PIN_DISTANCE = 400;
-const VERTICAL_LAYOUT_MEDIA_QUERY = '(max-width: 767px), (orientation: portrait) and (max-width: 1024px)';
+const VERTICAL_LAYOUT_MEDIA_QUERY = '(max-width: 767px), (orientation: portrait) and (max-width: 1024px), (pointer: coarse) and (max-height: 600px)';
 
 const useVerticalLayout = () => {
   const getMatches = () => (
@@ -332,13 +333,13 @@ const SEARCH_IMAGE_VERTICAL_OFFSET = -68;
 
 const HowItWorks3D = ({ steps, activeIndex, isVertical = false }) => (
   // 1. ELIMINADO max-w-7xl: Ahora es "w-full" para que se expanda hasta los bordes.
-  <div className={`relative mx-auto flex w-full flex-col items-center justify-between md:flex-row md:px-0 ${isVertical ? 'gap-6' : 'gap-10'}`}>
+  <div className={`works-stage relative mx-auto flex w-full flex-col items-center justify-between md:flex-row md:px-0 ${isVertical ? 'gap-6' : 'gap-10'}`}>
     
     {/* COLUMNA IZQUIERDA (TEXTO) */}
-    <div className={`order-2 flex w-full flex-1 items-center justify-center md:order-1 md:justify-start ${isVertical ? 'h-[340px]' : 'h-[500px] md:h-[700px]'}`}>
+    <div className={`works-labels order-2 flex w-full flex-1 items-center justify-center md:order-1 md:justify-start ${isVertical ? 'h-[340px]' : 'h-[500px] md:h-[700px]'}`}>
       <div className="relative flex h-full w-full flex-col items-center justify-center md:items-start">
         <div
-          className={`relative w-full max-w-5xl ${isVertical ? 'h-[340px]' : 'h-[700px]'}`}
+          className={`works-fan relative w-full max-w-5xl ${isVertical ? 'h-[340px]' : 'h-[700px]'}`}
           style={{
             maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
             WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
@@ -346,7 +347,7 @@ const HowItWorks3D = ({ steps, activeIndex, isVertical = false }) => (
         >
           {/* 2. RESTAURADO EL LEFT: Ponemos md:left-24 o lg:left-32. 
               Esto evita que la "S" de Search se corte al girar. */}
-          <div className={`relative h-full w-full ${isVertical ? 'left-4' : 'left-12 md:left-24 lg:left-32'}`}>
+          <div className={`relative h-full w-full ${isVertical ? 'left-0' : 'left-12 md:left-24 lg:left-32'}`}>
             {steps.map((step, index) => (
               <FanItem key={step.id} item={step} index={index} activeIndex={activeIndex} isVertical={isVertical} />
             ))}
@@ -357,8 +358,8 @@ const HowItWorks3D = ({ steps, activeIndex, isVertical = false }) => (
 
     {/* COLUMNA DERECHA (MÓVIL) */}
     {/* 3. MÓVIL A LA DERECHA: Aseguramos md:justify-end y damos un padding derecho opcional */}
-    <div className={`order-1 flex w-full flex-1 items-center justify-center md:order-2 md:justify-end md:pr-12 lg:pr-24 ${isVertical ? 'h-[34vh]' : 'h-[45vh] md:h-auto'}`}>
-      <div className={`relative flex h-auto items-center justify-center ${isVertical ? 'w-[180px]' : 'w-[220px] md:w-[300px]'}`}>
+    <div className={`works-phone order-1 flex w-full flex-1 items-center justify-center md:order-2 md:justify-end md:pr-12 lg:pr-24 ${isVertical ? 'h-[34vh]' : 'h-[45vh] md:h-auto'}`}>
+      <div className={`works-device relative flex h-auto items-center justify-center ${isVertical ? 'w-[180px]' : 'w-[220px] md:w-[300px]'}`}>
         <img
           src="/images/phone.png"
           alt="Phone frame"
@@ -400,9 +401,10 @@ const HowItWorksSection = ({ sectionRef, flows, activeTab, onTabChange, isVertic
     const st = ScrollTrigger.create({
       trigger: containerRef.current,
       start: "center center",
-      end: "+=1800", // Define la distancia del scroll para los 4 pasos
+      end: () => isVertical ? `+=${containerRef.current.offsetHeight * 2.4}` : '+=1800',
       pin: true,
       pinSpacing: true,
+      ...(isVertical ? { invalidateOnRefresh: true } : {}),
       onUpdate: (self) => {
         const progress = self.progress;
         const index = Math.min(
@@ -416,13 +418,13 @@ const HowItWorksSection = ({ sectionRef, flows, activeTab, onTabChange, isVertic
     return () => {
       st.kill();
     };
-  }, [steps.length]);
+  }, [steps.length, isVertical]);
 
   return (
-    <section ref={sectionRef} className="relative mt-[20vh] w-full overflow-visible z-0">
-      <div ref={containerRef} className="flex h-screen w-full items-center justify-center overflow-hidden">
-        <div className={`mx-auto flex h-full w-full max-w-[1800px] origin-center flex-col justify-center px-4 md:px-6 md:scale-[0.94] md:gap-9 md:pt-32 md:pb-14 ${isVertical ? 'scale-[0.82] gap-5 pt-24 pb-8' : 'scale-[0.9] gap-8 pt-28 pb-10'}`}>
-          <div className={`flex flex-col items-center gap-6 ${isVertical ? 'mt-8' : 'mt-14'}`}>
+    <section ref={sectionRef} className="works-section relative mt-[20vh] w-full overflow-visible z-0">
+      <div ref={containerRef} className="works-pin flex h-screen w-full items-center justify-center overflow-hidden">
+        <div className={`works-content mx-auto flex h-full w-full max-w-[1800px] origin-center flex-col justify-center px-4 md:px-6 md:scale-[0.94] md:gap-9 md:pt-32 md:pb-14 ${isVertical ? 'gap-5 pt-24 pb-8' : 'scale-[0.9] gap-8 pt-28 pb-10'}`}>
+          <div className={`works-heading flex flex-col items-center gap-6 ${isVertical ? '' : 'mt-14'}`}>
             <SectionHeading title="How Wisdom works" />
 
             <div className="flex justify-center">
@@ -478,7 +480,7 @@ const FanItem = ({ item, index, activeIndex, isVertical = false }) => {
         damping: 25,
       }}
       style={{
-        transformOrigin: `${-RADIUS}px 50%`,
+        transformOrigin: `${isVertical ? -160 : -RADIUS}px 50%`,
         position: 'absolute',
         top: '50%',
         left: 0,
@@ -511,7 +513,7 @@ const InteractiveToggleSection = ({ sectionRef, activeMode, onModeChange, isVert
   const contentItems = EXPERIENCE_CONTENT[activeMode] || EXPERIENCE_CONTENT.customers;
 
   return (
-    <section ref={sectionRef} className={`fade-section -mt-[190vh] w-full mx-auto flex flex-col justify-center items-center py-4 ${isVertical ? 'min-h-[55vh] px-4' : 'min-h-[42vh]'}`}>
+    <section ref={sectionRef} className={`experience-section fade-section -mt-[190vh] w-full mx-auto flex flex-col justify-center items-center py-4 ${isVertical ? 'min-h-[55vh] px-4' : 'min-h-[42vh]'}`}>
 
       {/* Selector Superior */}
       {/* <SectionHeading title="The dual experience" /> */}
@@ -556,8 +558,18 @@ const InteractiveToggleSection = ({ sectionRef, activeMode, onModeChange, isVert
               <div
                 key={index}
                 className="flex flex-col items-center cursor-default"
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
+                onMouseEnter={isVertical ? undefined : () => setHoveredIndex(index)}
+                onMouseLeave={isVertical ? undefined : () => setHoveredIndex(null)}
+                onClick={isVertical ? () => setHoveredIndex(hoveredIndex === index ? null : index) : undefined}
+                onKeyDown={isVertical ? (event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    setHoveredIndex(hoveredIndex === index ? null : index);
+                  }
+                } : undefined}
+                role={isVertical ? 'button' : undefined}
+                tabIndex={isVertical ? 0 : undefined}
+                aria-expanded={isVertical ? hoveredIndex === index : undefined}
               >
                 <motion.h2
                   className={`font-semibold tracking-tight text-[#050505] transition-colors duration-300 ${isVertical ? 'text-3xl leading-tight' : 'text-5xl md:text-6xl'}`}
@@ -627,13 +639,13 @@ const CosmosSpiral = ({ serviceFamilies, isVertical = false }) => {
 
   return (
     // CAMBIO 1: Se cambió bg-[#F3F3F3] por bg-white
-    <section className={`relative z-10 -mt-[640vh] w-full overflow-hidden bg-white flex items-center justify-center ${isVertical ? 'h-[100vh] px-5' : 'h-[120vh]'}`} style={{
+    <section className={`cosmos-section relative z-10 -mt-[640vh] w-full overflow-hidden bg-white flex items-center justify-center ${isVertical ? 'h-[100vh] px-5' : 'h-[120vh]'}`} style={{
       maskImage: 'linear-gradient(to bottom, transparent 0%, black 40%, black 70%, transparent 100%)',
       WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 40%, black 70%, transparent 100%)',
     }}>
 
       {/* --- CAPA DE ESPIRAL DE IMÁGENES --- */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none">
+      <div className="cosmos-images absolute inset-0 w-full h-full pointer-events-none">
         {Array.from({ length: 25 }).map((_, i) => (
           <FloatingImage
             key={i}
@@ -658,7 +670,7 @@ const CosmosSpiral = ({ serviceFamilies, isVertical = false }) => {
         </p>
 
         {/* 3. ELEMENTO DINÁMICO (CÁPSULA) */}
-        <div className={`flex w-full items-center justify-center ${isVertical ? '-translate-x-6' : '-translate-x-4 md:-translate-x-8'}`}>
+        <div className={`cosmos-label flex w-full items-center justify-center ${isVertical ? '' : '-translate-x-4 md:-translate-x-8'}`}>
 
           {/* Contenedor izquierdo: Fijo, ocupa el 50% y alinea a la derecha */}
           <div className="flex flex-1 justify-end pr-3">
@@ -749,10 +761,10 @@ const FloatingImage = ({ index, total, images }) => {
       }}
       className="absolute left-1/2 top-1/2 flex items-center justify-center pointer-events-none"
       style={{
-        width: randomParams.size,
-        height: randomParams.size * 1.4, // Aspecto vertical
-        marginLeft: `-${randomParams.size / 2}px`, // Centrar el div
-        marginTop: `-${(randomParams.size * 1.4) / 2}px`,
+        width: `calc(${randomParams.size}px * var(--floating-image-scale, 1))`,
+        height: `calc(${randomParams.size * 1.4}px * var(--floating-image-scale, 1))`,
+        marginLeft: `calc(-${randomParams.size / 2}px * var(--floating-image-scale, 1))`,
+        marginTop: `calc(-${(randomParams.size * 1.4) / 2}px * var(--floating-image-scale, 1))`,
       }}
     >
       <img
@@ -931,6 +943,11 @@ function App() {
   }, []);
 
   useLayoutEffect(() => {
+    if (isVertical) {
+      return createMobileAnimations(appRef.current, lenisRef);
+    }
+
+    let securityScrollTrigger;
     const ctx = gsap.context(() => {
 
       // 1. Configuración general (Igual que antes)
@@ -1587,6 +1604,8 @@ function App() {
             },
           });
 
+          if (isSecure) securityScrollTrigger = softPinTimeline.scrollTrigger;
+
           softPinTimeline
             .to(sectionEl, {
               y: () => getSoftPinEntryCruiseOffset(),
@@ -1754,6 +1773,22 @@ function App() {
 
     }, appRef);
 
+    // Acercar solo el CTA al final real de Safety, sin cambiar su coreografía.
+    const cta = ctaSectionRef.current;
+    const originalCtaMargin = cta.style.marginTop;
+    const syncCtaSpacing = () => {
+      if (!securityScrollTrigger) return;
+      const currentTop = cta.getBoundingClientRect().top + window.scrollY;
+      const currentMargin = parseFloat(window.getComputedStyle(cta).marginTop) || 0;
+      const adjustment = securityScrollTrigger.end + 24 - currentTop;
+      if (Math.abs(adjustment) > 1) {
+        cta.style.marginTop = `${currentMargin + adjustment}px`;
+        lenisRef.current?.resize?.();
+      }
+    };
+    ScrollTrigger.addEventListener('refresh', syncCtaSpacing);
+    syncCtaSpacing();
+
     let resizeTimeoutId;
     const handleWindowResize = () => {
       window.clearTimeout(resizeTimeoutId);
@@ -1766,6 +1801,8 @@ function App() {
     window.addEventListener('resize', handleWindowResize);
 
     return () => {
+      ScrollTrigger.removeEventListener('refresh', syncCtaSpacing);
+      cta.style.marginTop = originalCtaMargin;
       window.removeEventListener('resize', handleWindowResize);
       window.clearTimeout(resizeTimeoutId);
       syncAnimatedSearchBoxRef.current = null;
@@ -1775,7 +1812,7 @@ function App() {
       }
       ctx.revert();
     };
-  }, []);
+  }, [isVertical]);
 
   const scrollToSection = (sectionRef, options = {}) => {
     if (!sectionRef?.current) return;
@@ -1811,19 +1848,19 @@ function App() {
     }
 
     if (link === 'Vision') {
-      scrollToSection(searchSectionRef, { offset: +150 });
+      scrollToSection(searchSectionRef, { offset: isVertical ? 0 : +150 });
       return;
     }
 
     if (link === 'Safety') {
-      scrollToSection(secureSectionRef, { offset: -7000 });
+      scrollToSection(secureSectionRef, { offset: isVertical ? -80 : -7000 });
     }
   };
 
   return (
     <div ref={appRef} data-layout={isVertical ? 'vertical' : 'horizontal'} className="min-h-screen bg-white text-[#050505]">
 
-      <header className={`fixed backdrop-blur-xl top-4 left-1/2 z-20 flex -translate-x-1/2 items-center rounded-full font-semibold bg-white/50 ${isVertical ? 'w-[calc(100%-1.5rem)] px-3 py-2' : 'w-[min(1100px,calc(100%-2rem))] px-4 py-3'}`}>
+      <header className={`fixed backdrop-blur-xl top-4 left-1/2 z-20 flex -translate-x-1/2 items-center rounded-full font-semibold bg-white/50 ${isVertical ? 'site-header w-[calc(100%-1.5rem)] px-3 py-2' : 'w-[min(1100px,calc(100%-2rem))] px-4 py-3'}`}>
         
         {/* IZQUIERDA: Agrupamos logo y texto en un solo flex-1 */}
         <div className="flex flex-1 items-center justify-start gap-2 ml-1 md:ml-2">
@@ -1836,7 +1873,7 @@ function App() {
         </div>
 
         {/* CENTRO: Nav (al tener flex-1 a los lados, se centra matemáticamente) */}
-        <nav className="hidden flex-none flex-wrap items-center justify-center gap-8 md:flex">
+        <nav className={isVertical ? 'hidden' : 'hidden flex-none flex-wrap items-center justify-center gap-8 md:flex'}>
           {navLinks.map((link) => (
             <button
               key={link}
@@ -1860,10 +1897,10 @@ function App() {
       <main className="">
 
         {/* 1. PORTADA - IMPORTANTE: Quitamos 'overflow-hidden' para que el cuadro pueda salir */}
-        <section className={`relative flex min-h-screen items-center justify-center fade-section z-10 ${isVertical ? 'px-4 py-20' : 'px-6'}`}>
+        <section className={`hero-section relative flex min-h-screen items-center justify-center fade-section z-10 ${isVertical ? 'px-4 py-20' : 'px-6'}`}>
 
           {/* Capa de Cuadrados Grises (FONDO) */}
-          <div className={`absolute inset-0 w-full h-full pointer-events-none ${isVertical ? 'hero-decor-layer scale-[0.78] opacity-70' : ''}`}>
+          <div className="hero-shapes absolute inset-0 w-full h-full pointer-events-none">
             {grayShapes.map((shape, index) => {
               const isAnimatedBox = index === 3;
 
@@ -1892,7 +1929,7 @@ function App() {
           </div>
 
           {/* Capa de Imágenes (FRENTE) */}
-          <div className={`absolute inset-0 w-full h-full pointer-events-none ${isVertical ? 'hero-decor-layer scale-[0.78] opacity-70' : ''}`}>
+          <div className="hero-tiles absolute inset-0 w-full h-full pointer-events-none">
             {heroTiles.map((tile, index) => (
               <div key={`tile-${index}`} className={`parallax-item absolute overflow-hidden opacity-75 ${tile.size}`} style={tile.style} data-speed={isVertical ? '30' : '60'}>
                 <img src={tile.url} alt="" className="w-full h-full object-cover" />
@@ -1901,7 +1938,7 @@ function App() {
           </div>
 
           {/* Contenido Texto Hero */}
-          <div className="relative z-10 mx-auto max-w-4xl text-center flex flex-col items-center justify-center px-2 md:px-4">
+          <div className="hero-copy relative z-10 mx-auto max-w-4xl text-center flex flex-col items-center justify-center px-2 md:px-4">
             
             {/* Título Principal */}
             <h1 className={`font-bold text-[#111111] leading-[1.1] tracking-tight ${isVertical ? 'text-[32px]' : 'text-[40px] sm:text-[50px] md:text-[60px]'}`}>
@@ -1910,12 +1947,12 @@ function App() {
             
             {/* Subtítulo */}
             <p className={`mt-6 font-medium text-[#9F9F9F] leading-relaxed max-w-2xl ${isVertical ? 'text-base px-2' : 'text-xl md:text-[23px]'}`}>
-              The first marketplace where trust is the default.<br className="hidden md:block" />
+              The first marketplace where trust is the default.{isVertical ? ' ' : null}<br className="hidden md:block" />
               Simple. Secure payments. Verified reviews. One app.
             </p>
             
             {/* Contenedor de Botones */}
-            <div className={`mt-10 flex items-center justify-center gap-3 ${isVertical ? 'flex-col w-full max-w-xs' : 'flex-col sm:flex-row gap-4'}`}>
+            <div className={`hero-downloads mt-10 flex items-center justify-center gap-3 ${isVertical ? 'w-full max-w-xs' : 'flex-col sm:flex-row gap-4'}`}>
               
               {/* Botón App Store */}
               <a 
@@ -1943,7 +1980,7 @@ function App() {
         </section>
 
         {/* 2. Search (TARGET SECTION) */}
-        <section ref={searchSectionRef} className={`min-h-screen w-full mx-auto flex flex-col justify-center items-center relative z-0 ${isVertical ? 'gap-8 px-4 py-16' : 'gap-12 md:gap-44 px-6 py-24 md:flex-row'}`}>
+        <section ref={searchSectionRef} className={`search-section min-h-screen w-full mx-auto flex flex-col justify-center items-center relative z-0 ${isVertical ? 'gap-8 px-4 py-16' : 'gap-12 md:gap-44 px-6 py-24 md:flex-row'}`}>
 
           {/* Contenedor imagen con REF - La imagen aquí es INVISIBLE (opacity-0) */}
           <div ref={searchImageRef} className={`aspect-[3/4] w-full shrink-0 relative ${isVertical ? 'max-w-[260px]' : 'max-w-[420px]'}`}>
@@ -1962,16 +1999,16 @@ function App() {
         </section>
 
         {/* 3. Search 2 */}
-        <section ref={endlessSearchSectionRef} className={`fade-section min-h-screen mx-auto flex w-full justify-center items-center py-24 ${isVertical ? 'px-4' : 'px-6'}`}>
+        <section ref={endlessSearchSectionRef} className={`endless-section fade-section min-h-screen mx-auto flex w-full justify-center items-center py-24 ${isVertical ? 'px-4' : 'px-6'}`}>
           <p ref={endlessSearchTextRef} className={`readable-section-text mx-auto max-w-[820px] text-center font-semibold text-[#050505] ${isVertical ? 'text-2xl leading-snug' : 'text-[42px] leading-[1.3] leading-relaxed'}`}>
             Endless searches. Reliance on word-of-mouth. Zero guarantees. The service world was fragmented, forcing you to guess instead of choose.
           </p>
         </section>
 
         {/* 4. Pro alone */}
-        <section ref={proStorySectionRef} className="relative min-h-[200vh] w-full overflow-hidden">
-          <div ref={proStoryPinRef} className="relative flex h-screen w-full items-center justify-center">
-            <div ref={proStoryImageRef} className={`relative overflow-hidden ${isVertical ? 'w-screen max-w-none' : ''}`}>
+        <section ref={proStorySectionRef} className="pro-story-section relative min-h-[200vh] w-full overflow-hidden">
+          <div ref={proStoryPinRef} className="pro-story-pin relative flex h-screen w-full items-center justify-center">
+            <div ref={proStoryImageRef} className={`pro-story-image relative overflow-hidden ${isVertical ? 'w-screen max-w-none' : ''}`}>
               <img
                 src="/images/pro_alone4.png"
                 alt="People collaborating in a group"
@@ -1998,12 +2035,12 @@ function App() {
         </section>
 
         {/* 5. Until now */}
-        <section ref={untilNowSectionRef} className={`fade-section mx-auto flex min-h-screen w-full justify-center items-center bg-white relative ${isVertical ? 'px-4 py-16 -mt-[210vh]' : 'px-6 py-24 -mt-[210vh]'}`}>
+        <section ref={untilNowSectionRef} className={`until-section fade-section mx-auto flex min-h-screen w-full justify-center items-center bg-white relative ${isVertical ? 'px-4 py-16 -mt-[210vh]' : 'px-6 py-24 -mt-[210vh]'}`}>
           <p ref={untilNowTextRef} className={`text-center font-semibold ${isVertical ? 'text-5xl' : 'text-8xl'}`}>Until now.</p>
         </section>
 
         {/* 6. Unified */}
-        <section ref={unifiedSectionRef} className={`fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center -mt-[-20vh] overflow-hidden bg-white relative z-10 ${isVertical ? 'px-4 py-16 gap-24 pt-16' : 'px-6 py-24 gap-40 pt-20'}`}>
+        <section ref={unifiedSectionRef} className={`unified-section fade-section min-h-screen w-full mx-auto flex flex-col justify-center items-center -mt-[-20vh] overflow-hidden bg-white relative z-10 ${isVertical ? 'px-4 py-16 gap-24 pt-16' : 'px-6 py-24 gap-40 pt-20'}`}>
 
           <div className="relative flex flex-1 w-full items-center justify-center">
 
@@ -2073,7 +2110,7 @@ function App() {
         </section>
 
         {/* 7. Chaos */}
-        <section ref={chaosSectionRef} className={`fade-section -mt-[-350vh] min-h-screen mx-auto flex w-full justify-center items-center py-20 ${isVertical ? 'px-4' : 'px-6'}`}>
+        <section ref={chaosSectionRef} className={`chaos-section fade-section -mt-[-350vh] min-h-screen mx-auto flex w-full justify-center items-center py-20 ${isVertical ? 'px-4' : 'px-6'}`}>
           <p className={`readable-section-text mx-auto max-w-[1000px] text-center font-semibold text-[#050505] ${isVertical ? 'text-2xl leading-snug' : 'text-[42px] leading-[1.3] leading-relaxed'}`}>
             We replaced word-of-mouth with verified data. We replaced uncertainty with transparent profiles. A single ecosystem where quality is visible, and trust is the default.
           </p>
@@ -2099,7 +2136,7 @@ function App() {
         />
 
         {/* 10. Secure & Trust */}
-        <section ref={secureSectionRef} className={`fade-section mt-[780vh] w-full mx-auto flex flex-col justify-center items-center ${isVertical ? 'min-h-0 px-4 py-14' : 'min-h-screen px-6 py-24'}`}>
+        <section ref={secureSectionRef} className={`security-section fade-section mt-[780vh] w-full mx-auto flex flex-col justify-center items-center ${isVertical ? 'min-h-0 px-4 py-14' : 'min-h-screen px-6 py-24'}`}>
 
           {/* Título de la sección */}
           <div className={`text-center ${isVertical ? 'mb-6' : 'mb-20'}`}>
@@ -2136,7 +2173,7 @@ function App() {
         </section>
 
         {/* 11. CTA Final & Footer */}
-        <section ref={ctaSectionRef} className="fade-section -mt-[875vh] w-full min-h-screen relative flex flex-col items-center justify-center bg-white">
+        <section ref={ctaSectionRef} className="cta-section fade-section -mt-[875vh] w-full min-h-screen relative flex flex-col items-center justify-center bg-white">
           
           {/* Contenido del CTA (Centrado en la pantalla) */}
           <div className={`flex flex-col items-center justify-center text-center ${isVertical ? 'px-4' : 'px-6'}`}>
@@ -2152,7 +2189,7 @@ function App() {
           </div>
 
           {/* FOOTER (Fijado en la parte inferior de esta sección) */}
-          <div className="absolute bottom-0 w-full px-6 py-8 md:px-12 flex flex-col xl:flex-row justify-between items-center text-[15px] bg-white">
+          <div className="site-footer absolute bottom-0 w-full px-6 py-8 md:px-12 flex flex-col xl:flex-row justify-between items-center text-[15px] bg-white">
             
             {/* Izquierda: Marca y Copyright */}
             <div className="flex items-center gap-3 mb-6 xl:mb-0">
