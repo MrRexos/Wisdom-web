@@ -151,7 +151,8 @@ html {
 }
 
 [data-layout='vertical'] .pro-story-pin {
-  height: var(--scene-height);
+  /* Cubrir también el espacio que Safari libera al ocultar sus barras. */
+  height: 100lvh;
 }
 
 [data-layout='vertical'] [data-pro-story-text] {
@@ -176,7 +177,7 @@ html {
 }
 
 [data-layout='vertical'] .experience-section {
-  min-height: 65svh;
+  min-height: 100lvh;
   padding: 80px 24px;
 }
 
@@ -185,7 +186,9 @@ html {
 }
 
 [data-layout='vertical'] .experience-section [role='button'] {
-  padding: 8px 0;
+  min-height: 44px;
+  padding: 0;
+  justify-content: center;
   cursor: pointer;
 }
 
@@ -228,6 +231,7 @@ html {
 [data-layout='vertical'] .works-heading {
   flex: 0 0 auto;
   gap: 16px;
+  transform: translateY(2.6svh);
 }
 
 [data-layout='vertical'] .works-heading button {
@@ -264,6 +268,7 @@ html {
   order: 2;
   flex: 0 0 clamp(76px, 16svh, 140px);
   height: auto;
+  transform: translateY(-4svh);
 }
 
 [data-layout='vertical'] .works-fan {
@@ -280,7 +285,7 @@ html {
 }
 
 [data-layout='vertical'] .security-section {
-  padding: 72px 24px 32px;
+  padding: calc(72px + 16svh) 24px 32px;
 }
 
 [data-layout='vertical'] .security-section > :last-child {
@@ -293,25 +298,79 @@ html {
 }
 
 [data-layout='vertical'] .cta-section {
-  min-height: 0;
-  padding-top: 80px;
+  min-height: max(100lvh, 540px);
 }
 
 [data-layout='vertical'] .cta-section > :first-child {
-  padding: 0 24px 72px;
+  flex: 1;
+  min-height: inherit;
+  width: 100%;
+  padding: 128px 24px;
   max-width: 520px;
 }
 
-[data-layout='vertical'] .site-footer {
-  position: relative;
-  gap: 12px;
-  padding: 32px 24px;
+[data-layout='vertical'] .mobile-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 0 24px max(12px, env(safe-area-inset-bottom));
   font-size: 13px;
 }
 
-[data-layout='vertical'] .site-footer > :last-child {
-  flex-direction: column;
-  gap: 20px;
+[data-layout='vertical'] .mobile-footer-brand {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+[data-layout='vertical'] .mobile-footer-nav {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  font-size: clamp(12px, 3vw, 13px);
+}
+
+[data-layout='vertical'] .mobile-footer-nav button {
+  min-height: 44px;
+  min-width: 44px;
+  color: #050505;
+  font-weight: 500;
+  text-align: left;
+}
+
+[data-layout='vertical'] .mobile-footer-nav button:last-child {
+  text-align: right;
+}
+
+[data-layout='vertical'] .mobile-footer-links {
+  min-width: 0;
+  overflow: hidden;
+}
+
+[data-layout='vertical'] .mobile-footer-panel {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 3vw, 14px);
+  color: #9ca3af;
+}
+
+[data-layout='vertical'] .mobile-footer-panel-more {
+  justify-content: flex-end;
+}
+
+[data-layout='vertical'] .mobile-footer-panel a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+[data-layout='vertical'] .mobile-footer-nav :is(button, a):focus-visible {
+  outline: 2px solid #050505;
+  outline-offset: -2px;
+  border-radius: 4px;
 }
 
 @media (orientation: landscape) and (max-height: 600px) {
@@ -321,10 +380,10 @@ html {
   [data-layout='vertical'] .search-section > :last-child { max-width: 45%; }
   [data-layout='vertical'] .works-pin { min-height: 100svh; }
   [data-layout='vertical'] .works-content { padding-top: 72px; gap: 12px; }
-  [data-layout='vertical'] .works-heading { gap: 8px; }
+  [data-layout='vertical'] .works-heading { gap: 8px; transform: none; }
   [data-layout='vertical'] .works-stage { flex-direction: row; }
   [data-layout='vertical'] .works-device { width: 24svh; }
-  [data-layout='vertical'] .works-labels { flex: 1; height: 100%; }
+  [data-layout='vertical'] .works-labels { flex: 1; height: 100%; transform: none; }
 }
 
 .site-header {

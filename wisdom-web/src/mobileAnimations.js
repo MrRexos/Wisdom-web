@@ -8,6 +8,7 @@ export function createMobileAnimations(root, lenisRef) {
   const hero = select('.hero-section');
   const viewportHeight = () => hero.offsetHeight;
   let disposed = false;
+  let resetSearchGeometry;
 
   const context = gsap.context(() => {
     const search = select('.search-section');
@@ -32,7 +33,18 @@ export function createMobileAnimations(root, lenisRef) {
       .to({}, {duration: 0.35});
 
     const destinationY = () => searchTimeline.scrollTrigger.start + target.offsetTop - sourceTop();
-    gsap.set(box, {bottom: 'auto', right: 'auto', backgroundColor: '#F9F8F8'});
+    // Solo transformamos durante el scroll para evitar el reflujo y redondeo
+    // de width/height en cada fotograma de la imagen en movimiento.
+    resetSearchGeometry = () => gsap.set(box, {
+      left: sourceLeft(), top: sourceTop(),
+      width: target.offsetWidth, height: target.offsetHeight,
+    });
+    gsap.set(box, {
+      bottom: 'auto', right: 'auto', backgroundColor: '#F9F8F8',
+      transformOrigin: '0 0', force3D: true, willChange: 'transform',
+    });
+    resetSearchGeometry();
+    ScrollTrigger.addEventListener('refreshInit', resetSearchGeometry);
     gsap.timeline({
       scrollTrigger: {
         trigger: hero,
@@ -42,13 +54,13 @@ export function createMobileAnimations(root, lenisRef) {
         invalidateOnRefresh: true,
       },
     }).fromTo(box, {
-      left: sourceLeft, top: sourceTop, x: 0, y: 0, width: 64, height: 96,
+      x: 0, y: 0,
+      scaleX: () => 64 / target.offsetWidth,
+      scaleY: () => 96 / target.offsetHeight,
     }, {
-      left: sourceLeft, top: sourceTop,
       x: () => target.getBoundingClientRect().left - hero.getBoundingClientRect().left - sourceLeft(),
       y: destinationY,
-      width: () => target.offsetWidth,
-      height: () => target.offsetHeight,
+      scaleX: 1, scaleY: 1,
       ease: 'none', duration: 1,
     }).to(box, {
       y: () => destinationY() + holdDistance(), ease: 'none', duration: 0.42,
@@ -102,16 +114,23 @@ export function createMobileAnimations(root, lenisRef) {
     const unifiedText = unified.querySelector('.unified-text');
     gsap.set(photos, {x: 0, y: 0, scale: 0.2, rotation: 0, autoAlpha: 0});
     gsap.set(unifiedText, {autoAlpha: 0, y: 20});
+    // Abrir las fotos mientras entra el logo; llegan a su destino al centrarse.
     gsap.timeline({
       scrollTrigger: {
-        trigger: unified, start: 'top top', end: () => `+=${viewportHeight() * 1.6}`,
-        pin: true, scrub: 0.4, invalidateOnRefresh: true,
+        trigger: unified, start: 'center bottom', end: 'top top',
+        scrub: true, invalidateOnRefresh: true,
       },
     }).to(photos, {
       x: (_, element) => parseFloat(element.dataset.mobileX) * root.clientWidth / 100,
       y: (_, element) => parseFloat(element.dataset.mobileY) * viewportHeight() / 100,
       rotation: (_, element) => Number(element.dataset.rotate),
-      scale: 1, autoAlpha: 1, duration: 0.35, ease: 'power2.out',
+      scale: 1, autoAlpha: 1, duration: 1, ease: 'power2.out',
+    });
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: unified, start: 'top top', end: () => `+=${viewportHeight() * 1.2}`,
+        pin: true, scrub: 0.4, invalidateOnRefresh: true,
+      },
     }).to({}, {duration: 0.2})
       .to(photos, {x: 0, y: 0, rotation: 0, scale: 0.2, autoAlpha: 0, duration: 0.35})
       .to(unifiedText, {autoAlpha: 1, y: 0, duration: 0.2}, '-=0.1')
@@ -152,6 +171,7 @@ export function createMobileAnimations(root, lenisRef) {
     window.clearTimeout(refreshTimer);
     window.clearTimeout(resizeTimer);
     window.removeEventListener('resize', onResize);
+    ScrollTrigger.removeEventListener('refreshInit', resetSearchGeometry);
     context.revert();
   };
 }

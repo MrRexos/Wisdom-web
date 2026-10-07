@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from '@studio-freight/lenis';
 import { createMobileAnimations } from './mobileAnimations';
 import { ANDROID_PLAY_STORE_URL, APP_DOWNLOAD_PATH, IOS_APP_STORE_URL } from './appLinks';
+import officialAppIcon from './assets/official_app_icon.png';
 
 gsap.registerPlugin(ScrollTrigger);
 if (typeof window !== 'undefined') {
@@ -470,7 +471,8 @@ const FanItem = ({ item, index, activeIndex, isVertical = false }) => {
   return (
     <motion.div
       animate={{
-        rotate: rotate,
+        rotate: isVertical ? 0 : rotate,
+        y: isVertical ? distance * 56 : 0,
         opacity: isVisible ? (isActive ? 1 : 0.3) : 0,
         color: isActive ? '#050505' : '#e5e7eb',
       }}
@@ -480,7 +482,7 @@ const FanItem = ({ item, index, activeIndex, isVertical = false }) => {
         damping: 25,
       }}
       style={{
-        transformOrigin: `${isVertical ? -160 : -RADIUS}px 50%`,
+        transformOrigin: isVertical ? '50% 50%' : `${-RADIUS}px 50%`,
         position: 'absolute',
         top: '50%',
         left: 0,
@@ -493,6 +495,80 @@ const FanItem = ({ item, index, activeIndex, isVertical = false }) => {
       </h3>
       {/* <p className="mt-3 max-w-md text-center text-sm text-[#4c5563] md:text-left md:text-base">{item.description}</p> */}
     </motion.div>
+  );
+};
+
+const MobileFooter = () => {
+  const [expandedMenu, setExpandedMenu] = useState(null);
+  const menuButtons = useRef({});
+  const links = expandedMenu === 'connect'
+    ? [
+      { label: 'Instagram', href: 'https://www.instagram.com/wisdom__app?igsh=MWttN3dhc3FjajluNA==', external: true },
+      { label: 'TikTok', href: '#' },
+      { label: 'X', href: '#' },
+    ]
+    : [
+      { label: 'Terms', href: '/terms' },
+      { label: 'Privacy', href: '/privacy' },
+    ];
+
+  const toggleMenu = (menu) => setExpandedMenu((current) => current === menu ? null : menu);
+
+  return (
+    <footer className="site-footer mobile-footer">
+      <div className="mobile-footer-brand">
+        <span className="font-medium text-[#050505]">WISDOM</span>
+        <span className="text-[#9ca3af]">© 2026</span>
+      </div>
+      <nav
+        className="mobile-footer-nav"
+        aria-label="Footer"
+        onKeyDown={(event) => {
+          if (event.key === 'Escape' && expandedMenu) {
+            menuButtons.current[expandedMenu]?.focus();
+            setExpandedMenu(null);
+          }
+        }}
+      >
+        <button
+          ref={(element) => { menuButtons.current.connect = element; }}
+          type="button"
+          aria-expanded={expandedMenu === 'connect'}
+          aria-controls="mobile-footer-links"
+          onClick={() => toggleMenu('connect')}
+        >Connect</button>
+        <div id="mobile-footer-links" className="mobile-footer-links" aria-hidden={!expandedMenu} inert={!expandedMenu ? '' : undefined}>
+          <AnimatePresence initial={false} mode="wait">
+            {expandedMenu && (
+              <motion.div
+                key={expandedMenu}
+                className={`mobile-footer-panel mobile-footer-panel-${expandedMenu}`}
+                initial={{ opacity: 0, clipPath: expandedMenu === 'connect' ? 'inset(0 100% 0 0)' : 'inset(0 0 0 100%)' }}
+                animate={{ opacity: 1, clipPath: 'inset(0 0% 0 0%)' }}
+                exit={{ opacity: 0, clipPath: expandedMenu === 'connect' ? 'inset(0 100% 0 0)' : 'inset(0 0 0 100%)' }}
+                transition={{ duration: 0.2, ease: 'easeInOut' }}
+              >
+                {links.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target={link.external ? '_blank' : undefined}
+                    rel={link.external ? 'noopener noreferrer' : undefined}
+                  >{link.label}</a>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+        <button
+          ref={(element) => { menuButtons.current.more = element; }}
+          type="button"
+          aria-expanded={expandedMenu === 'more'}
+          aria-controls="mobile-footer-links"
+          onClick={() => toggleMenu('more')}
+        >More</button>
+      </nav>
+    </footer>
   );
 };
 
@@ -1865,7 +1941,7 @@ function App() {
         {/* IZQUIERDA: Agrupamos logo y texto en un solo flex-1 */}
         <div className="flex flex-1 items-center justify-start gap-2 ml-1 md:ml-2">
           <img
-            src='https://storage.googleapis.com/wisdom-images/app_icon.png'
+            src={officialAppIcon}
             alt="Wisdom Icon"
             className={`relative flex items-center justify-center ${isVertical ? 'h-8 w-8' : 'h-10 w-10 md:h-8 md:w-8'}`}
           />
@@ -2096,7 +2172,7 @@ function App() {
 
             {/* LOGO CENTRAL */}
             <img
-              src='https://storage.googleapis.com/wisdom-images/app_icon.png'
+              src={officialAppIcon}
               alt="Wisdom Icon"
               className={`relative z-10 flex items-center justify-center ${isVertical ? 'h-28 w-28' : 'h-40 w-40 md:h-72 md:w-72'}`}
             />
@@ -2156,7 +2232,7 @@ function App() {
                 className={`group flex flex-col rounded-[32px] bg-[#F9FAFB] shadow-sm transition-shadow duration-200 ${isVertical ? 'rounded-2xl p-4' : 'p-8 md:p-10 hover:shadow-md'}`}
               >
                 <div className={`flex items-center justify-center rounded-full bg-white shadow-sm border border-gray-100 ${isVertical ? 'mb-3 h-9 w-9' : 'mb-8 h-12 w-12'}`}>
-                  <div className={`text-[#3b82f6] ${isVertical ? 'scale-90' : ''}`}>
+                  <div className={`text-[#6B7280] ${isVertical ? 'scale-90' : ''}`}>
                     {feature.icon}
                   </div>
                 </div>
@@ -2189,7 +2265,7 @@ function App() {
           </div>
 
           {/* FOOTER (Fijado en la parte inferior de esta sección) */}
-          <div className="site-footer absolute bottom-0 w-full px-6 py-8 md:px-12 flex flex-col xl:flex-row justify-between items-center text-[15px] bg-white">
+          {isVertical ? <MobileFooter /> : <div className="site-footer absolute bottom-0 w-full px-6 py-8 md:px-12 flex flex-col xl:flex-row justify-between items-center text-[15px] bg-white">
             
             {/* Izquierda: Marca y Copyright */}
             <div className="flex items-center gap-3 mb-6 xl:mb-0">
@@ -2220,7 +2296,7 @@ function App() {
               </div>
 
             </div>
-          </div>
+          </div>}
         </section>
 
       </main>
