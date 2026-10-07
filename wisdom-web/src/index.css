@@ -179,6 +179,11 @@ html {
   min-height: 0;
 }
 
+/* La foto entra al terminar Endless; Until now empieza cuando ya ha salido. */
+[data-layout] :is(.pro-story-section, .until-section) {
+  margin-top: -100lvh;
+}
+
 [data-layout='vertical'] .pro-story-pin {
   /* Cubrir también el espacio que Safari libera al ocultar sus barras. */
   height: 100lvh;

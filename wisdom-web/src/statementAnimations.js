@@ -28,7 +28,11 @@ export function createStatementAnimations(root, lenisRef) {
 
   const syncScroll = () => {
     const scroller = lenisRef.current;
-    if (!scroller || !entries.some(({ trigger }) => trigger?.isActive)) {
+    const story = ScrollTrigger.getById('pro-story-reference');
+    const isReading = [story, ...entries.map(({ trigger }) => trigger)].some((trigger) => (
+      trigger && window.scrollY >= trigger.start && window.scrollY < trigger.end
+    ));
+    if (!scroller || !isReading) {
       restoreScroll();
       return;
     }
@@ -104,7 +108,13 @@ export function createStatementAnimations(root, lenisRef) {
     });
   }, root);
 
+  // El mismo perfil de inercia acompaña la foto y los tres textos de referencia.
+  window.addEventListener('scroll', syncScroll, { passive: true });
+  window.addEventListener('wheel', syncScroll, { capture: true, passive: true });
+
   return () => {
+    window.removeEventListener('scroll', syncScroll);
+    window.removeEventListener('wheel', syncScroll, { capture: true });
     entries.forEach(({ fade, scale }) => {
       fade?.kill();
       scale?.kill();

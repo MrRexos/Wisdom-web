@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from '@studio-freight/lenis';
 import { createMobileAnimations } from './mobileAnimations';
 import { createStatementAnimations } from './statementAnimations';
+import { createProStoryAnimations } from './proStoryAnimations';
 import { ANDROID_PLAY_STORE_URL, APP_DOWNLOAD_PATH, IOS_APP_STORE_URL } from './appLinks';
 import officialAppIcon from './assets/official_app_icon.png';
 
@@ -310,21 +311,6 @@ const SOFT_PIN_EXIT_RELEASE_PROGRESS = 0.18;
 const SOFT_PIN_EXIT_OFFSCREEN_EXTRA_FACTOR = 1.04;
 const INITIAL_ANIMATED_BOX_COLOR = '#F9F8F8';
 const HERO_PARALLAX_MAX_SCROLL_Y = 0;
-const PRO_STORY_SQUARE_VIEWPORT_FACTOR = 0.25;
-const PRO_STORY_SQUARE_MIN_SIZE = 130;
-const PRO_STORY_SQUARE_MAX_SIZE = 520;
-const PRO_STORY_SCALE_DISTANCE = 460;
-const PRO_STORY_PIN_HOLD_DISTANCE = 500;
-const PRO_STORY_TEXT_FADE_DISTANCE = 120;
-const PRO_STORY_TEXT_HOLD_DISTANCE = 420;
-const PRO_STORY_REVERSE_HOLD_DISTANCE = 260;
-const PRO_STORY_REVERSE_SLIDE_DISTANCE = 560;
-const PRO_STORY_POST_EXIT_HOLD_DISTANCE = 150;
-const PRO_STORY_SCROLL_DISTANCE_MULTIPLIER = 2;
-const PRO_STORY_TEXT_ENTRY_OFFSET = 52;
-const PRO_STORY_TEXT_RISE_RATIO = 0.22;
-const PRO_STORY_TEXT_EXIT_EXTRA_DISTANCE = 36;
-const PRO_STORY_IMAGE_HEIGHT_RATIO = 1248 / 832;
 // Ajuste fino para alinear opticamente la imagen con el bloque de texto.
 // (negativo = sube la imagen)
 const SEARCH_IMAGE_VERTICAL_OFFSET = -68;
@@ -1025,6 +1011,7 @@ function App() {
       };
     }
 
+    let disposeStory;
     let securityScrollTrigger;
     let experienceScrollTrigger;
     const ctx = gsap.context(() => {
@@ -1206,215 +1193,7 @@ function App() {
         );
       }
 
-      if (proStorySectionRef.current && proStoryPinRef.current && proStoryImageRef.current && proStoryTextsRef.current) {
-        const proSection = proStorySectionRef.current;
-        const proPin = proStoryPinRef.current;
-        const proImage = proStoryImageRef.current;
-        const proImageMedia = proImage.querySelector('img');
-        const proTextsLayer = proStoryTextsRef.current;
-        const proTextBlocks = gsap.utils.toArray('[data-pro-story-text]', proStoryTextsRef.current);
-        const getSquareSize = () => Math.round(
-          gsap.utils.clamp(
-            PRO_STORY_SQUARE_MIN_SIZE,
-            PRO_STORY_SQUARE_MAX_SIZE,
-            window.innerWidth * PRO_STORY_SQUARE_VIEWPORT_FACTOR,
-          ),
-        );
-
-        const getOffscreenOffset = () => {
-          const squareSize = getSquareSize();
-          return Math.round(
-            (window.innerHeight)
-            + (squareSize)
-            + window.innerHeight
-          );
-        };
-        const getFullscreenWidth = () => window.innerWidth;
-        const getFullscreenHeight = () => {
-          if (isVerticalLayoutRef.current) {
-            return window.innerHeight;
-          }
-          return Math.round(getFullscreenWidth() * PRO_STORY_IMAGE_HEIGHT_RATIO);
-        };
-        const getFullscreenOverflowY = () => Math.max(0, getFullscreenHeight() - window.innerHeight);
-        const getFullscreenTopAlignY = () => Math.round(getFullscreenOverflowY() * 0.5);
-        const getFullscreenBottomAlignY = () => -Math.round(getFullscreenOverflowY() * 0.5);
-        const getTextRiseDistance = () => Math.round(
-          gsap.utils.clamp(
-            90,
-            window.innerHeight * 0.32,
-            getFullscreenOverflowY() * PRO_STORY_TEXT_RISE_RATIO,
-          ),
-        );
-
-        const resetProStoryImage = () => {
-          const squareSize = getSquareSize();
-          gsap.set(proImage, {
-            width: squareSize,
-            height: squareSize,
-            borderRadius: 0,
-            y: getOffscreenOffset(),
-            autoAlpha: 1,
-            willChange: 'transform,width,height,opacity',
-          });
-          if (proImageMedia) {
-            gsap.set(proImageMedia, {
-              objectPosition: isVerticalLayoutRef.current ? '50% 35%' : '50% 50%',
-            });
-          }
-          if (proTextsLayer) {
-            gsap.set(proTextsLayer, {
-              y: 0,
-              willChange: 'transform',
-            });
-          }
-        };
-
-        gsap.set(proTextBlocks, {
-          autoAlpha: 0,
-          y: PRO_STORY_TEXT_ENTRY_OFFSET,
-          willChange: 'transform,opacity',
-        });
-
-        resetProStoryImage();
-
-        gsap.timeline({
-          scrollTrigger: {
-            trigger: proSection,
-            start: 'top bottom',
-            end: 'center center',
-            scrub: 0.2,
-            invalidateOnRefresh: true,
-            onRefresh: resetProStoryImage,
-            onLeaveBack: () => {
-              resetProStoryImage();
-              gsap.set(proTextBlocks, { autoAlpha: 0, y: PRO_STORY_TEXT_ENTRY_OFFSET });
-            },
-          },
-        }).fromTo(
-          proImage,
-          { y: () => getOffscreenOffset() },
-          {
-            y: 0,
-            ease: 'none',
-            duration: 1,
-          },
-        );
-
-        const fullStoryDistance = PRO_STORY_PIN_HOLD_DISTANCE
-          + PRO_STORY_SCALE_DISTANCE
-          + (proTextBlocks.length * ((PRO_STORY_TEXT_FADE_DISTANCE * 2) + PRO_STORY_TEXT_HOLD_DISTANCE))
-          + PRO_STORY_SCALE_DISTANCE
-          + PRO_STORY_REVERSE_HOLD_DISTANCE
-          + PRO_STORY_REVERSE_SLIDE_DISTANCE
-          + PRO_STORY_POST_EXIT_HOLD_DISTANCE;
-        const scaledFullStoryDistance = Math.round(fullStoryDistance * PRO_STORY_SCROLL_DISTANCE_MULTIPLIER);
-        const textSequenceDistance = proTextBlocks.length * ((PRO_STORY_TEXT_FADE_DISTANCE * 2) + PRO_STORY_TEXT_HOLD_DISTANCE);
-
-        const proStoryTimeline = gsap.timeline({
-          scrollTrigger: {
-            trigger: proPin,
-            start: 'center center+=1',
-            end: () => `+=${scaledFullStoryDistance}`,
-            pin: true,
-            pinSpacing: true,
-            scrub: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onRefresh: () => {
-              const squareSize = getSquareSize();
-              gsap.set(proImage, {
-                width: squareSize,
-                height: squareSize,
-                borderRadius: 0,
-              });
-              if (proImageMedia) {
-                gsap.set(proImageMedia, {
-                  objectPosition: '50% 50%',
-                });
-              }
-              if (proTextsLayer) {
-                gsap.set(proTextsLayer, { y: 0 });
-              }
-            },
-          },
-        });
-        const holdState = { progress: 0 };
-
-        proStoryTimeline.to(holdState, {
-          progress: 1,
-          ease: 'none',
-          duration: PRO_STORY_PIN_HOLD_DISTANCE,
-        });
-
-        proStoryTimeline.to(proImage, {
-          width: () => getFullscreenWidth(),
-          height: () => getFullscreenHeight(),
-          y: () => getFullscreenTopAlignY(),
-          autoAlpha: 1,
-          borderRadius: 0,
-          ease: 'none',
-          duration: PRO_STORY_SCALE_DISTANCE,
-        });
-
-        proStoryTimeline.add('proStoryTextSequenceStart');
-        proStoryTimeline.to(proImage, {
-          y: () => getFullscreenBottomAlignY(),
-          ease: 'none',
-          duration: textSequenceDistance,
-        }, 'proStoryTextSequenceStart');
-
-        const proStoryTextsTimeline = gsap.timeline();
-        proTextBlocks.forEach((textBlock) => {
-          proStoryTextsTimeline
-            .fromTo(
-              textBlock,
-              { autoAlpha: 0, y: PRO_STORY_TEXT_ENTRY_OFFSET },
-              { autoAlpha: 1, y: 0, ease: 'none', duration: PRO_STORY_TEXT_FADE_DISTANCE },
-            )
-            .to(textBlock, {
-              autoAlpha: 1,
-              y: () => -getTextRiseDistance(),
-              ease: 'none',
-              duration: PRO_STORY_TEXT_HOLD_DISTANCE,
-            })
-            .to(textBlock, {
-              autoAlpha: 0,
-              y: () => -(getTextRiseDistance() + PRO_STORY_TEXT_EXIT_EXTRA_DISTANCE),
-              ease: 'none',
-              duration: PRO_STORY_TEXT_FADE_DISTANCE,
-            });
-        });
-        proStoryTimeline.add(proStoryTextsTimeline, 'proStoryTextSequenceStart');
-
-        proStoryTimeline.to(proImage, {
-          width: () => getSquareSize(),
-          height: () => getSquareSize(),
-          y: 0,
-          autoAlpha: 1,
-          borderRadius: 0,
-          ease: 'none',
-          duration: PRO_STORY_SCALE_DISTANCE,
-        });
-
-        proStoryTimeline.to(holdState, {
-          progress: 2,
-          ease: 'none',
-          duration: PRO_STORY_REVERSE_HOLD_DISTANCE,
-        });
-
-        proStoryTimeline.to(proImage, {
-          y: () => -getOffscreenOffset(),
-          ease: 'none',
-          duration: PRO_STORY_REVERSE_SLIDE_DISTANCE,
-        });
-
-        proStoryTimeline.to(holdState, {
-          progress: 3,
-          ease: 'none',
-          duration: PRO_STORY_POST_EXIT_HOLD_DISTANCE,
-        });
-      }
+      disposeStory = createProStoryAnimations(appRef.current, false);
 
       [dualExperienceSectionRef, secureSectionRef].forEach((ref) => {
         if (ref.current) {
@@ -1707,6 +1486,7 @@ function App() {
 
     return () => {
       disposeStatements();
+      disposeStory();
       ScrollTrigger.removeEventListener('refresh', syncStatementSpacing);
       cancelAnimationFrame(spacingRefreshFrame);
       root.style.removeProperty('--statement-exit-gap');
@@ -1946,7 +1726,7 @@ function App() {
         </section>
 
         {/* 5. Until now */}
-        <section ref={untilNowSectionRef} className={`until-section statement-section mx-auto flex min-h-screen w-full justify-center items-center bg-white relative ${isVertical ? 'px-4 py-16 -mt-[210vh]' : 'px-6 py-24 -mt-[210vh]'}`}>
+        <section ref={untilNowSectionRef} className={`until-section statement-section mx-auto flex min-h-screen w-full justify-center items-center bg-white relative ${isVertical ? 'px-4 py-16' : 'px-6 py-24'}`}>
           <div className="statement-frame">
             <p ref={untilNowTextRef} className={`text-center font-semibold ${isVertical ? 'text-5xl' : 'text-8xl'}`}>Until now.</p>
           </div>

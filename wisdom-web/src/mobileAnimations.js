@@ -1,5 +1,6 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { createProStoryAnimations } from './proStoryAnimations';
 
 // La coreografía móvil tiene su propio flujo y sus propios espacios de pin.
 // El escritorio conserva sus timelines y compensaciones originales.
@@ -9,6 +10,7 @@ export function createMobileAnimations(root, lenisRef) {
   const viewportHeight = () => hero.offsetHeight;
   let disposed = false;
   let resetSearchGeometry;
+  let disposeStory;
 
   const context = gsap.context(() => {
     const search = select('.search-section');
@@ -66,33 +68,7 @@ export function createMobileAnimations(root, lenisRef) {
       y: () => destinationY() + holdDistance(), ease: 'none', duration: 0.42,
     }).fromTo(image, {autoAlpha: 0}, {autoAlpha: 1, duration: 0.2}, 0.12);
 
-    const story = select('.pro-story-pin');
-    const storyImage = select('.pro-story-image');
-    const storyTexts = gsap.utils.toArray('[data-pro-story-text]', root);
-    const square = () => Math.min(root.clientWidth * 0.55, 300);
-    gsap.set(storyTexts, {autoAlpha: 0, y: 28});
-    gsap.timeline({
-      scrollTrigger: {
-        trigger: story, start: 'top bottom', end: 'top top', scrub: true,
-        invalidateOnRefresh: true,
-      },
-    }).fromTo(storyImage, {y: () => viewportHeight() * 0.45}, {y: 0, ease: 'none'});
-
-    const storyTimeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: story, start: 'top top', end: () => `+=${viewportHeight() * 3.6}`,
-        pin: true, scrub: 0.35, invalidateOnRefresh: true,
-      },
-    }).fromTo(storyImage, {width: square, height: square}, {
-      width: () => root.clientWidth, height: () => story.offsetHeight, duration: 0.6,
-    }).to({}, {duration: 0.15});
-    storyTexts.forEach((paragraph) => {
-      storyTimeline.fromTo(paragraph, {autoAlpha: 0, y: 28}, {autoAlpha: 1, y: 0, duration: 0.18})
-        .to(paragraph, {y: -24, duration: 0.65})
-        .to(paragraph, {autoAlpha: 0, y: -48, duration: 0.18});
-    });
-    storyTimeline.to(storyImage, {width: square, height: square, duration: 0.55})
-      .to(storyImage, {y: () => -viewportHeight() * 0.75, autoAlpha: 0, duration: 0.45});
+    disposeStory = createProStoryAnimations(root, true);
 
     const unified = select('.unified-section');
     const photos = gsap.utils.toArray('.unified-photo', unified);
@@ -157,6 +133,7 @@ export function createMobileAnimations(root, lenisRef) {
     window.clearTimeout(resizeTimer);
     window.removeEventListener('resize', onResize);
     ScrollTrigger.removeEventListener('refreshInit', resetSearchGeometry);
+    disposeStory();
     context.revert();
   };
 }
