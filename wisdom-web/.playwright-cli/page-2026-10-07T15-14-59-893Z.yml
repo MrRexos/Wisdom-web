@@ -1,0 +1,49 @@
+- generic [ref=e4]:
+  - generic:
+    - navigation:
+      - button [ref=e6] [cursor=pointer]:
+        - separator [ref=e7]
+        - separator [ref=e8]
+      - generic:
+        - generic:
+          - button
+    - navigation:
+      - generic:
+        - generic:
+          - button
+          - list
+      - generic [ref=e9] [cursor=pointer]
+  - generic:
+    - button
+    - generic:
+      - heading [level=2]
+      - heading [level=3]
+      - paragraph
+  - generic:
+    - generic [ref=e20] [cursor=pointer]
+    - generic [ref=e23] [cursor=pointer]
+  - main [ref=e28]:
+    - generic [ref=e29]:
+      - generic:
+        - generic:
+          - generic:
+            - heading "Tracing Art" [level=1]:
+              - generic: Tracing
+              - generic: Art
+            - generic:
+              - generic:
+                - paragraph: Millions of Resources, Spanning Five Centuries
+                - heading "Here's how the Getty Provenance Index is transforming research on the social life of art." [level=2]
+            - generic:
+              - generic:
+                - generic:
+                  - button
+                  - paragraph: M. Knoedler & Co. Painting stock book 9, page 76, 1943-1952. Getty Research Institute, Los Angeles, 2012.M.54
+            - generic:
+              - generic:
+                - paragraph: "1669"
+                - paragraph: "1700"
+                - paragraph: "1864"
+                - paragraph: "1936"
+                - paragraph: "1940"
+                - paragraph: "1944"

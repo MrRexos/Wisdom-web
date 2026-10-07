@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from '@studio-freight/lenis';
 import { createMobileAnimations } from './mobileAnimations';
+import { createStatementAnimations } from './statementAnimations';
 import { ANDROID_PLAY_STORE_URL, APP_DOWNLOAD_PATH, IOS_APP_STORE_URL } from './appLinks';
 import officialAppIcon from './assets/official_app_icon.png';
 
@@ -296,10 +297,6 @@ const useVerticalLayout = () => {
   return isVertical;
 };
 
-const ENDLESS_PIN_DISTANCE = 600;
-const UNTIL_NOW_PIN_DISTANCE = 640;
-const ENDLESS_TEXT_START_SCALE = 0.95;
-const ENDLESS_TEXT_END_SCALE = 1.08;
 const DEFAULT_LENIS_LERP = 0.08;
 const DEFAULT_LENIS_WHEEL_MULTIPLIER = 1;
 const SOFT_PIN_START_VIEWPORT_RATIO = 0.92;
@@ -619,7 +616,7 @@ const InteractiveToggleSection = ({ sectionRef, activeMode, onModeChange, isVert
       </div>
 
       {/* Textos Principales Expandibles */}
-      <div className="flex flex-col items-center text-center gap-2">
+      <div data-experience-copy className="flex flex-col items-center text-center gap-2">
         <AnimatePresence mode='wait'>
           {/* Usamos un fragmento o div contenedor que se actualiza al cambiar activeMode */}
           <motion.div
@@ -1020,10 +1017,16 @@ function App() {
 
   useLayoutEffect(() => {
     if (isVertical) {
-      return createMobileAnimations(appRef.current, lenisRef);
+      const disposeMobile = createMobileAnimations(appRef.current, lenisRef);
+      const disposeStatements = createStatementAnimations(appRef.current, lenisRef);
+      return () => {
+        disposeStatements();
+        disposeMobile();
+      };
     }
 
     let securityScrollTrigger;
+    let experienceScrollTrigger;
     const ctx = gsap.context(() => {
 
       // 1. Configuración general (Igual que antes)
@@ -1413,207 +1416,7 @@ function App() {
         });
       }
 
-      if (endlessSearchSectionRef.current && endlessSearchTextRef.current) {
-        const endlessText = endlessSearchTextRef.current;
-
-        let lastSnapTimestamp = 0;
-        const SNAP_COOLDOWN_MS = 900;
-
-        const getSectionCenteredScrollY = (sectionEl) => {
-          if (!sectionEl) return Number.NaN;
-          const sectionRect = sectionEl.getBoundingClientRect();
-          const sectionTop = window.scrollY + sectionRect.top;
-          const sectionCenter = sectionTop + (sectionRect.height / 2);
-          return sectionCenter - (window.innerHeight / 2);
-        };
-
-        const softlySnapToSectionCenter = (sectionEl) => {
-          const now = Date.now();
-          if (now - lastSnapTimestamp < SNAP_COOLDOWN_MS) return;
-
-          const targetY = getSectionCenteredScrollY(sectionEl);
-          if (!Number.isFinite(targetY)) return;
-
-          const delta = Math.abs(targetY - window.scrollY);
-          if (delta < 8 || delta > 60) return;
-
-          lastSnapTimestamp = now;
-
-          if (lenisRef.current) {
-            lenisRef.current.scrollTo(targetY, {
-              duration: 0.55,
-              easing: (t) => 1 - ((1 - t) * (1 - t) * (1 - t)),
-            });
-            return;
-          }
-
-          window.scrollTo({ top: targetY, behavior: 'smooth' });
-        };
-
-        const softlySnapToEndlessCenter = () => softlySnapToSectionCenter(endlessSearchSectionRef.current);
-        const softlySnapToSearchCenter = () => softlySnapToSectionCenter(searchSectionRef.current);
-
-        const playEndlessIntro = () => {
-          gsap.killTweensOf(endlessText);
-          gsap.set(endlessText, {
-            opacity: 0,
-            scale: ENDLESS_TEXT_START_SCALE,
-            transformOrigin: '50% 50%',
-          });
-
-          gsap.timeline()
-            .to(endlessText, {
-              opacity: 1,
-              duration: 1,
-              ease: 'power1.out',
-            }, 0)
-            .to(endlessText, {
-              scale: ENDLESS_TEXT_END_SCALE,
-              duration: 2,
-              ease: 'power1.out',
-            }, 0);
-        };
-
-        gsap.set(endlessText, {
-          opacity: 0,
-          scale: ENDLESS_TEXT_START_SCALE,
-          transformOrigin: '50% 50%',
-        });
-
-        if (searchSectionRef.current) {
-          ScrollTrigger.create({
-            trigger: searchSectionRef.current,
-            start: "center center",
-            end: `+=${SEARCH_PIN_DISTANCE}`,
-            onLeave: softlySnapToEndlessCenter,
-          });
-        }
-
-        ScrollTrigger.create({
-          trigger: endlessSearchSectionRef.current,
-          start: "center center",
-          end: `+=${ENDLESS_PIN_DISTANCE}`,
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onEnter: playEndlessIntro,
-          onEnterBack: playEndlessIntro,
-          onLeave: () => {
-            gsap.killTweensOf(endlessText);
-            gsap.to(endlessText, {
-              opacity: 0,
-              duration: 0.5,
-              ease: 'power1.out',
-            });
-          },
-          onLeaveBack: () => {
-            gsap.killTweensOf(endlessText);
-            gsap.to(endlessText, {
-              opacity: 0,
-              duration: 0.5,
-              ease: 'power1.out',
-              onComplete: () => {
-                gsap.set(endlessText, { scale: ENDLESS_TEXT_START_SCALE });
-              },
-            });
-            softlySnapToSearchCenter();
-          },
-        });
-      }
-
-      if (untilNowSectionRef.current && untilNowTextRef.current) {
-        const untilNowText = untilNowTextRef.current;
-
-        const getSectionCenteredScrollY = (sectionEl) => {
-          if (!sectionEl) return Number.NaN;
-          const sectionRect = sectionEl.getBoundingClientRect();
-          const sectionTop = window.scrollY + sectionRect.top;
-          const sectionCenter = sectionTop + (sectionRect.height / 2);
-          return sectionCenter - (window.innerHeight / 2);
-        };
-
-        const softlySnapToSectionCenter = (sectionEl) => {
-          const targetY = getSectionCenteredScrollY(sectionEl);
-          if (!Number.isFinite(targetY)) return;
-
-          const delta = Math.abs(targetY - window.scrollY);
-          if (delta < 8 || delta > 48) return;
-
-          if (lenisRef.current) {
-            lenisRef.current.scrollTo(targetY, {
-              duration: 0.45,
-              easing: (t) => 1 - ((1 - t) * (1 - t) * (1 - t)),
-            });
-            return;
-          }
-
-          window.scrollTo({ top: targetY, behavior: 'smooth' });
-        };
-
-        const softlySnapToEndlessCenter = () => softlySnapToSectionCenter(endlessSearchSectionRef.current);
-
-        const playUntilNowIntro = () => {
-          gsap.killTweensOf(untilNowText);
-          gsap.set(untilNowText, {
-            opacity: 0,
-            scale: ENDLESS_TEXT_START_SCALE,
-            transformOrigin: '50% 50%',
-          });
-
-          gsap.timeline()
-            .to(untilNowText, {
-              opacity: 1,
-              duration: 1,
-              ease: 'power1.out',
-            }, 0)
-            .to(untilNowText, {
-              scale: ENDLESS_TEXT_END_SCALE,
-              duration: 2,
-              ease: 'power1.out',
-            }, 0);
-        };
-
-        gsap.set(untilNowText, {
-          opacity: 0,
-          scale: ENDLESS_TEXT_START_SCALE,
-          transformOrigin: '50% 50%',
-        });
-
-        ScrollTrigger.create({
-          trigger: untilNowSectionRef.current,
-          start: 'center center',
-          end: `+=${UNTIL_NOW_PIN_DISTANCE}`,
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 0,
-          invalidateOnRefresh: true,
-          onEnter: playUntilNowIntro,
-          onEnterBack: playUntilNowIntro,
-          onLeave: () => {
-            gsap.killTweensOf(untilNowText);
-            gsap.to(untilNowText, {
-              opacity: 0,
-              duration: 0.5,
-              ease: 'power1.out',
-            });
-          },
-          onLeaveBack: () => {
-            gsap.killTweensOf(untilNowText);
-            gsap.to(untilNowText, {
-              opacity: 0,
-              duration: 0.5,
-              ease: 'power1.out',
-              onComplete: () => {
-                gsap.set(untilNowText, { scale: ENDLESS_TEXT_START_SCALE });
-              },
-            });
-            softlySnapToEndlessCenter();
-          },
-        });
-      }
-
-      [chaosSectionRef, dualExperienceSectionRef, secureSectionRef].forEach((ref) => {
+      [dualExperienceSectionRef, secureSectionRef].forEach((ref) => {
         if (ref.current) {
           const sectionEl = ref.current;
           const isDual = ref === dualExperienceSectionRef;
@@ -1628,8 +1431,13 @@ function App() {
           
           const getSoftPinStartTop = () => Math.round(window.innerHeight * SOFT_PIN_START_VIEWPORT_RATIO);
           const getSoftPinCenterOffset = () => {
-            const sectionHeight = sectionEl.offsetHeight;
-            const centeredTop = (window.innerHeight - sectionHeight) / 2;
+            let contentCenter = sectionEl.offsetHeight / 2;
+            if (isDual) {
+              // Centrar las tres líneas; el switch conserva su distancia al texto.
+              const copyBounds = sectionEl.querySelector('[data-experience-copy]').getBoundingClientRect();
+              contentCenter = copyBounds.top - sectionEl.getBoundingClientRect().top + copyBounds.height / 2;
+            }
+            const centeredTop = window.innerHeight / 2 - contentCenter;
             return Math.round(centeredTop - getSoftPinStartTop());
           };
           const getSoftPinEntryCruiseOffset = () => (
@@ -1681,6 +1489,7 @@ function App() {
           });
 
           if (isSecure) securityScrollTrigger = softPinTimeline.scrollTrigger;
+          if (isDual) experienceScrollTrigger = softPinTimeline.scrollTrigger;
 
           softPinTimeline
             .to(sectionEl, {
@@ -1849,6 +1658,26 @@ function App() {
 
     }, appRef);
 
+    const disposeStatements = createStatementAnimations(appRef.current, lenisRef);
+
+    // Los márgenes históricos compensan pins creados fuera del orden visual.
+    // Ajustar solo este enlace mantiene intactas las demás coreografías.
+    const root = appRef.current;
+    let statementExitGap = 0;
+    let spacingRefreshFrame;
+    const syncStatementSpacing = () => {
+      const statement = ScrollTrigger.getById('statement-chaos-section');
+      if (!statement || !experienceScrollTrigger) return;
+      const adjustment = statement.end - experienceScrollTrigger.start;
+      if (Math.abs(adjustment) <= 1) return;
+      statementExitGap += adjustment;
+      root.style.setProperty('--statement-exit-gap', `${statementExitGap}px`);
+      cancelAnimationFrame(spacingRefreshFrame);
+      spacingRefreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
+    };
+    ScrollTrigger.addEventListener('refresh', syncStatementSpacing);
+    syncStatementSpacing();
+
     // Acercar solo el CTA al final real de Safety, sin cambiar su coreografía.
     const cta = ctaSectionRef.current;
     const originalCtaMargin = cta.style.marginTop;
@@ -1877,6 +1706,10 @@ function App() {
     window.addEventListener('resize', handleWindowResize);
 
     return () => {
+      disposeStatements();
+      ScrollTrigger.removeEventListener('refresh', syncStatementSpacing);
+      cancelAnimationFrame(spacingRefreshFrame);
+      root.style.removeProperty('--statement-exit-gap');
       ScrollTrigger.removeEventListener('refresh', syncCtaSpacing);
       cta.style.marginTop = originalCtaMargin;
       window.removeEventListener('resize', handleWindowResize);
@@ -2075,10 +1908,12 @@ function App() {
         </section>
 
         {/* 3. Search 2 */}
-        <section ref={endlessSearchSectionRef} className={`endless-section fade-section min-h-screen mx-auto flex w-full justify-center items-center py-24 ${isVertical ? 'px-4' : 'px-6'}`}>
-          <p ref={endlessSearchTextRef} className={`readable-section-text mx-auto max-w-[820px] text-center font-semibold text-[#050505] ${isVertical ? 'text-2xl leading-snug' : 'text-[42px] leading-[1.3] leading-relaxed'}`}>
-            Endless searches. Reliance on word-of-mouth. Zero guarantees. The service world was fragmented, forcing you to guess instead of choose.
-          </p>
+        <section ref={endlessSearchSectionRef} className={`endless-section statement-section min-h-screen mx-auto flex w-full justify-center items-center py-24 ${isVertical ? 'px-4' : 'px-6'}`}>
+          <div className="statement-frame">
+            <p ref={endlessSearchTextRef} className={`readable-section-text mx-auto max-w-[820px] text-center font-semibold text-[#050505] ${isVertical ? 'text-2xl leading-snug' : 'text-[42px] leading-[1.3] leading-relaxed'}`}>
+              Endless searches. Reliance on word-of-mouth. Zero guarantees. The service world was fragmented, forcing you to guess instead of choose.
+            </p>
+          </div>
         </section>
 
         {/* 4. Pro alone */}
@@ -2111,8 +1946,10 @@ function App() {
         </section>
 
         {/* 5. Until now */}
-        <section ref={untilNowSectionRef} className={`until-section fade-section mx-auto flex min-h-screen w-full justify-center items-center bg-white relative ${isVertical ? 'px-4 py-16 -mt-[210vh]' : 'px-6 py-24 -mt-[210vh]'}`}>
-          <p ref={untilNowTextRef} className={`text-center font-semibold ${isVertical ? 'text-5xl' : 'text-8xl'}`}>Until now.</p>
+        <section ref={untilNowSectionRef} className={`until-section statement-section mx-auto flex min-h-screen w-full justify-center items-center bg-white relative ${isVertical ? 'px-4 py-16 -mt-[210vh]' : 'px-6 py-24 -mt-[210vh]'}`}>
+          <div className="statement-frame">
+            <p ref={untilNowTextRef} className={`text-center font-semibold ${isVertical ? 'text-5xl' : 'text-8xl'}`}>Until now.</p>
+          </div>
         </section>
 
         {/* 6. Unified */}
@@ -2186,10 +2023,12 @@ function App() {
         </section>
 
         {/* 7. Chaos */}
-        <section ref={chaosSectionRef} className={`chaos-section fade-section -mt-[-350vh] min-h-screen mx-auto flex w-full justify-center items-center py-20 ${isVertical ? 'px-4' : 'px-6'}`}>
-          <p className={`readable-section-text mx-auto max-w-[1000px] text-center font-semibold text-[#050505] ${isVertical ? 'text-2xl leading-snug' : 'text-[42px] leading-[1.3] leading-relaxed'}`}>
-            We replaced word-of-mouth with verified data. We replaced uncertainty with transparent profiles. A single ecosystem where quality is visible, and trust is the default.
-          </p>
+        <section ref={chaosSectionRef} className={`chaos-section statement-section -mt-[-350vh] min-h-screen mx-auto flex w-full justify-center items-center py-20 ${isVertical ? 'px-4' : 'px-6'}`}>
+          <div className="statement-frame">
+            <p className={`readable-section-text mx-auto max-w-[1000px] text-center font-semibold text-[#050505] ${isVertical ? 'text-2xl leading-snug' : 'text-[42px] leading-[1.3] leading-relaxed'}`}>
+              We replaced word-of-mouth with verified data. We replaced uncertainty with transparent profiles. A single ecosystem where quality is visible, and trust is the default.
+            </p>
+          </div>
         </section>
 
         {/* 8. Dual experience */}

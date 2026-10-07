@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import { APP_DOWNLOAD_PATH } from '../appLinks';
+import brandmark from '../assets/brandmark.svg';
+import wordmark from '../assets/WISDOM_brandmark.svg';
 import { useLocale } from '../i18n/LocaleContext';
 import { getLegalDocument, LEGAL_LANGUAGES, normalizeLegalLanguage } from './content';
 import { LEGAL_ROUTES } from './routes';
@@ -54,37 +57,50 @@ export default function LegalDocumentPage({ documentKey }) {
   }
 
   return (
-    <main className="privacy-policy-page" lang={language} dir={language === 'ar' ? 'rtl' : 'ltr'}>
-      <article className="privacy-policy-shell">
-        {!isEnglishOnly && (
-          <label className="legal-language-control">
-            <span>{languageLabels[language]}</span>
-            <select value={language} onChange={changeLanguage}>
-              {LEGAL_LANGUAGES.map((key) => <option key={key} value={key}>{languageNames[key]}</option>)}
-            </select>
-          </label>
-        )}
-        <p className="privacy-policy-kicker">{content.lastUpdated}</p>
-        <h1>{content.title}</h1>
-        <div className="legal-document-body">
-          {documentKey === 'faq' ? content.sections.map((section) => (
-            <section key={section.id} className="privacy-policy-section">
-              <h2>{section.title}</h2>
-              {section.items.map((item) => (
-                <details key={item.id} className="legal-faq-item">
-                  <summary>{item.question}</summary>
-                  {item.answer.split('\n\n').map((paragraph, index) => <p key={index}><LinkedText text={paragraph} /></p>)}
-                </details>
-              ))}
-            </section>
-          )) : content.blocks.map((block) => <DocumentBlock key={block.id} block={block} />)}
-        </div>
-        <nav className="legal-related-documents">
-          {Object.entries(LEGAL_ROUTES).filter(([, key]) => key !== documentKey).map(([path, key]) => (
-            <a key={key} href={`${path}?lang=${language}`}>{getLegalDocument(language, key).title}</a>
-          ))}
-        </nav>
-      </article>
-    </main>
+    <>
+      {isEnglishOnly && (
+        <header className="legal-page-header" lang="en">
+          <a className="legal-page-brandmark" href="/" aria-label="Wisdom home">
+            <img src={brandmark} alt="" width="280" height="161" />
+          </a>
+          <a className="legal-page-wordmark" href="/" aria-label="Wisdom home">
+            <img src={wordmark} alt="WISDOM" width="504" height="91" />
+          </a>
+          <a className="legal-page-download" href={APP_DOWNLOAD_PATH}>Get the app</a>
+        </header>
+      )}
+      <main className={`privacy-policy-page${isEnglishOnly ? ' privacy-policy-page--primary' : ''}`} lang={language} dir={language === 'ar' ? 'rtl' : 'ltr'}>
+        <article className="privacy-policy-shell">
+          {!isEnglishOnly && (
+            <label className="legal-language-control">
+              <span>{languageLabels[language]}</span>
+              <select value={language} onChange={changeLanguage}>
+                {LEGAL_LANGUAGES.map((key) => <option key={key} value={key}>{languageNames[key]}</option>)}
+              </select>
+            </label>
+          )}
+          <p className="privacy-policy-kicker">{content.lastUpdated}</p>
+          <h1>{content.title}</h1>
+          <div className="legal-document-body">
+            {documentKey === 'faq' ? content.sections.map((section) => (
+              <section key={section.id} className="privacy-policy-section">
+                <h2>{section.title}</h2>
+                {section.items.map((item) => (
+                  <details key={item.id} className="legal-faq-item">
+                    <summary>{item.question}</summary>
+                    {item.answer.split('\n\n').map((paragraph, index) => <p key={index}><LinkedText text={paragraph} /></p>)}
+                  </details>
+                ))}
+              </section>
+            )) : content.blocks.map((block) => <DocumentBlock key={block.id} block={block} />)}
+          </div>
+          <nav className="legal-related-documents">
+            {Object.entries(LEGAL_ROUTES).filter(([, key]) => key !== documentKey).map(([path, key]) => (
+              <a key={key} href={`${path}?lang=${language}`}>{getLegalDocument(language, key).title}</a>
+            ))}
+          </nav>
+        </article>
+      </main>
+    </>
   );
 }

@@ -39,6 +39,35 @@ html {
   overflow: visible;
 }
 
+/* Tres escenas de lectura con el mismo hold de 150lvh que la referencia. */
+[data-layout] .statement-section {
+  height: 250lvh;
+  min-height: 250lvh;
+}
+
+.statement-frame {
+  position: fixed;
+  inset: 0;
+  z-index: 11;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: inherit;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.statement-frame > p {
+  will-change: transform;
+}
+
+/* El bloque anterior ya reserva su recorrido; no necesita solaparse con él. */
+[data-layout='horizontal'] .experience-section {
+  margin-top: var(--statement-exit-gap, 0px);
+}
+
 [data-layout='vertical'] .section-heading {
   font-size: clamp(1.5rem, 6vw, 2rem);
   line-height: 1.15;

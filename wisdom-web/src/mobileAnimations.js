@@ -66,19 +66,6 @@ export function createMobileAnimations(root, lenisRef) {
       y: () => destinationY() + holdDistance(), ease: 'none', duration: 0.42,
     }).fromTo(image, {autoAlpha: 0}, {autoAlpha: 1, duration: 0.2}, 0.12);
 
-    const animateStatement = (section, distance) => {
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: section, start: 'top top', end: () => `+=${viewportHeight() * distance}`,
-          pin: true, scrub: 0.35, invalidateOnRefresh: true,
-        },
-      }).fromTo(section.firstElementChild, {autoAlpha: 0, scale: 0.95, y: 24}, {
-        autoAlpha: 1, scale: 1, y: 0, duration: 0.3,
-      }).to(section.firstElementChild, {scale: 1.04, duration: 0.5})
-        .to(section.firstElementChild, {autoAlpha: 0, y: -24, duration: 0.2});
-    };
-    animateStatement(select('.endless-section'), 0.55);
-
     const story = select('.pro-story-pin');
     const storyImage = select('.pro-story-image');
     const storyTexts = gsap.utils.toArray('[data-pro-story-text]', root);
@@ -106,8 +93,6 @@ export function createMobileAnimations(root, lenisRef) {
     });
     storyTimeline.to(storyImage, {width: square, height: square, duration: 0.55})
       .to(storyImage, {y: () => -viewportHeight() * 0.75, autoAlpha: 0, duration: 0.45});
-
-    animateStatement(select('.until-section'), 0.4);
 
     const unified = select('.unified-section');
     const photos = gsap.utils.toArray('.unified-photo', unified);
@@ -138,7 +123,7 @@ export function createMobileAnimations(root, lenisRef) {
 
     // Estos bloques conservan su entrada suave; las tarjetas largas se leen
     // con scroll natural para que ninguna quede cortada por un pin de pantalla.
-    for (const selector of ['.chaos-section', '.experience-section']) {
+    for (const selector of ['.experience-section']) {
       const section = select(selector);
       gsap.fromTo(section, {autoAlpha: 0, y: 40}, {
         autoAlpha: 1, y: 0,
