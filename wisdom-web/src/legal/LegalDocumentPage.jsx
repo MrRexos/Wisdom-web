@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { APP_DOWNLOAD_PATH } from '../appLinks';
+import GetAppLink from '../GetAppLink';
 import brandmark from '../assets/brandmark.svg';
 import wordmark from '../assets/WISDOM_brandmark.svg';
 import { useLocale } from '../i18n/LocaleContext';
@@ -66,7 +66,7 @@ export default function LegalDocumentPage({ documentKey }) {
           <a className="legal-page-wordmark" href="/" aria-label="Wisdom home">
             <img src={wordmark} alt="WISDOM" width="504" height="91" />
           </a>
-          <a className="legal-page-download" href={APP_DOWNLOAD_PATH}>Get the app</a>
+          <GetAppLink className="legal-page-download">Get the app</GetAppLink>
         </header>
       )}
       <main className={`privacy-policy-page${isEnglishOnly ? ' privacy-policy-page--primary' : ''}`} lang={language} dir={language === 'ar' ? 'rtl' : 'ltr'}>

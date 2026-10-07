@@ -3,6 +3,10 @@ export const APP_DOWNLOAD_URL = `https://wisdomapp.es${APP_DOWNLOAD_PATH}`;
 export const IOS_APP_STORE_URL = 'https://apps.apple.com/app/id6737240739';
 export const ANDROID_PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.anonymous.Wisdom_expo';
 
+export function isMobileDevice(device = {}) {
+  return Boolean(getDeviceStoreUrl(device) || device.userAgentData?.mobile || /Mobi/i.test(device.userAgent || ''));
+}
+
 export function getDeviceStoreUrl({
   userAgent = '',
   platform = '',

@@ -6,7 +6,8 @@ import Lenis from '@studio-freight/lenis';
 import { createMobileAnimations } from './mobileAnimations';
 import { createStatementAnimations } from './statementAnimations';
 import { createProStoryAnimations } from './proStoryAnimations';
-import { ANDROID_PLAY_STORE_URL, APP_DOWNLOAD_PATH, IOS_APP_STORE_URL } from './appLinks';
+import { ANDROID_PLAY_STORE_URL, IOS_APP_STORE_URL } from './appLinks';
+import GetAppLink from './GetAppLink';
 import officialAppIcon from './assets/official_app_icon.png';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -1587,9 +1588,9 @@ function App() {
 
         {/* DERECHA: Botón en su propio flex-1 */}
         <div className="flex flex-1 justify-end">
-          <a href={APP_DOWNLOAD_PATH} className={`rounded-full bg-[#050505] font-semibold text-white hover:bg-black transition-colors ${isVertical ? 'px-4 py-1.5 text-xs' : 'px-6 py-2 text-sm'}`}>
+          <GetAppLink className={`rounded-full bg-[#050505] font-semibold text-white hover:bg-black transition-colors ${isVertical ? 'px-4 py-1.5 text-xs' : 'px-6 py-2 text-sm'}`}>
             Get the app
-          </a>
+          </GetAppLink>
         </div>
         
       </header>
@@ -1888,9 +1889,9 @@ function App() {
             <p className={`mt-5 text-[#9ca3af] font-medium max-w-md leading-relaxed ${isVertical ? 'text-base' : 'text-lg md:text-xl'}`}>
               Join the new standard for services today on Apple and Android.
             </p>
-            <a href={APP_DOWNLOAD_PATH} className="mt-10 rounded-full bg-[#0F0F0F] px-8 py-3 text-sm font-bold text-white transition-transform hover:scale-105">
+            <GetAppLink className="mt-10 rounded-full bg-[#0F0F0F] px-8 py-3 text-sm font-bold text-white transition-transform hover:scale-105">
               Give Wisdom a try
-            </a>
+            </GetAppLink>
           </div>
 
           {/* FOOTER (Fijado en la parte inferior de esta sección) */}
