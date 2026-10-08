@@ -4,6 +4,7 @@ import { pathToFileURL } from 'node:url';
 import { publicPaths, languagesFor, defaultLanguage, outputFile, vercelConfig } from './seo-routes.mjs';
 import { canonicalUrl, SHARE_IMAGE, SITE_URL, OPEN_GRAPH_LOCALES } from '../src/seo/metadata.js';
 import sharp from 'sharp';
+import { buildDiscovery } from './build-discovery.mjs';
 
 process.env.NODE_ENV = 'production';
 const { build } = await import('vite');
@@ -93,6 +94,9 @@ for (const path of publicPaths) {
   }
 }
 
+const discovery = await buildDiscovery({ build, outDir });
+emitted.push(...discovery.pages);
+urls.push(...discovery.urls);
 await writeFile(resolve(outDir, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls.join('\n')}\n</urlset>\n`, 'utf8');
 await writeFile(resolve(outDir, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`, 'utf8');
 for (const language of ['es', 'en']) {

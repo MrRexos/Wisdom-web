@@ -1,0 +1,40 @@
+{
+  "source": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap",
+  "fonts": [
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2JL7SUc.woff2",
+      "file": "inter-ca157063339a.woff2",
+      "bytes": 25960
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa0ZL7SUc.woff2",
+      "file": "inter-71d5ee93cc1e.woff2",
+      "bytes": 18748
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2ZL7SUc.woff2",
+      "file": "inter-6e9e020a25f9.woff2",
+      "bytes": 11232
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1pL7SUc.woff2",
+      "file": "inter-1be3448e292f.woff2",
+      "bytes": 18996
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2pL7SUc.woff2",
+      "file": "inter-5c66f9e07e90.woff2",
+      "bytes": 10252
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7SUc.woff2",
+      "file": "inter-34b9c504cab7.woff2",
+      "bytes": 85068
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+      "file": "inter-3100e775e861.woff2",
+      "bytes": 48256
+    }
+  ]
+}

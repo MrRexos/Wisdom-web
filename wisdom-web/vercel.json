@@ -354,6 +354,126 @@
     {
       "source": "/users",
       "destination": "/seo/users.default.html"
+    },
+    {
+      "source": "/en/services",
+      "destination": "/seo/discovery/en/services.html"
+    },
+    {
+      "source": "/es/servicios",
+      "destination": "/seo/discovery/es/servicios.html"
+    },
+    {
+      "source": "/ca/serveis",
+      "destination": "/seo/discovery/ca/serveis.html"
+    },
+    {
+      "source": "/fr/services",
+      "destination": "/seo/discovery/fr/services.html"
+    },
+    {
+      "source": "/pt/servicos",
+      "destination": "/seo/discovery/pt/servicos.html"
+    },
+    {
+      "source": "/de/dienstleistungen",
+      "destination": "/seo/discovery/de/dienstleistungen.html"
+    },
+    {
+      "source": "/it/servizi",
+      "destination": "/seo/discovery/it/servizi.html"
+    },
+    {
+      "source": "/zh/services",
+      "destination": "/seo/discovery/zh/services.html"
+    },
+    {
+      "source": "/ar/services",
+      "destination": "/seo/discovery/ar/services.html"
+    },
+    {
+      "source": "/hi/services",
+      "destination": "/seo/discovery/hi/services.html"
+    },
+    {
+      "source": "/ja/services",
+      "destination": "/seo/discovery/ja/services.html"
+    },
+    {
+      "source": "/ru/services",
+      "destination": "/seo/discovery/ru/services.html"
+    },
+    {
+      "source": "/es/servicios/servicios-a-domicilio",
+      "destination": "/seo/discovery/es/servicios/servicios-a-domicilio.html"
+    },
+    {
+      "source": "/en/services/home-services",
+      "destination": "/seo/discovery/en/services/home-services.html"
+    },
+    {
+      "source": "/es/servicios/limpieza-a-domicilio",
+      "destination": "/seo/discovery/es/servicios/limpieza-a-domicilio.html"
+    },
+    {
+      "source": "/en/services/home-cleaning",
+      "destination": "/seo/discovery/en/services/home-cleaning.html"
+    },
+    {
+      "source": "/es/servicios/reparaciones-y-mantenimiento",
+      "destination": "/seo/discovery/es/servicios/reparaciones-y-mantenimiento.html"
+    },
+    {
+      "source": "/en/services/repairs-and-maintenance",
+      "destination": "/seo/discovery/en/services/repairs-and-maintenance.html"
+    },
+    {
+      "source": "/es/servicios/clases-particulares",
+      "destination": "/seo/discovery/es/servicios/clases-particulares.html"
+    },
+    {
+      "source": "/en/services/private-lessons",
+      "destination": "/seo/discovery/en/services/private-lessons.html"
+    },
+    {
+      "source": "/es/servicios/servicios-online-y-freelancers",
+      "destination": "/seo/discovery/es/servicios/servicios-online-y-freelancers.html"
+    },
+    {
+      "source": "/en/services/online-services-and-freelancers",
+      "destination": "/seo/discovery/en/services/online-services-and-freelancers.html"
+    },
+    {
+      "source": "/es/servicios/ofrecer-servicios-profesionales",
+      "destination": "/seo/discovery/es/servicios/ofrecer-servicios-profesionales.html"
+    },
+    {
+      "source": "/en/services/offer-professional-services",
+      "destination": "/seo/discovery/en/services/offer-professional-services.html"
+    },
+    {
+      "source": "/es/servicios/bienestar-y-entrenamiento",
+      "destination": "/seo/discovery/es/servicios/bienestar-y-entrenamiento.html"
+    },
+    {
+      "source": "/en/services/wellbeing-and-personal-training",
+      "destination": "/seo/discovery/en/services/wellbeing-and-personal-training.html"
+    },
+    {
+      "source": "/es/servicios/cuidado-de-mascotas",
+      "destination": "/seo/discovery/es/servicios/cuidado-de-mascotas.html"
+    },
+    {
+      "source": "/en/services/pet-care",
+      "destination": "/seo/discovery/en/services/pet-care.html"
+    },
+    {
+      "source": "/es/servicios/profesionales-para-eventos",
+      "destination": "/seo/discovery/es/servicios/profesionales-para-eventos.html"
+    },
+    {
+      "source": "/en/services/event-professionals",
+      "destination": "/seo/discovery/en/services/event-professionals.html"
     }
   ]
 }

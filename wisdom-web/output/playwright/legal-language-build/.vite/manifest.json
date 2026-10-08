@@ -1,0 +1,131 @@
+{
+  "_appDownloadCopy-DEnT_7IW.js": {
+    "file": "assets/appDownloadCopy-DEnT_7IW.js",
+    "name": "appDownloadCopy",
+    "imports": [
+      "_main-BfHJyw9Q.js"
+    ]
+  },
+  "_language-Dc1L8vZi.js": {
+    "file": "assets/language-Dc1L8vZi.js",
+    "name": "language",
+    "imports": [
+      "_main-BfHJyw9Q.js"
+    ]
+  },
+  "_main-!~{003}~.js": {
+    "file": "assets/main-C36RPhcZ.css",
+    "src": "_main-!~{003}~.js"
+  },
+  "_main-BfHJyw9Q.js": {
+    "file": "assets/main-BfHJyw9Q.js",
+    "name": "main",
+    "dynamicImports": [
+      "src/AppDownload.jsx",
+      "src/DataDeletion.jsx",
+      "src/legal/LegalDocumentPage.jsx",
+      "src/UsersDashboard.jsx",
+      "src/App.jsx"
+    ],
+    "css": [
+      "assets/main-C36RPhcZ.css"
+    ]
+  },
+  "_metadata-!~{00c}~.js": {
+    "file": "assets/metadata-TEVy8u_C.css",
+    "src": "_metadata-!~{00c}~.js"
+  },
+  "_metadata-BFYU3Q_b.js": {
+    "file": "assets/metadata-BFYU3Q_b.js",
+    "name": "metadata",
+    "imports": [
+      "_main-BfHJyw9Q.js",
+      "_appDownloadCopy-DEnT_7IW.js"
+    ],
+    "css": [
+      "assets/metadata-TEVy8u_C.css"
+    ],
+    "assets": [
+      "assets/qr-wisdom-app-redondo-Gfdy0RsB.svg"
+    ]
+  },
+  "_official_app_icon-BR6atECF.js": {
+    "file": "assets/official_app_icon-BR6atECF.js",
+    "name": "official_app_icon",
+    "assets": [
+      "assets/official_app_icon-Ch6pVMEg.png"
+    ]
+  },
+  "src/App.jsx": {
+    "file": "assets/App-DDfHhtGa.js",
+    "name": "App",
+    "src": "src/App.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_main-BfHJyw9Q.js",
+      "_metadata-BFYU3Q_b.js",
+      "_official_app_icon-BR6atECF.js",
+      "_appDownloadCopy-DEnT_7IW.js"
+    ]
+  },
+  "src/AppDownload.jsx": {
+    "file": "assets/AppDownload-BmX4Yyyr.js",
+    "name": "AppDownload",
+    "src": "src/AppDownload.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_main-BfHJyw9Q.js",
+      "_official_app_icon-BR6atECF.js",
+      "_appDownloadCopy-DEnT_7IW.js"
+    ]
+  },
+  "src/DataDeletion.jsx": {
+    "file": "assets/DataDeletion-B2iKpizk.js",
+    "name": "DataDeletion",
+    "src": "src/DataDeletion.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_main-BfHJyw9Q.js",
+      "_language-Dc1L8vZi.js"
+    ],
+    "css": [
+      "assets/DataDeletion-BAAL0k2n.css"
+    ]
+  },
+  "src/UsersDashboard.jsx": {
+    "file": "assets/UsersDashboard-wMSABle2.js",
+    "name": "UsersDashboard",
+    "src": "src/UsersDashboard.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_main-BfHJyw9Q.js"
+    ]
+  },
+  "src/assets/IconWeb.png": {
+    "file": "assets/IconWeb-BH8pjLpz.png",
+    "src": "src/assets/IconWeb.png"
+  },
+  "src/assets/official_app_icon.png": {
+    "file": "assets/official_app_icon-Ch6pVMEg.png",
+    "src": "src/assets/official_app_icon.png"
+  },
+  "src/assets/qr-wisdom-app-redondo.svg": {
+    "file": "assets/qr-wisdom-app-redondo-Gfdy0RsB.svg",
+    "src": "src/assets/qr-wisdom-app-redondo.svg"
+  },
+  "src/legal/LegalDocumentPage.jsx": {
+    "file": "assets/LegalDocumentPage-8rqJhgGk.js",
+    "name": "LegalDocumentPage",
+    "src": "src/legal/LegalDocumentPage.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_main-BfHJyw9Q.js",
+      "_metadata-BFYU3Q_b.js",
+      "_language-Dc1L8vZi.js",
+      "_appDownloadCopy-DEnT_7IW.js"
+    ],
+    "css": [
+      "assets/LegalDocumentPage-DZL7UL9I.css"
+    ]
+  }
+}

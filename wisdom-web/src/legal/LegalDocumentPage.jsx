@@ -11,8 +11,29 @@ import { updatePageMetadata } from '../seo/metadata';
 import '../PrivacyPolicy.css';
 
 /* eslint-disable react/prop-types */
-const languageNames = { es: 'Español', en: 'English' };
-const languageLabels = { es: 'Idioma', en: 'Language' };
+const languageToggleLabels = { es: 'ES: cambiar a inglés', en: 'EN: switch to Spanish' };
+const relatedDocumentLabels = {
+  es: {
+    terms: 'Términos y condiciones',
+    privacy: 'Política de privacidad',
+    bookings: 'Política de reservas',
+    cancellation: 'Política de cancelación',
+    invoicing: 'Política de facturación',
+    premium: 'Política de Wisdom Premium',
+    serviceFee: 'Tarifa del servicio',
+    faq: 'Preguntas frecuentes',
+  },
+  en: {
+    terms: 'Terms and conditions',
+    privacy: 'Privacy policy',
+    bookings: 'Booking policy',
+    cancellation: 'Cancellation policy',
+    invoicing: 'Invoicing policy',
+    premium: 'Wisdom Premium policy',
+    serviceFee: 'Service fee',
+    faq: 'Frequently asked questions',
+  },
+};
 
 function getRequestedLanguage() {
   if (typeof window === 'undefined') return null;
@@ -38,7 +59,6 @@ function DocumentBlock({ block }) {
 export default function LegalDocumentPage({ documentKey, initialLanguage }) {
   const { locale } = useLocale();
   const [selectedLanguage, setSelectedLanguage] = useState(() => initialLanguage || getRequestedLanguage());
-  const isPrimaryDocument = documentKey === 'terms' || documentKey === 'privacy';
   const language = selectedLanguage || getLegalLocale();
   const copy = getCopy(language);
   const content = getLegalDocument(language, documentKey);
@@ -59,8 +79,8 @@ export default function LegalDocumentPage({ documentKey, initialLanguage }) {
     return () => document.body.classList.remove('privacy-policy-active');
   }, []);
 
-  function changeLanguage(event) {
-    const next = event.target.value;
+  function changeLanguage() {
+    const next = language === 'es' ? 'en' : 'es';
     setSelectedLanguage(next);
     const url = new URL(window.location.href);
     url.searchParams.set('lang', next);
@@ -69,25 +89,17 @@ export default function LegalDocumentPage({ documentKey, initialLanguage }) {
 
   return (
     <>
-      {isPrimaryDocument && (
-        <header className="legal-page-header" lang={language} dir="ltr">
-          <a className="legal-page-brandmark" href="/" aria-label="Wisdom">
-            <img src={brandmark} alt="" width="280" height="161" />
-          </a>
-          <a className="legal-page-wordmark" href="/" aria-label="Wisdom">
-            <img src={wordmark} alt="WISDOM" width="504" height="91" />
-          </a>
-          <GetAppLink className="legal-page-download">{copy.header.getApp}</GetAppLink>
-        </header>
-      )}
-      <main className={`privacy-policy-page${isPrimaryDocument ? ' privacy-policy-page--primary' : ''}`} lang={language} dir="ltr">
+      <header className="legal-page-header" lang={language} dir="ltr">
+        <a className="legal-page-brandmark" href="/" aria-label="Wisdom">
+          <img src={brandmark} alt="" width="280" height="161" />
+        </a>
+        <a className="legal-page-wordmark" href="/" aria-label="Wisdom">
+          <img src={wordmark} alt="WISDOM" width="504" height="91" />
+        </a>
+        <GetAppLink className="legal-page-download">{copy.header.getApp}</GetAppLink>
+      </header>
+      <main className="privacy-policy-page" lang={language} dir="ltr">
         <article className="privacy-policy-shell">
-          <label className="legal-language-control">
-            <span>{languageLabels[language]}</span>
-            <select value={language} onChange={changeLanguage}>
-              {LEGAL_LANGUAGES.map((key) => <option key={key} value={key}>{languageNames[key]}</option>)}
-            </select>
-          </label>
           <p className="privacy-policy-kicker">{content.lastUpdated}</p>
           <h1>{content.title}</h1>
           <div className="legal-document-body">
@@ -104,11 +116,19 @@ export default function LegalDocumentPage({ documentKey, initialLanguage }) {
             )) : content.blocks.map((block) => <DocumentBlock key={block.id} block={block} />)}
           </div>
           <nav className="legal-related-documents">
-            {Object.entries(LEGAL_ROUTES).filter(([, key]) => key !== documentKey).map(([path, key]) => (
-              <a key={key} href={`${path}?lang=${language}`}>{getLegalDocument(language, key).title}</a>
+            {Object.entries(LEGAL_ROUTES).filter(([, key]) => key !== documentKey && key !== 'invoicingDetails').map(([path, key]) => (
+              <a key={key} href={`${path}?lang=${language}`}>{relatedDocumentLabels[language][key]}</a>
             ))}
           </nav>
         </article>
+        <button
+          type="button"
+          className="legal-language-control"
+          onClick={changeLanguage}
+          aria-label={languageToggleLabels[language]}
+        >
+          {language.toUpperCase()}
+        </button>
       </main>
     </>
   );

@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "node scripts/build-seo.mjs",
-    "test": "node --test scripts/i18n.test.mjs scripts/seo.test.mjs",
+    "test": "node --test scripts/i18n.test.mjs scripts/seo.test.mjs scripts/discovery.test.mjs",
     "images:optimize": "node scripts/optimize-site-images.mjs",
     "lint": "eslint .",
     "preview": "node scripts/preview-seo.mjs"

@@ -1,0 +1,1 @@
+import{b as a}from"./main-BfHJyw9Q.js";const s=["es","en"];function r(e){const n=String(e||"en").toLowerCase().split(/[-_]/)[0];return n==="es"||n==="ca"?"es":"en"}function t(e){return r(a(e,["es","ca","en"]))}export{s as L,t as g,r as n};

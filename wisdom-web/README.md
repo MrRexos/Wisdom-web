@@ -1,5 +1,45 @@
 # React + Vite
 
+## Catálogo y guías de servicios
+
+La ampliación de servicios se genera de forma independiente de las páginas que ya
+existían. No cambia sus textos, metadatos, componentes, navegación ni estilos.
+
+- Catálogos traducidos a los 12 idiomas de la web, con las 38 categorías públicas:
+  `/es/servicios`, `/en/services`, `/ca/serveis`, etc.
+- Nueve guías originales, en español e inglés: servicios a domicilio, limpieza,
+  reparaciones, clases particulares, online/freelancers, ofrecer servicios,
+  bienestar, mascotas y eventos.
+- `src/discovery/routes.js` define las rutas, equivalencias entre idiomas y
+  categorías; `copy.js` y `guides.js` contienen los textos de las páginas nuevas.
+- `src/discovery/server.jsx` renderiza HTML estático. No se envía React ni otro
+  JavaScript a estas páginas. El CSS propio se publica con una huella de contenido
+  y solo se carga en las nuevas rutas.
+- Inter se sirve localmente solo en estas páginas; los WOFF2 originales, su
+  procedencia y licencia OFL están en `src/discovery/fonts`. El build funciona
+  sin descargar fuentes. El icono optimizado también se genera por separado.
+- `scripts/build-discovery.mjs` se ejecuta después del prerenderizado anterior.
+  Las nuevas URLs se añaden al sitemap y a los rewrites exactos de Vercel. Tras
+  cambiar las rutas, ejecutar `node scripts/sync-seo-routes.mjs` antes del build.
+- El build genera 73 documentos HTML y 71 URLs indexables. Las rutas internas
+  `/seo/discovery/...` son copias de implementación con `noindex`.
+
+Para respetar la conservación de todas las páginas actuales, no se añaden enlaces
+desde ellas. Los catálogos y guías nuevos se enlazan entre sí y se anuncian en el
+sitemap. La disponibilidad real y las reservas se consultan en la app; estas
+páginas no simulan listados, precios, reseñas ni cobertura por ciudades.
+
+Validación: `npm.cmd run build` y `npm.cmd test`. Las pruebas cubren traducciones,
+enlaces y anclas, canonicals/hreflang, datos estructurados y aislamiento de la
+aplicación existente. También se puede usar `SEO_BUILD_DIR` con un `--outDir`
+alternativo, como en las instrucciones de SEO técnico de este documento.
+
+Después de desplegar, comprobar las rutas públicas nuevas en Vercel y la lectura
+de `https://www.wisdomapp.es/sitemap.xml` en Search Console. El preview local no
+confirma las reglas reales del proveedor ni el acceso desde Google. Medir por
+página, consulta, país e idioma las impresiones, clics y posición; publicar las
+páginas no garantiza su indexación o una posición concreta.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

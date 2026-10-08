@@ -1,0 +1,346 @@
+[
+  {
+    "path": "/",
+    "language": "en",
+    "explicitLanguage": null,
+    "file": "index.html",
+    "canonical": "https://www.wisdomapp.es/",
+    "indexable": true
+  },
+  {
+    "path": "/",
+    "language": "en",
+    "explicitLanguage": "en",
+    "file": "seo/home.en.html",
+    "canonical": "https://www.wisdomapp.es/en",
+    "indexable": true
+  },
+  {
+    "path": "/",
+    "language": "es",
+    "explicitLanguage": "es",
+    "file": "seo/home.es.html",
+    "canonical": "https://www.wisdomapp.es/es",
+    "indexable": true
+  },
+  {
+    "path": "/",
+    "language": "ca",
+    "explicitLanguage": "ca",
+    "file": "seo/home.ca.html",
+    "canonical": "https://www.wisdomapp.es/ca",
+    "indexable": true
+  },
+  {
+    "path": "/",
+    "language": "fr",
+    "explicitLanguage": "fr",
+    "file": "seo/home.fr.html",
+    "canonical": "https://www.wisdomapp.es/fr",
+    "indexable": true
+  },
+  {
+    "path": "/",
+    "language": "pt",
+    "explicitLanguage": "pt",
+    "file": "seo/home.pt.html",
+    "canonical": "https://www.wisdomapp.es/pt",
+    "indexable": true
+  },
+  {
+    "path": "/",
+    "language": "de",
+    "explicitLanguage": "de",
+    "file": "seo/home.de.html",
+    "canonical": "https://www.wisdomapp.es/de",
+    "indexable": true
+  },
+  {
+    "path": "/",
+    "language": "it",
+    "explicitLanguage": "it",
+    "file": "seo/home.it.html",
+    "canonical": "https://www.wisdomapp.es/it",
+    "indexable": true
+  },
+  {
+    "path": "/",
+    "language": "zh",
+    "explicitLanguage": "zh",
+    "file": "seo/home.zh.html",
+    "canonical": "https://www.wisdomapp.es/zh",
+    "indexable": true
+  },
+  {
+    "path": "/",
+    "language": "ar",
+    "explicitLanguage": "ar",
+    "file": "seo/home.ar.html",
+    "canonical": "https://www.wisdomapp.es/ar",
+    "indexable": true
+  },
+  {
+    "path": "/",
+    "language": "hi",
+    "explicitLanguage": "hi",
+    "file": "seo/home.hi.html",
+    "canonical": "https://www.wisdomapp.es/hi",
+    "indexable": true
+  },
+  {
+    "path": "/",
+    "language": "ja",
+    "explicitLanguage": "ja",
+    "file": "seo/home.ja.html",
+    "canonical": "https://www.wisdomapp.es/ja",
+    "indexable": true
+  },
+  {
+    "path": "/",
+    "language": "ru",
+    "explicitLanguage": "ru",
+    "file": "seo/home.ru.html",
+    "canonical": "https://www.wisdomapp.es/ru",
+    "indexable": true
+  },
+  {
+    "path": "/app",
+    "language": "es",
+    "explicitLanguage": null,
+    "file": "app/index.html",
+    "canonical": "https://www.wisdomapp.es/app",
+    "indexable": true
+  },
+  {
+    "path": "/terms",
+    "language": "en",
+    "explicitLanguage": null,
+    "file": "seo/terms.default.html",
+    "canonical": "https://www.wisdomapp.es/terms",
+    "indexable": true
+  },
+  {
+    "path": "/terms",
+    "language": "es",
+    "explicitLanguage": "es",
+    "file": "seo/terms.es.html",
+    "canonical": "https://www.wisdomapp.es/terms?lang=es",
+    "indexable": true
+  },
+  {
+    "path": "/terms",
+    "language": "en",
+    "explicitLanguage": "en",
+    "file": "seo/terms.en.html",
+    "canonical": "https://www.wisdomapp.es/terms?lang=en",
+    "indexable": true
+  },
+  {
+    "path": "/privacy",
+    "language": "en",
+    "explicitLanguage": null,
+    "file": "seo/privacy.default.html",
+    "canonical": "https://www.wisdomapp.es/privacy",
+    "indexable": true
+  },
+  {
+    "path": "/privacy",
+    "language": "es",
+    "explicitLanguage": "es",
+    "file": "seo/privacy.es.html",
+    "canonical": "https://www.wisdomapp.es/privacy?lang=es",
+    "indexable": true
+  },
+  {
+    "path": "/privacy",
+    "language": "en",
+    "explicitLanguage": "en",
+    "file": "seo/privacy.en.html",
+    "canonical": "https://www.wisdomapp.es/privacy?lang=en",
+    "indexable": true
+  },
+  {
+    "path": "/booking-policy",
+    "language": "en",
+    "explicitLanguage": null,
+    "file": "seo/booking-policy.default.html",
+    "canonical": "https://www.wisdomapp.es/booking-policy",
+    "indexable": true
+  },
+  {
+    "path": "/booking-policy",
+    "language": "es",
+    "explicitLanguage": "es",
+    "file": "seo/booking-policy.es.html",
+    "canonical": "https://www.wisdomapp.es/booking-policy?lang=es",
+    "indexable": true
+  },
+  {
+    "path": "/booking-policy",
+    "language": "en",
+    "explicitLanguage": "en",
+    "file": "seo/booking-policy.en.html",
+    "canonical": "https://www.wisdomapp.es/booking-policy?lang=en",
+    "indexable": true
+  },
+  {
+    "path": "/cancellation-policy",
+    "language": "en",
+    "explicitLanguage": null,
+    "file": "seo/cancellation-policy.default.html",
+    "canonical": "https://www.wisdomapp.es/cancellation-policy",
+    "indexable": true
+  },
+  {
+    "path": "/cancellation-policy",
+    "language": "es",
+    "explicitLanguage": "es",
+    "file": "seo/cancellation-policy.es.html",
+    "canonical": "https://www.wisdomapp.es/cancellation-policy?lang=es",
+    "indexable": true
+  },
+  {
+    "path": "/cancellation-policy",
+    "language": "en",
+    "explicitLanguage": "en",
+    "file": "seo/cancellation-policy.en.html",
+    "canonical": "https://www.wisdomapp.es/cancellation-policy?lang=en",
+    "indexable": true
+  },
+  {
+    "path": "/invoicing-policy",
+    "language": "en",
+    "explicitLanguage": null,
+    "file": "seo/invoicing-policy.default.html",
+    "canonical": "https://www.wisdomapp.es/invoicing-policy",
+    "indexable": true
+  },
+  {
+    "path": "/invoicing-policy",
+    "language": "es",
+    "explicitLanguage": "es",
+    "file": "seo/invoicing-policy.es.html",
+    "canonical": "https://www.wisdomapp.es/invoicing-policy?lang=es",
+    "indexable": true
+  },
+  {
+    "path": "/invoicing-policy",
+    "language": "en",
+    "explicitLanguage": "en",
+    "file": "seo/invoicing-policy.en.html",
+    "canonical": "https://www.wisdomapp.es/invoicing-policy?lang=en",
+    "indexable": true
+  },
+  {
+    "path": "/invoicing-policy/details",
+    "language": "en",
+    "explicitLanguage": null,
+    "file": "seo/invoicing-policy-details.default.html",
+    "canonical": "https://www.wisdomapp.es/invoicing-policy/details",
+    "indexable": true
+  },
+  {
+    "path": "/invoicing-policy/details",
+    "language": "es",
+    "explicitLanguage": "es",
+    "file": "seo/invoicing-policy-details.es.html",
+    "canonical": "https://www.wisdomapp.es/invoicing-policy/details?lang=es",
+    "indexable": true
+  },
+  {
+    "path": "/invoicing-policy/details",
+    "language": "en",
+    "explicitLanguage": "en",
+    "file": "seo/invoicing-policy-details.en.html",
+    "canonical": "https://www.wisdomapp.es/invoicing-policy/details?lang=en",
+    "indexable": true
+  },
+  {
+    "path": "/premium-policy",
+    "language": "en",
+    "explicitLanguage": null,
+    "file": "seo/premium-policy.default.html",
+    "canonical": "https://www.wisdomapp.es/premium-policy",
+    "indexable": true
+  },
+  {
+    "path": "/premium-policy",
+    "language": "es",
+    "explicitLanguage": "es",
+    "file": "seo/premium-policy.es.html",
+    "canonical": "https://www.wisdomapp.es/premium-policy?lang=es",
+    "indexable": true
+  },
+  {
+    "path": "/premium-policy",
+    "language": "en",
+    "explicitLanguage": "en",
+    "file": "seo/premium-policy.en.html",
+    "canonical": "https://www.wisdomapp.es/premium-policy?lang=en",
+    "indexable": true
+  },
+  {
+    "path": "/service-fee",
+    "language": "en",
+    "explicitLanguage": null,
+    "file": "seo/service-fee.default.html",
+    "canonical": "https://www.wisdomapp.es/service-fee",
+    "indexable": true
+  },
+  {
+    "path": "/service-fee",
+    "language": "es",
+    "explicitLanguage": "es",
+    "file": "seo/service-fee.es.html",
+    "canonical": "https://www.wisdomapp.es/service-fee?lang=es",
+    "indexable": true
+  },
+  {
+    "path": "/service-fee",
+    "language": "en",
+    "explicitLanguage": "en",
+    "file": "seo/service-fee.en.html",
+    "canonical": "https://www.wisdomapp.es/service-fee?lang=en",
+    "indexable": true
+  },
+  {
+    "path": "/faq",
+    "language": "en",
+    "explicitLanguage": null,
+    "file": "seo/faq.default.html",
+    "canonical": "https://www.wisdomapp.es/faq",
+    "indexable": true
+  },
+  {
+    "path": "/faq",
+    "language": "es",
+    "explicitLanguage": "es",
+    "file": "seo/faq.es.html",
+    "canonical": "https://www.wisdomapp.es/faq?lang=es",
+    "indexable": true
+  },
+  {
+    "path": "/faq",
+    "language": "en",
+    "explicitLanguage": "en",
+    "file": "seo/faq.en.html",
+    "canonical": "https://www.wisdomapp.es/faq?lang=en",
+    "indexable": true
+  },
+  {
+    "path": "/data-deletion",
+    "language": "en",
+    "explicitLanguage": null,
+    "file": "seo/data-deletion.default.html",
+    "canonical": "https://www.wisdomapp.es/data-deletion",
+    "indexable": false
+  },
+  {
+    "path": "/users",
+    "language": "en",
+    "explicitLanguage": null,
+    "file": "seo/users.default.html",
+    "canonical": "https://www.wisdomapp.es/users",
+    "indexable": false
+  }
+]
