@@ -90,16 +90,28 @@ API, base de datos ni un servidor de renderizado en producción. No ejecutar sol
 - El cliente carga el JavaScript de cada ruta cuando se necesita. Conserva el
   HTML inicial hasta tener el componente listo y después monta React; no se usa
   hidratación porque las escenas existentes dependen del viewport y del azar.
-- Las fuentes mantienen Inter y los mismos pesos; ahora se descubren en el HTML.
+- Las fuentes mantienen Inter y los mismos pesos (300–700). Sus archivos WOFF2,
+  licencia y procedencia están en `public/assets/inter`; se sirven localmente y
+  el build incorpora sus declaraciones CSS al HTML, precargando el subconjunto
+  latino. No hay peticiones a Google Fonts ni descargas durante el build.
   La foto `pro_alone4.png` se convierte a WebP sin pérdida al compilar. Las imágenes
   del teléfono y de las escenas inferiores se cargan de forma diferida.
 - Las fotos y capturas usan `srcset` con versiones WebP adaptadas al dispositivo,
-  conservando imagen, proporciones y CSS. Las capturas usan calidad 95 y las fotos
-  calidad 86. Las variantes llevan huella del original, tamaño y calidad en el
+  conservando imagen, proporciones y CSS. Las fotos usan calidad 86 y la captura
+  de la búsqueda animada calidad 95. Las variantes llevan huella del original, tamaño y calidad en el
   nombre para permitir caché inmutable. Se guardan en `public/images/responsive`;
   `npm run images:optimize` las regenera al cambiar imágenes (necesita acceso al
   bucket público para actualizar los originales remotos). El build normal usa
   las copias guardadas y no depende de ese bucket.
+- Las capturas actuales de «Cómo funciona» y el icono de portada tienen variantes
+  WebP **sin pérdidas de compresión**, incluida la resolución original. Ejecutar
+  `npm.cmd run images:performance` al cambiar sus PNG originales; el manifiesto
+  separado es `src/seo/performanceImages.json`. No modifica `pro_alone4`, que sigue
+  conservando su resolución y todos los píxeles visibles al ampliarse.
+- Las imágenes decorativas y la foto ampliable tienen prioridad de descarga baja
+  para dar paso a la fuente y al contenido inicial. Las animaciones conservan
+  sus curvas, tiempos, pins y distancias; solo se eliminan timelines vacías y se
+  agrupan recálculos iniciales duplicados en móvil.
 
 `scripts/seo-routes.mjs` es la fuente de las reglas de rutas. Después de cambiarlas,
 ejecutar `node scripts/sync-seo-routes.mjs` para actualizar `vercel.json`. El build

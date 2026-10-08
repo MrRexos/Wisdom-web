@@ -115,8 +115,7 @@ export function createMobileAnimations(root, lenisRef) {
     lenisRef.current?.resize();
     ScrollTrigger.refresh();
   };
-  const refreshTimer = window.setTimeout(refresh, 200);
-  document.fonts.ready.then(refresh);
+  // App agrupa el ajuste inicial, el cambio de idioma y la carga de fuentes.
 
   // La barra del navegador móvil cambia innerHeight al deslizar. svh mantiene
   // las escenas estables; solo recalculamos si cambia el ancho o la orientación.
@@ -131,7 +130,6 @@ export function createMobileAnimations(root, lenisRef) {
   window.addEventListener('resize', onResize);
   return () => {
     disposed = true;
-    window.clearTimeout(refreshTimer);
     window.clearTimeout(resizeTimer);
     window.removeEventListener('resize', onResize);
     ScrollTrigger.removeEventListener('refreshInit', resetSearchGeometry);

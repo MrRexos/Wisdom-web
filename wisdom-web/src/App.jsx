@@ -1,3 +1,5 @@
+/* eslint react/no-unknown-property: ["error", { "ignore": ["fetchpriority"] }] */
+// React 18 reenvía el atributo HTML en minúsculas sin avisos de propiedad desconocida.
 import React, { useMemo, useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
@@ -9,7 +11,6 @@ import { createProStoryAnimations } from './proStoryAnimations';
 import { ANDROID_PLAY_STORE_URL, IOS_APP_STORE_URL } from './appLinks';
 import GetAppLink from './GetAppLink';
 import { useLocale } from './i18n/LocaleContext';
-import officialAppIcon from './assets/official_app_icon.png';
 import { getHomeMetadata, updatePageMetadata } from './seo/metadata';
 import { getRequestedLocale } from './i18n/detectLocale';
 import { responsiveImage } from './seo/responsiveImages';
@@ -231,8 +232,8 @@ const HowItWorks3D = ({ steps, activeIndex, isVertical = false }) => (
           {steps.map((step, index) => (
             <motion.img
               key={step.id}
-              // Conservar los PNG solicitados y la nitidez del texto de la app.
-              src={step.screen}
+              // Derivadas de los PNG originales, sin pérdidas de compresión.
+              {...responsiveImage(step.screen, '(max-width: 767px) 200px, 251px')}
               width={1125}
               height={2436}
               loading="lazy"
@@ -763,13 +764,25 @@ function App() {
   }, [isVertical]);
 
   useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
+    let disposed = false;
+    const refresh = () => {
       lenisRef.current?.resize?.();
       ScrollTrigger.refresh();
       syncAnimatedSearchBoxRef.current?.();
-    }, 150);
+    };
+    let timeoutId = window.setTimeout(refresh, 150);
+    // Agrupar el ajuste inicial y el de fuentes. Antes se repetía también
+    // en createMobileAnimations, recalculando todos los pins tres veces.
+    if (isVertical) document.fonts.ready.then(() => {
+      if (disposed) return;
+      window.clearTimeout(timeoutId);
+      timeoutId = window.setTimeout(refresh, 150);
+    });
 
-    return () => window.clearTimeout(timeoutId);
+    return () => {
+      disposed = true;
+      window.clearTimeout(timeoutId);
+    };
   }, [isVertical, locale]);
 
   useEffect(() => {
@@ -796,27 +809,6 @@ function App() {
       if (lenisRef.current) {
         lenisRef.current.scrollTo(0, { immediate: true });
       }
-    });
-
-    // 2. Lógica de "Pinning" (1200px por sección)
-    // Seleccionamos solo las secciones de texto/imagen que queremos congelar
-    const sections = gsap.utils.toArray('.fade-section');
-
-    sections.forEach((section) => {
-      // Creamos una Timeline para tener control total
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: "center center", // Se engancha cuando el CENTRO de la sección toca el CENTRO de la pantalla
-          end: "+=1200",          // Aquí defines la "duración" del scroll (1200px)
-          pin: false,              // Congela la sección
-          pinSpacing: true,       // Empuja el siguiente contenido hacia abajo
-          scrub: 0.5,             // Inercia suave (0.5s) para que no sea robótico
-          anticipatePin: 1,       // <--- CLAVE: Evita el pequeño "salto" al enganchar
-        }
-      });
-
-
     });
 
     // 3. Parallax del ratón (Igual que antes)
@@ -906,19 +898,6 @@ function App() {
     let securityScrollTrigger;
     let experienceScrollTrigger;
     const ctx = gsap.context(() => {
-
-      // 1. Configuración general (Igual que antes)
-      const sections = gsap.utils.toArray('.fade-section');
-      sections.forEach((section) => {
-        if (section !== endlessSearchSectionRef.current) {
-          gsap.timeline({
-            scrollTrigger: {
-              trigger: section, start: "center center", end: "+=1200",
-              pin: false, pinSpacing: true, scrub: 0.5, anticipatePin: 1,
-            }
-          });
-        }
-      });
 
       // 2. Animación ESPECÍFICA: Cuadro Gris -> Imagen Final
       if (animadaBoxRef.current && searchImageRef.current && searchSectionRef.current && searchTextRef.current) {
@@ -1456,7 +1435,7 @@ function App() {
         {/* IZQUIERDA: Agrupamos logo y texto en un solo flex-1 */}
         <div className="flex flex-1 items-center justify-start gap-2 ml-1 md:ml-2">
           <img
-            src={officialAppIcon}
+            {...responsiveImage('wisdom-icon', '40px')}
             width="1024"
             height="1024"
             decoding="async"
@@ -1510,6 +1489,7 @@ function App() {
                   {isAnimatedBox && (
                     <img
                       {...responsiveImage(shape.imageInside, '(max-width: 767px) 300px, 420px')}
+                      fetchpriority="low"
                       decoding="async"
                       alt=""
                       className="w-full h-full object-cover opacity-0" // Empieza invisible (gris)
@@ -1527,7 +1507,7 @@ function App() {
           <div className="hero-tiles absolute inset-0 w-full h-full pointer-events-none">
             {heroTiles.map((tile, index) => (
               <div key={`tile-${index}`} className={`parallax-item absolute overflow-hidden opacity-75 ${tile.size}`} style={tile.style} data-speed={isVertical ? '30' : '60'}>
-                <img {...responsiveImage(tile.url, '(max-width: 767px) 22vw, 240px')} decoding="async" alt="" className="w-full h-full object-cover" />
+                <img {...responsiveImage(tile.url, '(max-width: 767px) 22vw, 240px')} fetchpriority="low" decoding="async" alt="" className="w-full h-full object-cover" />
               </div>
             ))}
           </div>
@@ -1581,6 +1561,7 @@ function App() {
           <div ref={searchImageRef} className={`aspect-[3/4] w-full shrink-0 relative ${isVertical ? 'max-w-[260px]' : 'max-w-[420px]'}`}>
             <img
               {...responsiveImage('https://storage.googleapis.com/wisdom-images/search_services.png', '(max-width: 767px) 300px, 420px')}
+              fetchpriority="low"
               decoding="async"
               alt=""
               className="w-full h-full object-cover opacity-0" // <--- IMPORTANTE: Invisible
@@ -1610,6 +1591,7 @@ function App() {
               <img
                 src={import.meta.env.PROD ? '/images/pro_alone4.webp' : '/images/pro_alone4.png'}
                 loading="lazy"
+                fetchpriority="low"
                 decoding="async"
                 alt=""
                 className="h-full w-full object-cover"
@@ -1708,7 +1690,7 @@ function App() {
 
             {/* LOGO CENTRAL */}
             <img
-              src={officialAppIcon}
+              {...responsiveImage('wisdom-icon', '(max-width: 767px) 112px, 288px')}
               alt="Wisdom"
               className={`relative z-10 flex items-center justify-center ${isVertical ? 'h-28 w-28' : 'h-40 w-40 md:h-72 md:w-72'}`}
             />

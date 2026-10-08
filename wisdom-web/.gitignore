@@ -12,6 +12,7 @@ dist
 dist-ssr
 .playwright-cli/
 output/playwright/seo-*
+output/playwright/perf-before/
 *.local
 
 # Editor directories and files

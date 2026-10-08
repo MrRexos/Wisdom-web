@@ -23,8 +23,15 @@ await writeFile(resolve(outDir, 'images/pro_alone4.webp'), optimizedImage);
 console.log(`Lossless image: ${originalImage.length} → ${optimizedImage.length} bytes.`);
 await build({ build: { ssr: 'src/seo/entry-server.jsx', outDir: 'dist-ssr', manifest: false, rollupOptions: { input: 'src/seo/entry-server.jsx' } } });
 const { renderPage, structuredData, getWebsiteDocument } = await import(pathToFileURL(resolve('dist-ssr/entry-server.js')).href);
-const template = await readFile(resolve(outDir, 'index.html'), 'utf8');
-const appTemplate = await readFile(resolve(outDir, 'app/index.html'), 'utf8');
+const fontSources = JSON.parse(await readFile('public/assets/inter/sources.json', 'utf8'));
+const fontCss = await readFile(`public/assets/inter/${fontSources.cssFile}`, 'utf8');
+// Las mismas caras tipográficas, sin una petición CSS bloqueante adicional.
+const inlineFonts = (html) => html.replace(
+  /<link rel="stylesheet" href="\/assets\/inter\/inter-[a-f0-9]+\.css"\s*\/?>/,
+  () => `<style data-fonts="inter">${fontCss}</style>`,
+);
+const template = inlineFonts(await readFile(resolve(outDir, 'index.html'), 'utf8'));
+const appTemplate = inlineFonts(await readFile(resolve(outDir, 'app/index.html'), 'utf8'));
 const manifest = JSON.parse(await readFile(resolve(outDir, '.vite/manifest.json'), 'utf8'));
 const escape = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const indexable = (path) => !['/users', '/data-deletion'].includes(path);
