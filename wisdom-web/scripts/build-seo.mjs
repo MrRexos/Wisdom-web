@@ -5,6 +5,7 @@ import { publicPaths, languagesFor, defaultLanguage, outputFile, vercelConfig } 
 import { canonicalUrl, SHARE_IMAGE, SITE_URL, OPEN_GRAPH_LOCALES } from '../src/seo/metadata.js';
 import sharp from 'sharp';
 import { buildDiscovery } from './build-discovery.mjs';
+import { buildGeo } from './build-geo.mjs';
 
 process.env.NODE_ENV = 'production';
 const { build } = await import('vite');
@@ -111,5 +112,6 @@ for (const language of ['es', 'en']) {
   const markdown = `# ${faq.title}\n\n${faq.description}\n\n${faq.lastUpdated}\n\n${faq.sections.map((section) => `## ${section.title}\n\n${section.items.map((item) => `### ${item.question}\n\n${item.answer}`).join('\n\n')}`).join('\n\n')}\n`;
   await writeFile(resolve(outDir, `faq.${language}.md`), markdown, 'utf8');
 }
+await buildGeo({ outDir });
 await writeFile(resolve(outDir, '.vite/seo-pages.json'), JSON.stringify(emitted, null, 2), 'utf8');
 console.log(`SEO: ${emitted.length} static pages; ${urls.length} canonical sitemap URLs.`);

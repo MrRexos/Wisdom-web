@@ -9,6 +9,7 @@ import { SUPPORTED_LOCALES } from '../i18n/detectLocale.js';
 import { getCopy } from '../i18n/translations.js';
 import { getWebsiteDocument as getLegalDocument } from '../legal/websiteContent.js';
 import { getHomeMetadata, SITE_URL, SHARE_IMAGE, canonicalUrl } from './metadata.js';
+import { organizationSchema, websiteSchema, applicationSchema, APPLICATION_ID } from './entity.js';
 
 export { SUPPORTED_LOCALES, LEGAL_ROUTES };
 export { getWebsiteDocument } from '../legal/websiteContent.js';
@@ -42,19 +43,18 @@ export function renderPage(pathname, language) {
 
 export function structuredData(pathname, language, explicitLanguage, metadata) {
   const url = canonicalUrl(pathname, explicitLanguage ? language : null);
-  const organization = {
-    '@type': 'Organization', '@id': `${SITE_URL}/#organization`, name: 'Wisdom', url: `${SITE_URL}/`,
-    logo: { '@type': 'ImageObject', url: `${SITE_URL}/images/wisdom-app-icon.webp` },
-    sameAs: ['https://www.instagram.com/wisdom__app', 'https://www.tiktok.com/@wisdom_app', 'https://x.com/wisdom_entity'],
-  };
+  const organization = organizationSchema();
   return {
     '@context': 'https://schema.org',
     '@graph': [organization,
-      { '@type': 'WebSite', '@id': `${SITE_URL}/#website`, name: 'Wisdom', url: `${SITE_URL}/`, publisher: { '@id': organization['@id'] }, inLanguage: SUPPORTED_LOCALES },
+      websiteSchema(),
       { '@type': pathname === '/faq' ? 'FAQPage' : 'WebPage', '@id': `${url}#webpage`, url, name: metadata.title, description: metadata.description,
         ...(pathname === '/faq' ? { mainEntity: getLegalDocument(language, 'faq').sections.flatMap((section) => section.items.map((item) => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } }))) } : {}),
         inLanguage: language, isPartOf: { '@id': `${SITE_URL}/#website` }, about: { '@id': organization['@id'] },
-        primaryImageOfPage: { '@type': 'ImageObject', url: SHARE_IMAGE, width: 1200, height: 630 } },
+        primaryImageOfPage: { '@type': 'ImageObject', url: SHARE_IMAGE, width: 1200, height: 630 },
+        ...(['/', '/app'].includes(pathname) ? { mainEntity: { '@id': APPLICATION_ID } } : {}),
+      },
+      ...(['/', '/app'].includes(pathname) ? [applicationSchema()] : []),
     ],
   };
 }

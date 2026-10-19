@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "node scripts/build-seo.mjs",
-    "test": "node --test scripts/i18n.test.mjs scripts/seo.test.mjs scripts/discovery.test.mjs scripts/performance.test.mjs",
+    "test": "node --test scripts/i18n.test.mjs scripts/seo.test.mjs scripts/discovery.test.mjs scripts/performance.test.mjs scripts/geo.test.mjs",
     "images:optimize": "node scripts/optimize-site-images.mjs",
     "images:performance": "node scripts/optimize-performance-assets.mjs",
     "lint": "eslint .",

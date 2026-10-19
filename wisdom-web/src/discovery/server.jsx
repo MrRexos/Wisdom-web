@@ -3,9 +3,12 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { getCopy } from '../i18n/translations.js';
 import { SITE_URL, SHARE_IMAGE } from '../seo/metadata.js';
+import { organizationSchema, websiteSchema, applicationSchema, OFFICIAL_PROFILES, APPLICATION_ID } from '../seo/entity.js';
 import { ANDROID_PLAY_STORE_URL, IOS_APP_STORE_URL } from '../appLinks.js';
 import { DIRECTORY_COPY } from './copy.js';
 import { SERVICE_GUIDES } from './guides.js';
+import { ABOUT_WISDOM } from './about.js';
+import { renderMarkdown } from './markdown.js';
 import { directoryPath, guidePath, discoveryAlternates, SERVICE_GROUPS, LANGUAGE_NAMES } from './routes.js';
 
 const guideLabels = {
@@ -52,11 +55,30 @@ function Guide({ guide, page, siteCopy }) {
   </div>;
 }
 
+function About({ language }) {
+  const content = ABOUT_WISDOM[language];
+  return <div className="discovery-reading">
+    <p>{content.reviewed}</p>
+    {content.sections.map(([id, title, text]) => <section className="discovery-section" id={id} key={id}><h2>{title}</h2><p>{text}</p></section>)}
+    <section className="discovery-section"><h2>{content.questionsTitle}</h2>{content.questions.map(([question, answer]) => <details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</section>
+    <section className="discovery-section"><h2>{content.sources}</h2>
+      <p><a href={directoryPath(language)}>{DIRECTORY_COPY[language].catalog}</a></p>
+      <GuideLinks language={language} />
+      <ul>{[['/terms', content.terms], ['/booking-policy', content.booking], ['/service-fee', content.fees], ['/faq', content.faq]].map(([path, label]) => <li key={path}><a href={`${path}?lang=${language}`}>{label}</a></li>)}</ul>
+    </section>
+    <section className="discovery-section"><h2>{content.identity}</h2><ul>
+      <li><a href={`/${language}`}>wisdomapp.es</a></li>
+      {OFFICIAL_PROFILES.map((url) => <li key={url}><a href={url}>{new URL(url).hostname.replace('www.', '')} · {new URL(url).pathname.slice(1)}</a></li>)}
+    </ul></section>
+  </div>;
+}
+
 function DiscoveryPage({ page }) {
   const copy = DIRECTORY_COPY[page.language];
   const siteCopy = getCopy(page.language);
   const guide = SERVICE_GUIDES[page.key]?.[page.language];
-  const content = guide || copy;
+  const about = page.key === 'about';
+  const content = about ? ABOUT_WISDOM[page.language] : guide || copy;
   return <>
     <a className="discovery-skip" href="#main">{content.title}</a>
     <header className="discovery-header">
@@ -66,11 +88,11 @@ function DiscoveryPage({ page }) {
     <main id="main" className="discovery-shell">
       <nav className="discovery-breadcrumb" aria-label={copy.home}>
         <a href={`/${page.language}`}>{copy.home}</a><span aria-hidden="true"> / </span>
-        {guide ? <><a href={directoryPath(page.language)}>{copy.catalog}</a><span aria-hidden="true"> / </span><span>{content.title}</span></> : <span>{copy.catalog}</span>}
+        {about ? <span>{content.title}</span> : guide ? <><a href={directoryPath(page.language)}>{copy.catalog}</a><span aria-hidden="true"> / </span><span>{content.title}</span></> : <span>{copy.catalog}</span>}
       </nav>
       <article>
         <div className="discovery-hero"><p className="discovery-eyebrow">WISDOM</p><h1>{content.title}</h1><p className="discovery-intro">{content.intro}</p></div>
-        {guide ? <Guide guide={guide} page={page} siteCopy={siteCopy} /> : <Directory language={page.language} copy={copy} siteCopy={siteCopy} />}
+        {about ? <About language={page.language} /> : guide ? <Guide guide={guide} page={page} siteCopy={siteCopy} /> : <Directory language={page.language} copy={copy} siteCopy={siteCopy} />}
       </article>
       <aside className="discovery-availability"><p>{copy.availability}</p></aside>
       <div className="discovery-download"><h2>{copy.download}</h2><div><a href={IOS_APP_STORE_URL}>App Store ↗</a><a href={ANDROID_PLAY_STORE_URL}>Google Play ↗</a></div></div>
@@ -83,30 +105,36 @@ function DiscoveryPage({ page }) {
 }
 
 export function renderDiscoveryPage(page) {
-  const content = SERVICE_GUIDES[page.key]?.[page.language] || DIRECTORY_COPY[page.language];
+  const about = page.key === 'about';
+  const content = about ? ABOUT_WISDOM[page.language] : SERVICE_GUIDES[page.key]?.[page.language] || DIRECTORY_COPY[page.language];
   const url = `${SITE_URL}${page.path}`;
   const organizationId = `${SITE_URL}/#organization`;
   const copy = DIRECTORY_COPY[page.language];
   const breadcrumbs = [
     { '@type': 'ListItem', position: 1, name: 'Wisdom', item: `${SITE_URL}/${page.language}` },
-    { '@type': 'ListItem', position: 2, name: copy.title, item: `${SITE_URL}${directoryPath(page.language)}` },
-    ...(page.key === 'directory' ? [] : [{ '@type': 'ListItem', position: 3, name: content.title, item: url }]),
+    { '@type': 'ListItem', position: 2, name: about ? content.title : copy.title, item: about ? url : `${SITE_URL}${directoryPath(page.language)}` },
+    ...(page.key === 'directory' || about ? [] : [{ '@type': 'ListItem', position: 3, name: content.title, item: url }]),
   ];
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
-      { '@type': 'Organization', '@id': organizationId, name: 'Wisdom', url: `${SITE_URL}/`, logo: `${SITE_URL}/images/wisdom-app-icon.webp` },
-      { '@type': 'WebSite', '@id': `${SITE_URL}/#website`, name: 'Wisdom', url: `${SITE_URL}/`, publisher: { '@id': organizationId } },
-      { '@type': page.key === 'directory' ? 'CollectionPage' : 'WebPage', '@id': `${url}#webpage`, url, name: content.title, description: content.description, inLanguage: page.language,
+      organizationSchema(),
+      websiteSchema(),
+      { '@type': about ? 'AboutPage' : page.key === 'directory' ? 'CollectionPage' : 'WebPage', '@id': `${url}#webpage`, url, name: content.title, description: content.description, inLanguage: page.language,
         isPartOf: { '@id': `${SITE_URL}/#website` }, about: { '@id': organizationId }, breadcrumb: { '@id': `${url}#breadcrumb` },
+        publisher: { '@id': organizationId },
         primaryImageOfPage: { '@type': 'ImageObject', url: SHARE_IMAGE, width: 1200, height: 630 },
+        ...(about ? { mainEntity: { '@id': APPLICATION_ID }, dateModified: '2026-10-19' } : {}),
         ...(page.key === 'directory' ? { mainEntity: { '@id': `${url}#categories` } } : {}),
       },
       { '@type': 'BreadcrumbList', '@id': `${url}#breadcrumb`, itemListElement: breadcrumbs },
       ...(page.key !== 'directory' ? [] : [{ '@type': 'ItemList', '@id': `${url}#categories`, name: copy.catalog, numberOfItems: SERVICE_GROUPS.flatMap((group) => group.ids).length,
         itemListElement: SERVICE_GROUPS.flatMap((group) => group.ids).map((id, index) => ({ '@type': 'ListItem', position: index + 1, name: getCopy(page.language).categories[id], url: `${url}#category-${id}` })),
       }]),
+      ...(about ? [applicationSchema()] : []),
     ],
   };
-  return { title: content.title.includes('Wisdom') ? content.title : `${content.title} | Wisdom`, description: content.description, html: renderToStaticMarkup(<DiscoveryPage page={page} />), schema };
+  const element = <DiscoveryPage page={page} />;
+  const markdown = `Canonical: ${url}\nLanguage: ${page.language}\n\n${renderMarkdown(element, url)}`;
+  return { title: content.title.includes('Wisdom') ? content.title : `${content.title} | Wisdom`, description: content.description, html: renderToStaticMarkup(element), markdown, schema };
 }

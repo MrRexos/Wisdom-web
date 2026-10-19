@@ -1,0 +1,82 @@
+{
+  "existingPagesTextUnchanged": 73,
+  "exactBodies": 60,
+  "assetsByteIdentical": 217,
+  "agentsSameHtml": [
+    "Mozilla/5.0",
+    "OAI-SearchBot/1.4",
+    "PerplexityBot/1.0",
+    "Claude-SearchBot/1.0",
+    "Googlebot/2.1",
+    "bingbot/2.0"
+  ],
+  "responses": [
+    {
+      "path": "/es/sobre-wisdom",
+      "status": 200,
+      "type": "text/html; charset=utf-8",
+      "canonical": null
+    },
+    {
+      "path": "/en/about-wisdom",
+      "status": 200,
+      "type": "text/html; charset=utf-8",
+      "canonical": null
+    },
+    {
+      "path": "/es/servicios",
+      "status": 200,
+      "type": "text/html; charset=utf-8",
+      "canonical": null
+    },
+    {
+      "path": "/faq?lang=es",
+      "status": 200,
+      "type": "text/html; charset=utf-8",
+      "canonical": null
+    },
+    {
+      "path": "/es/sobre-wisdom.md",
+      "status": 200,
+      "type": "text/markdown; charset=utf-8",
+      "canonical": "<https://www.wisdomapp.es/es/sobre-wisdom>; rel=\"canonical\""
+    },
+    {
+      "path": "/es/servicios.md",
+      "status": 200,
+      "type": "text/markdown; charset=utf-8",
+      "canonical": "<https://www.wisdomapp.es/es/servicios>; rel=\"canonical\""
+    },
+    {
+      "path": "/faq.en.md",
+      "status": 200,
+      "type": "text/markdown; charset=utf-8",
+      "canonical": "<https://www.wisdomapp.es/faq?lang=en>; rel=\"canonical\""
+    },
+    {
+      "path": "/llms.txt",
+      "status": 200,
+      "type": "text/plain; charset=utf-8",
+      "canonical": null
+    },
+    {
+      "path": "/llms-full.txt",
+      "status": 200,
+      "type": "text/plain; charset=utf-8",
+      "canonical": null
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200,
+      "type": "text/plain; charset=utf-8",
+      "canonical": null
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 200,
+      "type": "application/xml; charset=utf-8",
+      "canonical": null
+    }
+  ],
+  "unknownPathStatus": 404
+}

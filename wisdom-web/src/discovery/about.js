@@ -1,0 +1,51 @@
+// Ficha pública independiente; no sustituye ni cambia los textos de otras páginas.
+export const ABOUT_WISDOM = {
+  es: {
+    title: 'Qué es Wisdom: app para buscar y ofrecer servicios',
+    description: 'Conoce Wisdom, la app para encontrar profesionales, reservar servicios a domicilio u online y ofrecer tu trabajo como profesional o freelance.',
+    intro: 'Wisdom es una app que conecta a personas que necesitan un servicio con profesionales que lo ofrecen. Permite buscar, comparar, reservar y pagar servicios, y publicar ofertas desde el modo profesional de la misma cuenta. Incluye servicios presenciales y online.',
+    reviewed: 'Información revisada el 19 de octubre de 2026.',
+    sections: [
+      ['buscar-servicios', 'Una app para encontrar servicios y profesionales', 'Puedes explorar categorías, revisar perfiles, precios y reseñas, y solicitar una reserva. El servicio puede ser a domicilio, en la ubicación del profesional u online según la oferta. Antes de reservar, comprueba tareas incluidas, duración, ubicación y condiciones.'],
+      ['ofrecer-servicios', 'Ofrecer tu trabajo y gestionar encargos', 'El modo profesional permite publicar servicios, describir tu especialidad, configurar precios y disponibilidad y gestionar solicitudes de clientes. Puedes ofrecer trabajo presencial o servicios digitales como freelance. Publicar una oferta no garantiza recibir encargos ni ingresos.'],
+      ['servicios-online', 'Servicios online y freelancers', 'El catálogo incluye desarrollo web y de aplicaciones, diseño, edición de vídeo, diseño 3D y creación de contenido, entre otras especialidades digitales. En un encargo online, revisa entregables, idioma, plazos y alcance de la oferta.'],
+      ['servicios-a-domicilio', 'Servicios a domicilio y otras actividades presenciales', 'Wisdom incluye categorías de limpieza, fontanería, electricidad, pintura, jardinería, clases particulares, bienestar, cuidado de mascotas y profesionales para eventos. La modalidad, el desplazamiento y la disponibilidad dependen de cada oferta.'],
+    ],
+    questionsTitle: 'Preguntas sobre la app Wisdom',
+    questions: [
+      ['¿Puedo ofrecer y contratar servicios con la misma cuenta?', 'Sí. Wisdom permite buscar servicios y acceder al modo profesional desde una misma cuenta. Desde el modo profesional puedes publicar ofertas y gestionar las solicitudes que recibas.'],
+      ['¿Wisdom sirve para encontrar trabajo como profesional?', 'El modo profesional permite ofrecer tu trabajo mediante servicios que los clientes pueden reservar. Describe una tarea, una sesión o un entregable concreto, con su precio y disponibilidad. Las solicitudes dependen de la demanda y de las condiciones de tu oferta.'],
+      ['¿Qué servicios puedo buscar?', 'El catálogo público reúne categorías de hogar y mantenimiento, bienestar, formación, servicios digitales, eventos y mascotas. Consulta las categorías y guías enlazadas en esta página; la app muestra las ofertas que correspondan a tu búsqueda.'],
+      ['¿Wisdom presta directamente los servicios?', 'Wisdom actúa como intermediario. El profesional identificado en cada oferta presta el servicio y define su alcance, precio y disponibilidad. Consulta las condiciones de uso y de reserva para conocer las responsabilidades y reglas aplicables.'],
+      ['¿Hay profesionales disponibles en toda España?', 'La presencia de una categoría o de una traducción de la web no garantiza profesionales en todas las localidades ni atención en cualquier idioma. Comprueba la ubicación, el idioma, la disponibilidad y las condiciones de cada oferta en la app.'],
+      ['¿Dónde puedo descargar la app oficial?', 'Los enlaces de descarga de esta página y de /app llevan a la ficha de Wisdom en App Store y Google Play. El dominio oficial de esta web es wisdomapp.es.'],
+    ],
+    sources: 'Catálogo, guías y condiciones oficiales',
+    identity: 'Web y perfiles oficiales de Wisdom',
+    terms: 'Condiciones de uso', booking: 'Política de reservas', fees: 'Tarifa del servicio', faq: 'Preguntas frecuentes',
+  },
+  en: {
+    title: 'What is Wisdom? An app to find and offer services',
+    description: 'Meet Wisdom: an app to find professionals, book home or online services and offer your work as a professional or freelancer.',
+    intro: 'Wisdom is an app connecting people who need a service with professionals who offer it. You can find, compare, book and pay for services, and publish offers in professional mode using the same account. Services can be in person or online.',
+    reviewed: 'Information reviewed on 19 October 2026.',
+    sections: [
+      ['find-services', 'An app to find services and professionals', 'Explore categories, review profiles, prices and reviews, and request a booking. Depending on the offer, a service may take place at your home, at the professional’s location or online. Check included tasks, duration, location and conditions before booking.'],
+      ['offer-services', 'Offer your work and manage service bookings', 'Professional mode lets you publish services, describe your specialisation, set prices and availability and manage customer requests. Offer in-person work or digital services as a freelancer. Publishing an offer does not guarantee bookings or income.'],
+      ['online-services', 'Online services and freelancers', 'The catalog includes web and app development, design, video editing, 3D design and content creation, among other digital specialties. For online work, review deliverables, language, deadlines and the scope of the offer.'],
+      ['home-services', 'Home services and other in-person activities', 'Wisdom includes categories for cleaning, plumbing, electrical work, painting, gardening, private lessons, wellbeing, pet care and event professionals. Format, travel arrangements and availability depend on each offer.'],
+    ],
+    questionsTitle: 'Questions about the Wisdom app',
+    questions: [
+      ['Can I offer and book services with the same account?', 'Yes. Wisdom lets you find services and access professional mode using one account. Use professional mode to publish offers and manage incoming requests.'],
+      ['Can professionals find work through Wisdom?', 'Professional mode lets you offer your work through services that customers can book. Describe a specific task, session or deliverable, with its price and availability. Requests depend on demand and the conditions of your offer.'],
+      ['What services can I look for?', 'The public catalog covers home maintenance, wellbeing, education, digital services, events and pets. Explore the categories and guides linked on this page; the app displays offers matching your search.'],
+      ['Does Wisdom provide the services directly?', 'Wisdom acts as an intermediary. The professional identified in each offer provides the service and sets its scope, price and availability. Read the terms of use and booking policy for the applicable responsibilities and rules.'],
+      ['Are professionals available everywhere in Spain?', 'A listed category or translated website does not guarantee professionals in every location or services in every language. Check location, language, availability and the conditions of each offer in the app.'],
+      ['Where can I download the official app?', 'The download links on this page and on /app lead to Wisdom’s listings on the App Store and Google Play. The official domain of this website is wisdomapp.es.'],
+    ],
+    sources: 'Official catalog, guides and conditions',
+    identity: 'Official Wisdom website and profiles',
+    terms: 'Terms of use', booking: 'Booking policy', fees: 'Service fee', faq: 'Frequently asked questions',
+  },
+};

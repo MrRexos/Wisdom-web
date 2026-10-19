@@ -3,6 +3,39 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "wisdom-web\\.vercel\\.app"
+        }
+      ],
+      "destination": "https://www.wisdomapp.es/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "wisdom-rexos-projects-2036d9c4\\.vercel\\.app"
+        }
+      ],
+      "destination": "https://www.wisdomapp.es/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "wisdom-git-main-rexos-projects-2036d9c4\\.vercel\\.app"
+        }
+      ],
+      "destination": "https://www.wisdomapp.es/:path*",
+      "permanent": true
+    },
+    {
       "source": "/index.html",
       "destination": "/",
       "permanent": true
@@ -56,6 +89,466 @@
         {
           "key": "X-Robots-Tag",
           "value": "noindex, follow"
+        }
+      ]
+    },
+    {
+      "source": "/en/services.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/en/services>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/es/servicios.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/es/servicios>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/ca/serveis.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/ca/serveis>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/fr/services.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/fr/services>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/pt/servicos.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/pt/servicos>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/de/dienstleistungen.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/de/dienstleistungen>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/it/servizi.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/it/servizi>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/zh/services.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/zh/services>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/ar/services.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/ar/services>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/hi/services.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/hi/services>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/ja/services.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/ja/services>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/ru/services.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/ru/services>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/es/servicios/servicios-a-domicilio.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/es/servicios/servicios-a-domicilio>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/en/services/home-services.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/en/services/home-services>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/es/servicios/limpieza-a-domicilio.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/es/servicios/limpieza-a-domicilio>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/en/services/home-cleaning.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/en/services/home-cleaning>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/es/servicios/reparaciones-y-mantenimiento.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/es/servicios/reparaciones-y-mantenimiento>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/en/services/repairs-and-maintenance.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/en/services/repairs-and-maintenance>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/es/servicios/clases-particulares.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/es/servicios/clases-particulares>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/en/services/private-lessons.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/en/services/private-lessons>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/es/servicios/servicios-online-y-freelancers.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/es/servicios/servicios-online-y-freelancers>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/en/services/online-services-and-freelancers.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/en/services/online-services-and-freelancers>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/es/servicios/ofrecer-servicios-profesionales.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/es/servicios/ofrecer-servicios-profesionales>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/en/services/offer-professional-services.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/en/services/offer-professional-services>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/es/servicios/bienestar-y-entrenamiento.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/es/servicios/bienestar-y-entrenamiento>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/en/services/wellbeing-and-personal-training.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/en/services/wellbeing-and-personal-training>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/es/servicios/cuidado-de-mascotas.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/es/servicios/cuidado-de-mascotas>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/en/services/pet-care.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/en/services/pet-care>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/es/servicios/profesionales-para-eventos.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/es/servicios/profesionales-para-eventos>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/en/services/event-professionals.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/en/services/event-professionals>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/es/sobre-wisdom.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/es/sobre-wisdom>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/en/about-wisdom.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/en/about-wisdom>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/faq.es.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/faq?lang=es>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/faq.en.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://www.wisdomapp.es/faq?lang=en>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/llms.txt",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/llms-full.txt",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
         }
       ]
     }
@@ -474,6 +967,14 @@
     {
       "source": "/en/services/event-professionals",
       "destination": "/seo/discovery/en/services/event-professionals.html"
+    },
+    {
+      "source": "/es/sobre-wisdom",
+      "destination": "/seo/discovery/es/sobre-wisdom.html"
+    },
+    {
+      "source": "/en/about-wisdom",
+      "destination": "/seo/discovery/en/about-wisdom.html"
     }
   ]
 }

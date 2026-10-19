@@ -43,6 +43,8 @@ export async function buildDiscovery({ build, outDir }) {
     <meta name="description" content="${escape(content.description)}" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="${canonical}" />
+    <link rel="describedby" href="${SITE_URL}/llms.txt" type="text/plain" />
+    <link rel="alternate" href="${canonical}.md" type="text/markdown" />
     ${alternatives.map((alternate) => `<link rel="alternate" hreflang="${alternate.language}" href="${alternate.url}" />`).join('\n    ')}
     <link rel="icon" href="/${iconFile}" type="image/webp" />
     <link rel="preload" href="${latinFont}" as="font" type="font/woff2" crossorigin />
@@ -68,6 +70,9 @@ export async function buildDiscovery({ build, outDir }) {
     const file = discoveryOutputFile(page.path);
     await mkdir(dirname(resolve(outDir, file)), { recursive: true });
     await writeFile(resolve(outDir, file), html, 'utf8');
+    const markdownFile = resolve(outDir, `.${page.path}.md`);
+    await mkdir(dirname(markdownFile), { recursive: true });
+    await writeFile(markdownFile, content.markdown, 'utf8');
     pages.push({ path: page.path, language: page.language, explicitLanguage: null, file, canonical, indexable: true, kind: 'discovery' });
     urls.push(`  <url><loc>${canonical}</loc>${alternatives.map((alternate) => `<xhtml:link rel="alternate" hreflang="${alternate.language}" href="${alternate.url}"/>`).join('')}</url>`);
   }

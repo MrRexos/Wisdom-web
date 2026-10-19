@@ -15,9 +15,11 @@ export const GUIDE_SLUGS = {
 };
 export const directoryPath = (language = 'es') => `/${language}/${DIRECTORY_SLUGS[language] || DIRECTORY_SLUGS.en}`;
 export const guidePath = (key, language) => GUIDE_SLUGS[key]?.[language] ? `${directoryPath(language)}/${GUIDE_SLUGS[key][language]}` : null;
+export const aboutPath = (language) => language === 'es' ? '/es/sobre-wisdom' : '/en/about-wisdom';
 export const discoveryPages = [
   ...SUPPORTED_LOCALES.map((language) => ({ path: directoryPath(language), language, key: 'directory' })),
   ...Object.keys(GUIDE_SLUGS).flatMap((key) => ['es', 'en'].map((language) => ({ path: guidePath(key, language), language, key }))),
+  ...['es', 'en'].map((language) => ({ path: aboutPath(language), language, key: 'about' })),
 ];
 const byPath = new Map(discoveryPages.map((page) => [page.path, page]));
 export const getDiscoveryPage = (path) => byPath.get(path);

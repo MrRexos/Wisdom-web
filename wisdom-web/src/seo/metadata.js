@@ -1,4 +1,6 @@
 export const SITE_URL = 'https://www.wisdomapp.es';
+export const SITE_NAME = 'Wisdom';
+export const SITE_ALTERNATE_NAMES = ['Wisdom App', 'wisdomapp.es'];
 export const SHARE_IMAGE = `${SITE_URL}/images/wisdom-app-share-v1.jpg`;
 export const OPEN_GRAPH_LOCALES = { en: 'en_US', es: 'es_ES', ca: 'ca_ES', fr: 'fr_FR', pt: 'pt_PT', de: 'de_DE', it: 'it_IT', zh: 'zh_CN', ar: 'ar_SA', hi: 'hi_IN', ja: 'ja_JP', ru: 'ru_RU' };
 

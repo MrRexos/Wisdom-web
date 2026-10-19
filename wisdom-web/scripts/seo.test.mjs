@@ -34,6 +34,32 @@ test('every canonical URL is routed to its own HTML and unknown paths have no ho
   assert.ok(config.rewrites.every((rule) => !rule.source.includes('.*')));
 });
 
+test('only public production aliases permanently redirect to the official domain', () => {
+  const hostRedirects = config.redirects.filter((rule) => rule.has?.some((condition) => condition.type === 'host'));
+  const matchingRedirects = (hostname) => hostRedirects.filter((rule) => rule.has.every((condition) =>
+    condition.type === 'host' && new RegExp(`^(?:${condition.value})$`).test(hostname)));
+  const aliases = [
+    'wisdom-web.vercel.app',
+    'wisdom-rexos-projects-2036d9c4.vercel.app',
+    'wisdom-git-main-rexos-projects-2036d9c4.vercel.app',
+  ];
+  assert.equal(hostRedirects.length, aliases.length);
+  for (const hostname of aliases) {
+    const matches = matchingRedirects(hostname);
+    assert.equal(matches.length, 1, hostname);
+    assert.equal(matches[0].source, '/:path*');
+    assert.equal(matches[0].destination, 'https://www.wisdomapp.es/:path*');
+    assert.equal(matches[0].permanent, true);
+    assert.ok(config.redirects.indexOf(matches[0]) < config.redirects.findIndex((rule) => rule.source === '/index.html'));
+  }
+  for (const hostname of ['www.wisdomapp.es', 'wisdomapp.es', 'localhost',
+    'wisdom-preview-rexos-projects-2036d9c4.vercel.app',
+    'wisdom-git-feature-rexos-projects-2036d9c4.vercel.app',
+    'wisdom-webXvercelXapp', 'wisdom-web.vercel.app.example.com']) {
+    assert.equal(matchingRedirects(hostname).length, 0, hostname);
+  }
+});
+
 test('all public pages contain metadata, canonicals, language alternates and usable static content', async () => {
   for (const page of pages) {
     const html = await readFile(resolve(outDir, page.file), 'utf8');
@@ -44,6 +70,12 @@ test('all public pages contain metadata, canonicals, language alternates and usa
     assert.ok(html.includes(`<link rel="canonical" href="${page.canonical}"`), page.file);
     assert.ok(html.includes(`name="robots" content="${page.indexable ? 'index' : 'noindex'},`), page.file);
     const data = JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1]);
+    const website = data['@graph'].filter((item) => item['@type'] === 'WebSite');
+    assert.equal(website.length, 1, page.file);
+    assert.equal(website[0].name, 'Wisdom', page.file);
+    assert.deepEqual(website[0].alternateName, ['Wisdom App', 'wisdomapp.es'], page.file);
+    assert.equal(website[0].url, 'https://www.wisdomapp.es/', page.file);
+    assert.ok(html.includes('<meta property="og:site_name" content="Wisdom"'), page.file);
     assert.equal(data['@graph'][2].url, page.canonical);
     if (page.path !== '/users') {
       assert.equal((html.match(/<h1\b/g) || []).length, 1, page.file);

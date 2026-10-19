@@ -80,7 +80,7 @@ API, base de datos ni un servidor de renderizado en producción. No ejecutar sol
   servicios). El contenido editorial vive en `src/legal/serviceFaq.js`; no editar
   los JSON legales sincronizados para cambiar estas preguntas.
 - `robots.txt`, `sitemap.xml` y `faq.es.md` / `faq.en.md` se generan en cada build.
-  `public/llms.txt` enlaza las versiones Markdown de la FAQ y las políticas.
+  `scripts/build-geo.mjs` genera `llms.txt` desde las rutas y contenidos públicos.
   `llms.txt` es una ayuda para herramientas de IA, no una garantía de posicionamiento.
 - Los metadatos de cada página incluyen título, descripción, canonical, Open
   Graph, Twitter y JSON-LD. El marcado de la FAQ usa las mismas respuestas visibles;
@@ -116,6 +116,42 @@ API, base de datos ni un servidor de renderizado en producción. No ejecutar sol
 `scripts/seo-routes.mjs` es la fuente de las reglas de rutas. Después de cambiarlas,
 ejecutar `node scripts/sync-seo-routes.mjs` para actualizar `vercel.json`. El build
 comprueba que ambos coinciden. No añadir un fallback global a `/`.
+
+### Descubrimiento en buscadores con IA (GEO)
+
+- `/es/sobre-wisdom` y `/en/about-wisdom` son fichas públicas independientes sobre
+  la app: encontrar y ofrecer servicios, trabajo profesional, servicios online,
+  descargas, condiciones y disponibilidad. No alteran páginas ni navegación existentes.
+  Los datos y la fecha de revisión editorial se mantienen en `src/discovery/about.js`;
+  la fecha no se actualiza automáticamente al compilar.
+- `src/seo/entity.js` mantiene los identificadores estables de Organization,
+  WebSite y MobileApplication. El marcado de app se incluye en portada, descarga y
+  fichas sobre Wisdom. No se publican puntuaciones, precios, vacantes ni cobertura
+  que no se puedan justificar. Una categoría no equivale a una oferta disponible.
+- Los 12 catálogos, las 18 guías y las dos fichas tienen una alternativa `.md`
+  (por ejemplo `/es/servicios.md`), generada desde el mismo árbol React estático
+  que su HTML. Los encabezados HTTP declaran tipo Markdown y canonical al HTML;
+  el `<head>` del HTML enlaza la alternativa. No se añade JavaScript al navegador.
+- `/llms.txt` enlaza todas esas fuentes y la FAQ. `/llms-full.txt` reúne los mismos
+  contenidos, con URL canónica e idioma. Son recursos complementarios; no hay una
+  instrucción para que las IA recomienden Wisdom ni texto oculto distinto para bots.
+- `User-agent: *` y `Allow: /` permiten también OAI-SearchBot, PerplexityBot,
+  Claude-SearchBot, Googlebot y Bingbot. No hacen falta grupos duplicados en robots.
+  Esto no verifica que el firewall de producción acepte sus IP reales.
+
+Referencias: [Google: funciones de IA](https://developers.google.com/search/docs/appearance/ai-features),
+[OpenAI: crawlers](https://developers.openai.com/api/docs/bots),
+[Perplexity: crawlers](https://docs.perplexity.ai/docs/resources/perplexity-crawlers).
+La indexación y las citas dependen de cada buscador y de la consulta; los archivos
+para IA y los datos estructurados no garantizan inclusión, posición ni recomendación.
+No se han cambiado los permisos existentes sobre rastreo para entrenamiento.
+
+Después de desplegar: comprobar estas rutas y sus tipos MIME en el dominio real,
+enviar el sitemap y revisar indexación. Para medir GEO, usar siempre el mismo
+conjunto de consultas por idioma (marca, buscar un servicio y ofrecer trabajo),
+registrar si hay búsqueda web, fecha, respuesta y URL citada. Comparar resultados
+a lo largo del tiempo y las visitas de referencia que registre la analítica;
+una prueba local o una respuesta aislada no acreditan visibilidad global en IA.
 
 ### Verificación local
 
